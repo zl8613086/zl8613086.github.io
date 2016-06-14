@@ -94,7 +94,7 @@ This class provides thread-local variables.  These variables differ from their n
 <meta property="og:description" content="什么是ThreadLocal&amp;#160; &amp;#160; &amp;#160; &amp;#160;首先来看一下jdk1.7中的部分注释：
 
 This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (">
-<meta property="og:updated_time" content="2016-06-02T07:09:32.230Z">
+<meta property="og:updated_time" content="2016-06-14T03:17:55.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadLocal源码分析">
 <meta name="twitter:description" content="什么是ThreadLocal&amp;#160; &amp;#160; &amp;#160; &amp;#160;首先来看一下jdk1.7中的部分注释：
@@ -378,7 +378,7 @@ This class provides thread-local variables.  These variables differ from their n
 <p>This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (via its <tt>get</tt> or <tt>set</tt> method) has its own, independently initialized copy of the variable.  <tt>ThreadLocal</tt> instances are typically private static fields in classes that wish to associate state with a thread (e.g., a user ID or Transaction ID).<br>Each thread holds an implicit reference to its copy of a thread-local variable as long as the thread is alive and the <tt>ThreadLocal</tt> instance is accessible; after a thread goes away, all of its copies of thread-local instances are subject to garbage collection (unless other references to these copies exist).</p>
 </blockquote>
 <p>&#160; &#160; &#160; &#160;就是说这个类给线程提供了一个本地变量，这个变量使该线程拥有的。在线程存在，并且ThreadLocal能访问的时候，线程保存了对这个本地变量的引用。当线程消失的时候，本地实例会被GC掉。并且建议我们ThreadLocal最好是private static修饰的。</p>
-<p>##ThreadLocal中set get方法<br>&#160; &#160; &#160; &#160;我们首先看一下threadlocal中的set get方法，下面是jdk1.7的部分源代码：</p>
+<h2 id="ThreadLocal中set-get方法"><a href="#ThreadLocal中set-get方法" class="headerlink" title="ThreadLocal中set get方法"></a>ThreadLocal中set get方法</h2><p>&#160; &#160; &#160; &#160;我们首先看一下threadlocal中的set get方法，下面是jdk1.7的部分源代码：</p>
 <pre><code>public void set(T value) {
     Thread t = Thread.currentThread();
     ThreadLocalMap map = getMap(t);
@@ -416,7 +416,7 @@ void createMap(Thread t, T firstValue) {
     t.threadLocals = new ThreadLocalMap(this, firstValue);
 }
 </code></pre><p>&#160; &#160; &#160; &#160;可以回过头看一下set方法，首先得到Thread对象中的ThreadLocalMap对象引用，如果引用为空，就调用createMap方法，否则就在map中添加一个entry，key为threadlocal，value为想要设置的值。</p>
-<p>##ThreadLocalMap<br>下面来看一下ThreadLocalMap：</p>
+<h2 id="ThreadLocalMap"><a href="#ThreadLocalMap" class="headerlink" title="ThreadLocalMap"></a>ThreadLocalMap</h2><p>下面来看一下ThreadLocalMap：</p>
 <pre><code>/**
     * Construct a new map initially containing (firstKey, firstValue).
     * ThreadLocalMaps are constructed lazily, so we only create
@@ -480,7 +480,7 @@ private static int nextHashCode() {
 }
 </code></pre><p>&#160; &#160; &#160; &#160;可以看到entry数组的下标是由每一个ThreadLocal的threadLocalhashcode决定的，而threadLocalhashcode是一个常量，它是由一个静态变量初始值为0的nextHashcode加上一个0x61c88647决定的，这样就能保证每创建一个threadlocal他的threadlocalhashcode都不一样，但是这并不能保证他在map中的数组坐标也唯一。当下标冲突的时候，采用线性探查法来解决。具体可以看上边threadlocalmap中的set方法，当得到的entry不为null，且k==key是一个threadlocal市就更新里面的value值，如果k为null，就放入该位置。如果key为其他的，就在下一个位置找，直到寻找到的entry为null。如果找到的entry为空就创建一个，并保存进去。然后调用cleansomeslots进行清理，如果没有任何Entry被清理且表的size超过了阈值，就调用rehash()方法。</p>
 <p>&#160; &#160; &#160; &#160;cleansomeslots()会调用expungestaleEntry清理陈旧的Entry。rehash则会调用expungestaleEntries（）清理所有的陈旧的Entry，然后在大于3/4时调用resize()扩充。</p>
-<p>##总结<br>可以看到当我们调用setget方法时会自动清理key是null的值，不会造成内存泄露。而当使用线程池的时候使用完该线程，应该显示的调用remove清空entry；</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可以看到当我们调用setget方法时会自动清理key是null的值，不会造成内存泄露。而当使用线程池的时候使用完该线程，应该显示的调用remove清空entry；</p>
 
       
     </div>
@@ -666,7 +666,7 @@ private static int nextHashCode() {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是ThreadLocal"><span class="nav-number">1.</span> <span class="nav-text">什么是ThreadLocal</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是ThreadLocal"><span class="nav-number">1.</span> <span class="nav-text">什么是ThreadLocal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal中set-get方法"><span class="nav-number">2.</span> <span class="nav-text">ThreadLocal中set get方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocalMap"><span class="nav-number">3.</span> <span class="nav-text">ThreadLocalMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
         </section>
