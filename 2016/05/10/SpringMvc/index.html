@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="数据库,Redis," />
+  <meta name="keywords" content="spring,web," />
 
 
 
@@ -84,19 +84,22 @@
 
 
 
-<meta name="description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="description" content="什么是SpringMVC&amp;#160;&amp;#160;&amp;#160;&amp;#160;Spring Web MVC是一种基于Java的实现了Web MVC设计模式的请求驱动类型的轻量级Web框架，即使用了MVC架构模式的思想，将web层进行职责解耦，基于请求驱动指的就是使用请求-响应模型，框架的目的就是帮助我们简化开发，Spring Web MVC也是要简化我们日常Web开发的。
+&amp;#160;&amp;#160;&amp;#1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis(二)">
-<meta property="og:url" content="http://yoursite.com/2016/05/04/Redis学习(二)/index.html">
+<meta property="og:title" content="SpringMVC">
+<meta property="og:url" content="http://yoursite.com/2016/05/10/SpringMvc/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
-<meta property="og:updated_time" content="2016-07-28T12:59:14.585Z">
+<meta property="og:description" content="什么是SpringMVC&amp;#160;&amp;#160;&amp;#160;&amp;#160;Spring Web MVC是一种基于Java的实现了Web MVC设计模式的请求驱动类型的轻量级Web框架，即使用了MVC架构模式的思想，将web层进行职责解耦，基于请求驱动指的就是使用请求-响应模型，框架的目的就是帮助我们简化开发，Spring Web MVC也是要简化我们日常Web开发的。
+&amp;#160;&amp;#160;&amp;#1">
+<meta property="og:image" content="http://i.imgur.com/G4TnKL1.jpg">
+<meta property="og:image" content="http://i.imgur.com/c3SL8CX.jpg">
+<meta property="og:updated_time" content="2016-07-28T15:53:37.529Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis(二)">
-<meta name="twitter:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="twitter:title" content="SpringMVC">
+<meta name="twitter:description" content="什么是SpringMVC&amp;#160;&amp;#160;&amp;#160;&amp;#160;Spring Web MVC是一种基于Java的实现了Web MVC设计模式的请求驱动类型的轻量级Web框架，即使用了MVC架构模式的思想，将web层进行职责解耦，基于请求驱动指的就是使用请求-响应模型，框架的目的就是帮助我们简化开发，Spring Web MVC也是要简化我们日常Web开发的。
+&amp;#160;&amp;#160;&amp;#1">
+<meta name="twitter:image" content="http://i.imgur.com/G4TnKL1.jpg">
 
 
 
@@ -114,7 +117,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
   };
 </script>
 
-  <title> Redis(二) | ZL's blog </title>
+  <title> SpringMVC | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -304,7 +307,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
             
               
-                Redis(二)
+                SpringMVC
               
             
           </h1>
@@ -316,8 +319,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T12:30:45+08:00" content="2016-05-04">
-              2016-05-04
+            <time itemprop="dateCreated" datetime="2016-05-10T22:21:01+08:00" content="2016-05-10">
+              2016-05-10
             </time>
           </span>
 
@@ -330,8 +333,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
                   </a>
                 </span>
 
@@ -346,8 +349,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/04/Redis学习(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/Redis学习(二)/" itemprop="commentsCount"></span>
+                <a href="/2016/05/10/SpringMvc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/10/SpringMvc/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -370,13 +373,16 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
 
       
-        <h2 id="Redis使用方法"><a href="#Redis使用方法" class="headerlink" title="Redis使用方法"></a>Redis使用方法</h2><p>&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。</p>
-<h3 id="list"><a href="#list" class="headerlink" title="list:"></a>list:</h3><p>&#160;&#160;&#160;&#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了几条额外信息（数组长度，最后结点偏移量等）的数组，存储的内容都是在连续的内存中，但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。而linkedlist是一种双向链表。它的结构比较简单，节点中存放pre和next两个指针，还有节点相关的信息。当每增加一个node的时候，就需要重新malloc一块内存。</p>
-<p>&#160;&#160;&#160;&#160;知道list的结构后，其实list方法就是平时我们所学的队列哪些基本方法，lpush(推入队列)、lpop(推出队列)、blpop(推出队列，如果没有元素会阻塞等待知道有元素)、lindex（查询指定位置元素，坐标从0开始）、lrange（取出坐标范围元素）、lrem（删除元素跟pop区别在于rem删除并且返回删除的数量，pop返回删除的元素本身）、linsert（在指定位置向前后者向后插入）、lset（通过位置设置元素值）、rpush（跟lpush都是插入但一个是队列头一个是队列尾插入）</p>
-<p>&#160;&#160;&#160;&#160;list应用场景主要是关注列表，粉丝等。比如说现在做一个关注列表，我们知道redis是键值对存储，对于列表来说，key就是一个字符串标识，value就是我们在讨论的队列或者列表，我们可以用当前用户相关的字符串作为key值，list中就存入你关注的用户id。这样后台很容易查到某个用户中关联的其他人id。</p>
-<h3 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h3><p>&#160;&#160;&#160;&#160;集合对象的编码可以是intset或者hashtable。hashtable是一个哈希表，这里不再多说。来谈一谈这个intset，intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数:int16,int32,int64。intset是一个有序集合，查找元素的复杂度为O(logN)（有序使用二分法），但插入时不一定为O(logN)（同上），因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。</p>
-<p>&#160;&#160;&#160;&#160;常用命令：sadd(添加元素),spop(取出元素),smembers(显示元素),sunion(两个集合的并集),sdiff(两个集合不相交的集合),sinter(两集合交集),sismember(是否存在元素) 等。set中sismemeber是一个区别于list的接口。</p>
-<p>&#160;&#160;&#160;&#160;set应用场景主要是点赞点<br>踩，抽奖，已读，<br>共同好友。尤其是sinter求交集可以很容易得到共同好友，共同爱好这些内容。通过去重属性可以用来去掉重复用户然后抽奖等。通过类似list关注方法可以实现踩赞功能。通过查找ismemeber可以实现是否已读。</p>
+        <h2 id="什么是SpringMVC"><a href="#什么是SpringMVC" class="headerlink" title="什么是SpringMVC"></a>什么是SpringMVC</h2><p>&#160;&#160;&#160;&#160;Spring Web MVC是一种基于Java的实现了Web MVC设计模式的请求驱动类型的轻量级Web框架，即使用了MVC架构模式的思想，将web层进行职责解耦，基于请求驱动指的就是使用请求-响应模型，框架的目的就是帮助我们简化开发，Spring Web MVC也是要简化我们日常Web开发的。</p>
+<p>&#160;&#160;&#160;&#160;Spring Web MVC也是服务到工作者模式的实现，但进行可优化。前端控制器是DispatcherServlet；应用控制器其实拆为处理器映射器(Handler Mapping)进行处理器管理和视图解析器(View Resolver)进行视图管理；页面控制器/动作/处理器为Controller接口（仅包含ModelAndView handleRequest(request, response) 方法）的实现（也可以是任何的POJO类）；支持本地化（Locale）解析、主题（Theme）解析及文件上传等；提供了非常灵活的数据验证、格式化和数据绑定机制；提供了强大的约定大于配置（惯例优先原则）的契约式编程支持。</p>
+<h2 id="Spring-MVC-结构"><a href="#Spring-MVC-结构" class="headerlink" title="Spring MVC 结构"></a>Spring MVC 结构</h2><p>&#160;&#160;&#160;&#160;Spring Web MVC框架也是一个基于请求驱动的Web框架，并且也使用了前端控制器模式来进行设计，再根据请求映射规则分发给相应的页面控制器（动作/处理器）进行处理。首先让我们整体看一下Spring Web MVC处理请求的流程如下：</p>
+<p><img src="http://i.imgur.com/G4TnKL1.jpg" alt=""></p>
+<p>具体执行步骤如下：<br>1、  首先用户发送请求————&gt;前端控制器，前端控制器根据请求信息（如URL）来决定选择哪一个页面控制器进行处理并把请求委托给它，即以前的控制器的控制逻辑部分；图2-1中的1、2步骤；<br>2、  页面控制器接收到请求后，进行功能处理，首先需要收集和绑定请求参数到一个对象，这个对象在Spring Web MVC中叫命令对象，并进行验证，然后将命令对象委托给业务对象进行处理；处理完毕后返回一个ModelAndView（模型数据和逻辑视图名）；图2-1中的3、4、5步骤；<br>3、  前端控制器收回控制权，然后根据返回的逻辑视图名，选择相应的视图进行渲染，并把模型数据传入以便视图渲染；图2-1中的步骤6、7；<br>4、  前端控制器再次收回控制权，将响应返回给用户，图2-1中的步骤8；至此整个结束。</p>
+<p>Spring Web MVC核心架构图如下：</p>
+<p><img src="http://i.imgur.com/c3SL8CX.jpg" alt=""></p>
+<p>核心架构的具体流程步骤如下：<br>1、  首先用户发送请求——&gt;DispatcherServlet，前端控制器收到请求后自己不进行处理，而是委托给其他的解析器进行处理，作为统一访问点，进行全局的流程控制；<br>2、  DispatcherServlet——&gt;HandlerMapping， HandlerMapping将会把请求映射为HandlerExecutionChain对象（包含一个Handler处理器（页面控制器）对象、多个HandlerInterceptor拦截器）对象，通过这种策略模式，很容易添加新的映射策略；<br>3、  DispatcherServlet——&gt;HandlerAdapter，HandlerAdapter将会把处理器包装为适配器，从而支持多种类型的处理器，即适配器设计模式的应用，从而很容易支持很多类型的处理器；<br>4、  HandlerAdapter——&gt;处理器功能处理方法的调用，HandlerAdapter将会根据适配的结果调用真正的处理器的功能处理方法，完成功能处理；并返回一个ModelAndView对象（包含模型数据、逻辑视图名）；<br>5、  ModelAndView的逻辑视图名——&gt; ViewResolver， ViewResolver将把逻辑视图名解析为具体的View，通过这种策略模式，很容易更换其他视图技术；<br>6、  View——&gt;渲染，View会根据传进来的Model模型数据进行渲染，此处的Model实际是一个Map数据结构，因此很容易支持其他视图技术；<br>7、返回控制权给DispatcherServlet，由DispatcherServlet返回响应给用户，到此一个流程结束。</p>
+<p>此处我们只是讲了核心流程，没有考虑拦截器、本地解析、文件上传解析等。</p>
+<p>在此我们可以看出具体的核心开发步骤：<br>1、  DispatcherServlet在web.xml中的部署描述，从而拦截请求到Spring Web MVC<br>2、  HandlerMapping的配置，从而将请求映射到处理器<br>3、  HandlerAdapter的配置，从而支持多种类型的处理器<br>4、  ViewResolver的配置，从而将逻辑视图名解析为具体视图技术<br>5、处理器（页面控制器）的配置，从而进行功能处理</p>
 
       
     </div>
@@ -398,9 +404,9 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
         <div class="post-tags">
           
-            <a href="/tags/数据库/" rel="tag">#数据库</a>
+            <a href="/tags/spring/" rel="tag">#spring</a>
           
-            <a href="/tags/Redis/" rel="tag">#Redis</a>
+            <a href="/tags/web/" rel="tag">#web</a>
           
         </div>
       
@@ -409,17 +415,13 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/02/Redis学习(一)/" rel="next" title="Redis(一)">
-                <i class="fa fa-chevron-left"></i> Redis(一)
+              <a href="/2016/05/08/虚拟机内存回收/" rel="next" title="虚拟机">
+                <i class="fa fa-chevron-left"></i> 虚拟机
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/06/虚拟机/" rel="prev" title="虚拟机">
-                虚拟机 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -434,10 +436,10 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/05/04/Redis学习(二)/"
-     data-title="Redis(二)"
+        <div class="ds-share flat" data-thread-key="2016/05/10/SpringMvc/"
+     data-title="SpringMVC"
      data-content=""
-     data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+     data-url="http://yoursite.com/2016/05/10/SpringMvc/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -464,8 +466,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/04/Redis学习(二)/"
-           data-title="Redis(二)" data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+      <div class="ds-thread" data-thread-key="2016/05/10/SpringMvc/"
+           data-title="SpringMVC" data-url="http://yoursite.com/2016/05/10/SpringMvc/">
       </div>
     
   </div>
@@ -566,7 +568,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SpringMVC"><span class="nav-number">1.</span> <span class="nav-text">什么是SpringMVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-MVC-结构"><span class="nav-number">2.</span> <span class="nav-text">Spring MVC 结构</span></a></li></ol></div>
             
           </div>
         </section>

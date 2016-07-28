@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="数据库,Redis," />
+  <meta name="keywords" content="java,虚拟机," />
 
 
 
@@ -84,19 +84,26 @@
 
 
 
-<meta name="description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="description" content="java内存
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;如图所示，JVM主要包括两个子系统和两个组件。两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Class lo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis(二)">
-<meta property="og:url" content="http://yoursite.com/2016/05/04/Redis学习(二)/index.html">
+<meta property="og:title" content="虚拟机">
+<meta property="og:url" content="http://yoursite.com/2016/05/06/虚拟机/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
-<meta property="og:updated_time" content="2016-07-28T12:59:14.585Z">
+<meta property="og:description" content="java内存
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;如图所示，JVM主要包括两个子系统和两个组件。两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Class lo">
+<meta property="og:image" content="http://i.imgur.com/iGQTAnK.png">
+<meta property="og:image" content="http://i.imgur.com/jo0eet9.jpg">
+<meta property="og:image" content="http://i.imgur.com/aGV4XaR.jpg">
+<meta property="og:updated_time" content="2016-07-28T15:20:42.407Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis(二)">
-<meta name="twitter:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="twitter:title" content="虚拟机">
+<meta name="twitter:description" content="java内存
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;如图所示，JVM主要包括两个子系统和两个组件。两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Class lo">
+<meta name="twitter:image" content="http://i.imgur.com/iGQTAnK.png">
 
 
 
@@ -114,7 +121,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
   };
 </script>
 
-  <title> Redis(二) | ZL's blog </title>
+  <title> 虚拟机 | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -304,7 +311,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
             
               
-                Redis(二)
+                虚拟机
               
             
           </h1>
@@ -316,8 +323,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T12:30:45+08:00" content="2016-05-04">
-              2016-05-04
+            <time itemprop="dateCreated" datetime="2016-05-06T22:21:01+08:00" content="2016-05-06">
+              2016-05-06
             </time>
           </span>
 
@@ -330,8 +337,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -346,8 +353,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/04/Redis学习(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/Redis学习(二)/" itemprop="commentsCount"></span>
+                <a href="/2016/05/06/虚拟机/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/06/虚拟机/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -370,13 +377,25 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
 
       
-        <h2 id="Redis使用方法"><a href="#Redis使用方法" class="headerlink" title="Redis使用方法"></a>Redis使用方法</h2><p>&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。</p>
-<h3 id="list"><a href="#list" class="headerlink" title="list:"></a>list:</h3><p>&#160;&#160;&#160;&#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了几条额外信息（数组长度，最后结点偏移量等）的数组，存储的内容都是在连续的内存中，但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。而linkedlist是一种双向链表。它的结构比较简单，节点中存放pre和next两个指针，还有节点相关的信息。当每增加一个node的时候，就需要重新malloc一块内存。</p>
-<p>&#160;&#160;&#160;&#160;知道list的结构后，其实list方法就是平时我们所学的队列哪些基本方法，lpush(推入队列)、lpop(推出队列)、blpop(推出队列，如果没有元素会阻塞等待知道有元素)、lindex（查询指定位置元素，坐标从0开始）、lrange（取出坐标范围元素）、lrem（删除元素跟pop区别在于rem删除并且返回删除的数量，pop返回删除的元素本身）、linsert（在指定位置向前后者向后插入）、lset（通过位置设置元素值）、rpush（跟lpush都是插入但一个是队列头一个是队列尾插入）</p>
-<p>&#160;&#160;&#160;&#160;list应用场景主要是关注列表，粉丝等。比如说现在做一个关注列表，我们知道redis是键值对存储，对于列表来说，key就是一个字符串标识，value就是我们在讨论的队列或者列表，我们可以用当前用户相关的字符串作为key值，list中就存入你关注的用户id。这样后台很容易查到某个用户中关联的其他人id。</p>
-<h3 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h3><p>&#160;&#160;&#160;&#160;集合对象的编码可以是intset或者hashtable。hashtable是一个哈希表，这里不再多说。来谈一谈这个intset，intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数:int16,int32,int64。intset是一个有序集合，查找元素的复杂度为O(logN)（有序使用二分法），但插入时不一定为O(logN)（同上），因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。</p>
-<p>&#160;&#160;&#160;&#160;常用命令：sadd(添加元素),spop(取出元素),smembers(显示元素),sunion(两个集合的并集),sdiff(两个集合不相交的集合),sinter(两集合交集),sismember(是否存在元素) 等。set中sismemeber是一个区别于list的接口。</p>
-<p>&#160;&#160;&#160;&#160;set应用场景主要是点赞点<br>踩，抽奖，已读，<br>共同好友。尤其是sinter求交集可以很容易得到共同好友，共同爱好这些内容。通过去重属性可以用来去掉重复用户然后抽奖等。通过类似list关注方法可以实现踩赞功能。通过查找ismemeber可以实现是否已读。</p>
+        <h2 id="java内存"><a href="#java内存" class="headerlink" title="java内存"></a>java内存</h2><p><img src="http://i.imgur.com/iGQTAnK.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;如图所示，JVM主要包括两个子系统和两个组件。两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。</p>
+<p>&#160;&#160;&#160;&#160;Class loader子系统的作用：根据给定的全限定名类名(如 java.lang.Object)来装载class文件的内容到 Runtime data area中的method area(方法区域)。Java程序员可以extends java.lang.ClassLoader类来写自己的Class loader。  </p>
+<p>&#160;&#160;&#160;&#160;Execution engine子系统的作用：执行classes中的指令。任何JVM specification实现(JDK)的核心都是Execution engine，不同的JDK例如Sun 的JDK 和IBM的JDK好坏主要就取决于他们各自实现的Execution engine的好坏。</p>
+<p>&#160;&#160;&#160;&#160;Native interface组件：与native libraries交互，是其它编程语言交互的接口。当调用native方法的时候，就进入了一个全新的并且不再受虚拟机限制的世界，所以也很容易出现 JVM无法控制的native heap OutOfMemory。</p>
+<p>&#160;&#160;&#160;&#160;Runtime Data Area组件：这就是我们常说的JVM的内存了。它主要分为五个部分——</p>
+<p>1、Heap (堆)：一个Java虚拟实例中只存在一个堆空间，此区域是内存中最大的一块。此区域的唯一目的就是存放对象实例，几乎所有的对象实例都在这里分配内存。而java堆是垃圾收集器管理的主要区域，因此此区域也被成为”GC”堆</p>
+<p>2、Method Area(方法区域)：被装载的class的信息存储在Method area的内存中。当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件内容并把它传输到虚拟机中。</p>
+<p>3、 Java Stack(java的栈)：虚拟机只会直接对Java stack执行两种操作：以帧为单位的压栈或出栈</p>
+<p>4、Program Counter(程序计数器)：每一个线程都有它自己的PC寄存器，也是该线程启动时创建的。PC寄存器的内容总是指向下一条将被执行指令的饿地址，这里 的地址可以是一个本地指针，也可以是在方法区中相对应于该方法起始指令的偏移量。 </p>
+<p>5、Native method stack(本地方法栈)：保存native方法进入区域的地址</p>
+<p>以上五部分只有Heap 和Method Area是被所有线程的共享使用的；而Java stack, Program counter 和Native method stack是以线程为粒度的，每个线程独自拥有自己的部分。</p>
+<p>&#160;&#160;&#160;&#160;这里再顺便提一下对象的访问定位，目前主流的访问方式有使用句柄和直接指针两种。</p>
+<ul>
+<li><p>如果使用句柄访问的话，那么java堆中将会划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址，而句柄中分别存储对象实例和对象类型书库的地址如下图：<br><img src="http://i.imgur.com/jo0eet9.jpg" alt=""></p>
+</li>
+<li><p>如果使用直接指针访问，那么java对对象的不居中就必须考虑如何访问类型信息，而reference中直接存储的是对象地址。<br><img src="http://i.imgur.com/aGV4XaR.jpg" alt=""></p>
+</li>
+</ul>
 
       
     </div>
@@ -398,9 +417,9 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
         <div class="post-tags">
           
-            <a href="/tags/数据库/" rel="tag">#数据库</a>
+            <a href="/tags/java/" rel="tag">#java</a>
           
-            <a href="/tags/Redis/" rel="tag">#Redis</a>
+            <a href="/tags/虚拟机/" rel="tag">#虚拟机</a>
           
         </div>
       
@@ -409,15 +428,15 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/02/Redis学习(一)/" rel="next" title="Redis(一)">
-                <i class="fa fa-chevron-left"></i> Redis(一)
+              <a href="/2016/05/04/Redis学习(二)/" rel="next" title="Redis(二)">
+                <i class="fa fa-chevron-left"></i> Redis(二)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/06/虚拟机/" rel="prev" title="虚拟机">
+              <a href="/2016/05/08/虚拟机内存回收/" rel="prev" title="虚拟机">
                 虚拟机 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -434,10 +453,10 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/05/04/Redis学习(二)/"
-     data-title="Redis(二)"
+        <div class="ds-share flat" data-thread-key="2016/05/06/虚拟机/"
+     data-title="虚拟机"
      data-content=""
-     data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+     data-url="http://yoursite.com/2016/05/06/虚拟机/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -464,8 +483,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/04/Redis学习(二)/"
-           data-title="Redis(二)" data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+      <div class="ds-thread" data-thread-key="2016/05/06/虚拟机/"
+           data-title="虚拟机" data-url="http://yoursite.com/2016/05/06/虚拟机/">
       </div>
     
   </div>
@@ -566,7 +585,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存"><span class="nav-number">1.</span> <span class="nav-text">java内存</span></a></li></ol></div>
             
           </div>
         </section>

@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="数据库,Redis," />
+  <meta name="keywords" content="java,虚拟机," />
 
 
 
@@ -84,19 +84,22 @@
 
 
 
-<meta name="description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;了解JVM的系统结构，再来看看JVM内存回收问题了——Sun的 JVM Generational Collecting(垃圾回收)原理是这样的：把对象分为年青代(Young)、年老代(Tenured)、持久代(Perm)，对不同生命周期的对象 使用不同的算法。(基于对对象生命周期分析)
+
+Young（年轻代）年轻代分三个区。一个Eden 区，两个Su">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis(二)">
-<meta property="og:url" content="http://yoursite.com/2016/05/04/Redis学习(二)/index.html">
+<meta property="og:title" content="虚拟机">
+<meta property="og:url" content="http://yoursite.com/2016/05/08/虚拟机内存回收/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
-<meta property="og:updated_time" content="2016-07-28T12:59:14.585Z">
+<meta property="og:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;了解JVM的系统结构，再来看看JVM内存回收问题了——Sun的 JVM Generational Collecting(垃圾回收)原理是这样的：把对象分为年青代(Young)、年老代(Tenured)、持久代(Perm)，对不同生命周期的对象 使用不同的算法。(基于对对象生命周期分析)
+
+Young（年轻代）年轻代分三个区。一个Eden 区，两个Su">
+<meta property="og:updated_time" content="2016-07-28T15:46:07.839Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis(二)">
-<meta name="twitter:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta name="twitter:title" content="虚拟机">
+<meta name="twitter:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;了解JVM的系统结构，再来看看JVM内存回收问题了——Sun的 JVM Generational Collecting(垃圾回收)原理是这样的：把对象分为年青代(Young)、年老代(Tenured)、持久代(Perm)，对不同生命周期的对象 使用不同的算法。(基于对对象生命周期分析)
+
+Young（年轻代）年轻代分三个区。一个Eden 区，两个Su">
 
 
 
@@ -114,7 +117,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
   };
 </script>
 
-  <title> Redis(二) | ZL's blog </title>
+  <title> 虚拟机 | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -304,7 +307,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
             
               
-                Redis(二)
+                虚拟机
               
             
           </h1>
@@ -316,8 +319,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T12:30:45+08:00" content="2016-05-04">
-              2016-05-04
+            <time itemprop="dateCreated" datetime="2016-05-08T22:21:01+08:00" content="2016-05-08">
+              2016-05-08
             </time>
           </span>
 
@@ -330,8 +333,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -346,8 +349,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/04/Redis学习(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/Redis学习(二)/" itemprop="commentsCount"></span>
+                <a href="/2016/05/08/虚拟机内存回收/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/08/虚拟机内存回收/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -370,13 +373,21 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
 
       
-        <h2 id="Redis使用方法"><a href="#Redis使用方法" class="headerlink" title="Redis使用方法"></a>Redis使用方法</h2><p>&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。</p>
-<h3 id="list"><a href="#list" class="headerlink" title="list:"></a>list:</h3><p>&#160;&#160;&#160;&#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了几条额外信息（数组长度，最后结点偏移量等）的数组，存储的内容都是在连续的内存中，但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。而linkedlist是一种双向链表。它的结构比较简单，节点中存放pre和next两个指针，还有节点相关的信息。当每增加一个node的时候，就需要重新malloc一块内存。</p>
-<p>&#160;&#160;&#160;&#160;知道list的结构后，其实list方法就是平时我们所学的队列哪些基本方法，lpush(推入队列)、lpop(推出队列)、blpop(推出队列，如果没有元素会阻塞等待知道有元素)、lindex（查询指定位置元素，坐标从0开始）、lrange（取出坐标范围元素）、lrem（删除元素跟pop区别在于rem删除并且返回删除的数量，pop返回删除的元素本身）、linsert（在指定位置向前后者向后插入）、lset（通过位置设置元素值）、rpush（跟lpush都是插入但一个是队列头一个是队列尾插入）</p>
-<p>&#160;&#160;&#160;&#160;list应用场景主要是关注列表，粉丝等。比如说现在做一个关注列表，我们知道redis是键值对存储，对于列表来说，key就是一个字符串标识，value就是我们在讨论的队列或者列表，我们可以用当前用户相关的字符串作为key值，list中就存入你关注的用户id。这样后台很容易查到某个用户中关联的其他人id。</p>
-<h3 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h3><p>&#160;&#160;&#160;&#160;集合对象的编码可以是intset或者hashtable。hashtable是一个哈希表，这里不再多说。来谈一谈这个intset，intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数:int16,int32,int64。intset是一个有序集合，查找元素的复杂度为O(logN)（有序使用二分法），但插入时不一定为O(logN)（同上），因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。</p>
-<p>&#160;&#160;&#160;&#160;常用命令：sadd(添加元素),spop(取出元素),smembers(显示元素),sunion(两个集合的并集),sdiff(两个集合不相交的集合),sinter(两集合交集),sismember(是否存在元素) 等。set中sismemeber是一个区别于list的接口。</p>
-<p>&#160;&#160;&#160;&#160;set应用场景主要是点赞点<br>踩，抽奖，已读，<br>共同好友。尤其是sinter求交集可以很容易得到共同好友，共同爱好这些内容。通过去重属性可以用来去掉重复用户然后抽奖等。通过类似list关注方法可以实现踩赞功能。通过查找ismemeber可以实现是否已读。</p>
+        <p>&#160;&#160;&#160;&#160;了解JVM的系统结构，再来看看JVM内存回收问题了——<br>Sun的 JVM Generational Collecting(垃圾回收)原理是这样的：把对象分为年青代(Young)、年老代(Tenured)、持久代(Perm)，对不同生命周期的对象 使用不同的算法。(基于对对象生命周期分析)</p>
+<ol>
+<li>Young（年轻代）<br>年轻代分三个区。一个Eden 区，两个Survivor区。大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当这个 Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor去也满了的时候，从第一个Survivor区复制 过来的并且此时还存活的对象，将被复制年老区(Tenured。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从 Eden复制过来 对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空 的。  </li>
+<li>Tenured（年老代）<br>年老代存放从年轻代存活的对象。一般来说年老代存放的都是生命期较长的对象。  </li>
+<li>Perm（持久代）<br>用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些 class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过 -XX:MaxPermSize=进行设置。</li>
+</ol>
+<p>&#160;&#160;&#160;&#160;举个例子：当在程序中生成对象时，正常对象会在年轻代中分配空间，如果是过大的对象也可能会 直接在年老代生成（据观测在运行某程序时候每次会生成一个十兆的空间用收发消息，这部分内存就会直接在年老代分配）。年轻代在空间被分配完的时候就会发起 内存回收，大部分内存会被回收，一部分幸存的内存会被拷贝至Survivor的from区，经过多次回收以后如果from区内存也分配完毕，就会也发生内 存回收然后将剩余的对象拷贝至to区。等到to区也满的时候，就会再次发生内存回收然后把幸存的对象拷贝至年老区。</p>
+<p>&#160;&#160;&#160;&#160;通常我们说的JVM内 存回收总是在指堆内存回收，确实只有堆中的内容是动态申请分配的，所以以上对象的年轻代和年老代都是指的JVM的Heap空间，而持久代则是之前提到的 Method Area，不属于Heap。</p>
+<p>&#160;&#160;&#160;&#160;了解完这些之后，以下的转载一热衷于钻研技术的哥们Richen Wang关于内存管理的一些建议——<br>1、手动将生成的无用对象，中间对象置为null，加快内存回收。<br>2、对象池技术 如果生成的对象是可重用的对象，只是其中的属性不同时，可以考虑采用对象池来较少对象的生成。如果有空闲的对象就从对象池中取出使用，没有再生成新的对 象，大大提高了对象的复用率。<br>3、JVM调优 通过配置JVM的参数来提高垃圾回收的速度，如果在没有出现内存泄露且上面两种办法都不能保证内存的回收时，可以考虑采用JVM调优的方式来解决，不过一 定要经过实体机的长期测试，因为不同的参数可能引起不同的效果。如-Xnoclassgc参数等。</p>
+<p>&#160;&#160;&#160;&#160;推荐的两款内存检测工具</p>
+<p>1、 jconsole JDK自带的内存监测工具，路径jdk bin目录下jconsole.exe，双击可运行。连接方式有两种，第一种是本地方式如调试时运行的进程可以直接连，第二种是远程方式，可以连接以服务 形式启动的进程。远程连接方式是：在目标进程的jvm启动参数中添加-Dcom.sun.management.jmxremote.port=1090 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false 1090是监听的端口号具体使用时要进行修改，然后使用IP加端口号连接即可。通过该工具可以监测到当时内存的大小，CPU的使用量以及类的加载，还提供 了手动gc的功能。优点是效率高，速度快，在不影响进行运行的情况下监测产品的运行。缺点是无法看到类或者对象之类的具体信息。使用方式很简单点击几下就 可以知道功能如何了，确实有不明白之处可以上网查询文档。</p>
+<p>2、JProfiler 收费的工具，但是到处都有破解办法。安装好以后按照配置调试的方式配置好一个本地的session即可运行。可以监测当时的内存、CPU、线程等，能具体 的列出内存的占用情况，还可以就某个类进行分析。优点很多，缺点太影响速度，而且有的类可能无法被织入方法，例如我使用jprofiler时一直没有备份 成功过，总会有一些类的错误。</p>
+<p>3、java.lang.OutOfMemoryError: PermGen space及其解决方法     </p>
+<p>  PermGen space的全称是Permanent Generation space,是指内存的永久保存区域OutOfMemoryError: PermGen space从表面上看就是内存益出，解决方法也一定是加大内存。<br>说说为什么会内存益出：这一部分用于存放Class和Meta的信息,Class在被 Load的时候被放入PermGen space区域，它和和存放Instance的Heap区域不同,GC(Garbage Collection)不会在主程序运行 期对PermGen space进行清理，所以如果你的APP会LOAD很多CLASS的话,就很可能出现PermGen space错误。这种错误常见在web服务器对JSP进行pre compile的时候。<br>改正方法：-Xms256m -Xmx256m -XX:MaxNewSize=256m -XX:MaxPermSize=256m</p>
+<p>  在tomcat中redeploy时出现outofmemory的错误. 可以有以下几个方面的原因:<br> 1, 使用了proxool,因为proxool内部包含了一个老版本的cglib.<br> 2, log4j,最好不用,只用common-logging<br> 3, 老版本的cglib,快点更新到最新版。<br> 4, 更新到最新的hibernate3.2 3、</p>
 
       
     </div>
@@ -398,9 +409,9 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
       
         <div class="post-tags">
           
-            <a href="/tags/数据库/" rel="tag">#数据库</a>
+            <a href="/tags/java/" rel="tag">#java</a>
           
-            <a href="/tags/Redis/" rel="tag">#Redis</a>
+            <a href="/tags/虚拟机/" rel="tag">#虚拟机</a>
           
         </div>
       
@@ -409,16 +420,16 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/02/Redis学习(一)/" rel="next" title="Redis(一)">
-                <i class="fa fa-chevron-left"></i> Redis(一)
+              <a href="/2016/05/06/虚拟机/" rel="next" title="虚拟机">
+                <i class="fa fa-chevron-left"></i> 虚拟机
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/06/虚拟机/" rel="prev" title="虚拟机">
-                虚拟机 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/10/SpringMvc/" rel="prev" title="SpringMVC">
+                SpringMVC <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -434,10 +445,10 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/05/04/Redis学习(二)/"
-     data-title="Redis(二)"
+        <div class="ds-share flat" data-thread-key="2016/05/08/虚拟机内存回收/"
+     data-title="虚拟机"
      data-content=""
-     data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+     data-url="http://yoursite.com/2016/05/08/虚拟机内存回收/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -464,8 +475,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/04/Redis学习(二)/"
-           data-title="Redis(二)" data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+      <div class="ds-thread" data-thread-key="2016/05/08/虚拟机内存回收/"
+           data-title="虚拟机" data-url="http://yoursite.com/2016/05/08/虚拟机内存回收/">
       </div>
     
   </div>
@@ -566,7 +577,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
