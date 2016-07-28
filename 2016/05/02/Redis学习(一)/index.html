@@ -68,6 +68,8 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
+  <meta name="keywords" content="数据库,Redis," />
+
 
 
 
@@ -82,15 +84,28 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ZL's blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="redis介绍&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis主要有三个很大的特点：
+
+Redis是完全在内存中保存数据的数据库，使用磁盘只是为了持久性目的；
+Redis相">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis(一)">
+<meta property="og:url" content="http://yoursite.com/2016/05/02/Redis学习(一)/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description">
+<meta property="og:description" content="redis介绍&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis主要有三个很大的特点：
+
+Redis是完全在内存中保存数据的数据库，使用磁盘只是为了持久性目的；
+Redis相">
+<meta property="og:image" content="http://images.cnitblog.com/blog/492619/201307/18083837-1c0468286ab14582bdd382567ef40d58.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/270324/201305/27152846-f394a6eb01ad41ba92989d571f34d211.png">
+<meta property="og:updated_time" content="2016-07-28T11:04:19.613Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ZL's blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Redis(一)">
+<meta name="twitter:description" content="redis介绍&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&amp;#160;&amp;#160;&amp;#160;&amp;#160;Redis主要有三个很大的特点：
+
+Redis是完全在内存中保存数据的数据库，使用磁盘只是为了持久性目的；
+Redis相">
+<meta name="twitter:image" content="http://images.cnitblog.com/blog/492619/201307/18083837-1c0468286ab14582bdd382567ef40d58.jpg">
 
 
 
@@ -108,7 +123,7 @@
   };
 </script>
 
-  <title>  - ZL's blog -  </title>
+  <title> Redis(一) | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -129,9 +144,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,9 +291,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -300,136 +313,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/05/04/Redis学习(二)/" itemprop="url">
-                  Redis(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T12:30:45+08:00" content="2016-05-04">
-              2016-05-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/04/Redis学习(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/Redis学习(二)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Redis使用方法&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&#160;&#160;&#160;&
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/04/Redis学习(二)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/02/Redis学习(一)/" itemprop="url">
-                  Redis(一)
-                </a>
+                Redis(一)
               
             
           </h1>
@@ -495,297 +379,99 @@ list:&#160;&#160;&#160;&
       
 
       
-        
-          
-          redis介绍&#160;&#160;&#160;&#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&#160;&#160;&#160;&#160;Redis主要有三个
-          ...
+        <h2 id="redis介绍"><a href="#redis介绍" class="headerlink" title="redis介绍"></a>redis介绍</h2><p>&#160;&#160;&#160;&#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：<a href="http://www.redis.io/。" target="_blank" rel="external">http://www.redis.io/。</a><br>&#160;&#160;&#160;&#160;Redis主要有三个很大的特点：</p>
+<ul>
+<li>Redis是完全在内存中保存数据的数据库，使用磁盘只是为了持久性目的；</li>
+<li>Redis相比许多键值数据存储系统有相对丰富的数据类型； </li>
+<li>Redis可以将数据复制到任意数量的从服务器中；</li>
+<li></li>
+</ul>
+<h2 id="Redis优点"><a href="#Redis优点" class="headerlink" title="Redis优点"></a>Redis优点</h2><ul>
+<li><strong>异常快速</strong> :   Redis是非常快的，每秒可以执行大约110000设置操作，81000个/每秒的读取操作。</li>
+<li><strong>支持丰富的数据类型</strong> : Redis支持最大多数开发人员已经知道如列表，集合，可排序集合，哈希等数据类型。</li>
+<li><strong>操作都是原子的</strong> : 所有 Redis 的操作都是原子，从而确保当两个客户同时访问 Redis 服务器得到的是更新后的值（最新值）。</li>
+<li><strong>MultiUtility工具</strong>：Redis是一个多功能实用工具，可以在很多如：缓存，消息传递队列中使用（Redis原生支持发布/订阅），在应用程序中，如：Web应用程序会话，网站页面点击数等任何短暂的数据；</li>
+</ul>
+<h2 id="Redis环境"><a href="#Redis环境" class="headerlink" title="Redis环境"></a>Redis环境</h2><p>&#160;&#160;&#160;&#160;这里主要讲讲windows 64位安装,可以从后面的网站直接下载 <a href="https://github.com/MSOpenTech/redis/releases" target="_blank" rel="external">https://github.com/MSOpenTech/redis/releases</a></p>
+<p>&#160;&#160;&#160;&#160;下载完成后直接安装，在安装文件夹里面使用命令行窗口输入redis-server.exe redis.windows.conf开启服务，如下图<br><img src="http://images.cnitblog.com/blog/492619/201307/18083837-1c0468286ab14582bdd382567ef40d58.jpg" alt="image"><br>接下来不要关掉这个窗口，运行redis-cli.exe 如下图<img src="http://images.cnitblog.com/blog/270324/201305/27152846-f394a6eb01ad41ba92989d571f34d211.png" alt="image"><br>当出现127.0.0.1:6379&gt;时表示你已经安装成功，6379是默认端口可以在配置文件里面配置。当然在使用redis-cli的时候要一直开着前一个server窗口，如果你觉得麻烦的话可以运行redis-server.exe –service-install redis.conf –loglevel verbose命令 其中redis.conf是配置文件，名字可能不一样改成相应文件即可。然后可以在自己电脑服务管理那看到开了一个redis的服务，以后可以直接运行redis-cli.exe的命令就行。</p>
 
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/02/Redis学习(一)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+      
+    </div>
+
+    <div>
+      
         
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/threadlocal源码分析/" itemprop="url">
-                  ThreadLocal源码分析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-20T12:30:45+08:00" content="2016-04-20">
-              2016-04-20
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
+            <a href="/tags/数据库/" rel="tag">#数据库</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/20/threadlocal源码分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/20/threadlocal源码分析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/Redis/" rel="tag">#Redis</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          什么是ThreadLocal&#160; &#160; &#160; &#160;首先来看一下jdk1.7中的部分注释：
-
-This class provides thread-local variables.  These variables differ from their normal co
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/threadlocal源码分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/20/threadlocal源码分析/" rel="next" title="ThreadLocal源码分析">
+                <i class="fa fa-chevron-left"></i> ThreadLocal源码分析
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/05/04/Redis学习(二)/" rel="prev" title="Redis(二)">
+                Redis(二) <i class="fa fa-chevron-right"></i>
+              </a>
             
-              
-                
-                <a class="post-title-link" href="/2016/04/02/helloworld/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T12:30:45+08:00" content="2016-04-02">
-              2016-04-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/NEXT/" itemprop="url" rel="index">
-                    <span itemprop="name">NEXT</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/02/helloworld/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/helloworld/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/02/helloworld/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/02/Redis学习(一)/"
+     data-title="Redis(一)"
+     data-content=""
+     data-url="http://yoursite.com/2016/05/02/Redis学习(一)/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -793,6 +479,14 @@ This class provides thread-local variables.  These variables differ from their n
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/02/Redis学习(一)/"
+           data-title="Redis(一)" data-url="http://yoursite.com/2016/05/02/Redis学习(一)/">
+      </div>
+    
+  </div>
+
         </div>
         
           
@@ -811,8 +505,17 @@ This class provides thread-local variables.  These variables differ from their n
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/1.png"
@@ -873,6 +576,17 @@ This class provides thread-local variables.  These variables differ from their n
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis介绍"><span class="nav-number">1.</span> <span class="nav-text">redis介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis优点"><span class="nav-number">2.</span> <span class="nav-text">Redis优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis环境"><span class="nav-number">3.</span> <span class="nav-text">Redis环境</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -969,6 +683,10 @@ This class provides thread-local variables.  These variables differ from their n
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

@@ -68,6 +68,8 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
+  <meta name="keywords" content="java,源码," />
+
 
 
 
@@ -82,15 +84,22 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ZL's blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="什么是ThreadLocal&amp;#160; &amp;#160; &amp;#160; &amp;#160;首先来看一下jdk1.7中的部分注释：
+
+This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadLocal源码分析">
+<meta property="og:url" content="http://yoursite.com/2016/04/20/threadlocal源码分析/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description">
+<meta property="og:description" content="什么是ThreadLocal&amp;#160; &amp;#160; &amp;#160; &amp;#160;首先来看一下jdk1.7中的部分注释：
+
+This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (">
+<meta property="og:updated_time" content="2016-07-28T11:01:25.708Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ZL's blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="ThreadLocal源码分析">
+<meta name="twitter:description" content="什么是ThreadLocal&amp;#160; &amp;#160; &amp;#160; &amp;#160;首先来看一下jdk1.7中的部分注释：
+
+This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (">
 
 
 
@@ -108,7 +117,7 @@
   };
 </script>
 
-  <title>  - ZL's blog -  </title>
+  <title> ThreadLocal源码分析 | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -129,9 +138,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,9 +285,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -300,261 +307,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/05/04/Redis学习(二)/" itemprop="url">
-                  Redis(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-04T12:30:45+08:00" content="2016-05-04">
-              2016-05-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/04/Redis学习(二)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/Redis学习(二)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Redis使用方法&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&#160;&#160;&#160;&
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/04/Redis学习(二)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/02/Redis学习(一)/" itemprop="url">
-                  Redis(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-02T12:30:45+08:00" content="2016-05-02">
-              2016-05-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/02/Redis学习(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/02/Redis学习(一)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          redis介绍&#160;&#160;&#160;&#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&#160;&#160;&#160;&#160;Redis主要有三个
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/02/Redis学习(一)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/threadlocal源码分析/" itemprop="url">
-                  ThreadLocal源码分析
-                </a>
+                ThreadLocal源码分析
               
             
           </h1>
@@ -620,172 +373,192 @@ list:&#160;&#160;&#160;&
       
 
       
-        
-          
-          什么是ThreadLocal&#160; &#160; &#160; &#160;首先来看一下jdk1.7中的部分注释：
+        <h2 id="什么是ThreadLocal"><a href="#什么是ThreadLocal" class="headerlink" title="什么是ThreadLocal"></a>什么是ThreadLocal</h2><p>&#160; &#160; &#160; &#160;首先来看一下jdk1.7中的部分注释：</p>
+<blockquote>
+<p>This class provides thread-local variables.  These variables differ from their normal counterparts in that each thread that accesses one (via its <tt>get</tt> or <tt>set</tt> method) has its own, independently initialized copy of the variable.  <tt>ThreadLocal</tt> instances are typically private static fields in classes that wish to associate state with a thread (e.g., a user ID or Transaction ID).<br>Each thread holds an implicit reference to its copy of a thread-local variable as long as the thread is alive and the <tt>ThreadLocal</tt> instance is accessible; after a thread goes away, all of its copies of thread-local instances are subject to garbage collection (unless other references to these copies exist).</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;就是说这个类给线程提供了一个本地变量，这个变量使该线程拥有的。在线程存在，并且ThreadLocal能访问的时候，线程保存了对这个本地变量的引用。当线程消失的时候，本地实例会被GC掉。并且建议我们ThreadLocal最好是private static修饰的。</p>
+<h2 id="ThreadLocal中set-get方法"><a href="#ThreadLocal中set-get方法" class="headerlink" title="ThreadLocal中set get方法"></a>ThreadLocal中set get方法</h2><p>&#160; &#160; &#160; &#160;我们首先看一下threadlocal中的set get方法，下面是jdk1.7的部分源代码：</p>
+<pre><code>public void set(T value) {
+    Thread t = Thread.currentThread();
+    ThreadLocalMap map = getMap(t);
+    if (map != null)
+        map.set(this, value);
+    else
+        createMap(t, value);
+}
 
-This class provides thread-local variables.  These variables differ from their normal co
-          ...
 
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/threadlocal源码分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+/**
+ * Get the map associated with a ThreadLocal. Overridden in
+ * InheritableThreadLocal.
+ *
+ * @param  t the current thread
+ * @return the map
+ */
+ThreadLocalMap getMap(Thread t) {
+    return t.threadLocals;
+}
+</code></pre><p>&#160; &#160; &#160; &#160;发现里面有一个ThreadLocalMap，在Thread类里面定义一个ThreadLocalMap的引用，如下：</p>
+<pre><code>/* ThreadLocal values pertaining to this thread. This map is maintained
+ * by the ThreadLocal class. */
+ThreadLocal.ThreadLocalMap threadLocals = null;
+
+/**
+ * Create the map associated with a ThreadLocal. Overridden in
+ * InheritableThreadLocal.
+ *
+ * @param t the current thread
+ * @param firstValue value for the initial entry of the map
+ * @param map the map to store.
+ */
+void createMap(Thread t, T firstValue) {
+    t.threadLocals = new ThreadLocalMap(this, firstValue);
+}
+</code></pre><p>&#160; &#160; &#160; &#160;可以回过头看一下set方法，首先得到Thread对象中的ThreadLocalMap对象引用，如果引用为空，就调用createMap方法，否则就在map中添加一个entry，key为threadlocal，value为想要设置的值。</p>
+<h2 id="ThreadLocalMap"><a href="#ThreadLocalMap" class="headerlink" title="ThreadLocalMap"></a>ThreadLocalMap</h2><p>下面来看一下ThreadLocalMap：</p>
+<pre><code>/**
+    * Construct a new map initially containing (firstKey, firstValue).
+    * ThreadLocalMaps are constructed lazily, so we only create
+    * one when we have at least one entry to put in it.
+    */
+   ThreadLocalMap(ThreadLocal firstKey, Object firstValue) {
+       table = new Entry[INITIAL_CAPACITY];
+       int i = firstKey.threadLocalHashCode &amp; (INITIAL_CAPACITY - 1);
+       table[i] = new Entry(firstKey, firstValue);
+       size = 1;
+       setThreshold(INITIAL_CAPACITY);
+   }
+</code></pre><p>&#160; &#160; &#160; &#160;实际上ThreadLocalMap是ThreadLocal中的一个静态内部类，上面是这个内部类的构造函数，可以看到这个map跟我们平时所用的差不多，只不过他的key值必须是threadlocal，value是你保存的本地变量引用。其中构造函数初始化了INITIAL_CAPACITY个entry，得到一个坐标，将构造函数的参数值加入这个map中。</p>
+<p>&#160; &#160; &#160; &#160;再来看一下ThreadLocalMap的set方法</p>
+<pre><code> /**
+     * Set the value associated with key.
+     *
+     * @param key the thread local object
+     * @param value the value to be set
+     */
+    private void set(ThreadLocal key, Object value) {
+
+        // We don&apos;t use a fast path as with get() because it is at
+        // least as common to use set() to create new entries as
+        // it is to replace existing ones, in which case, a fast
+        // path would fail more often than not.
+
+        Entry[] tab = table;
+        int len = tab.length;
+        int i = key.threadLocalHashCode &amp; (len-1);
+
+        for (Entry e = tab[i];
+             e != null;
+             e = tab[i = nextIndex(i, len)]) {
+            ThreadLocal k = e.get();
+
+            if (k == key) {
+                e.value = value;
+                return;
+            }
+
+            if (k == null) {
+                replaceStaleEntry(key, value, i);
+                return;
+            }
+        }
+
+        tab[i] = new Entry(key, value);
+        int sz = ++size;
+        if (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)
+            rehash();
+    }
+
+
+private final int threadLocalHashCode = nextHashCode();
+private static AtomicInteger nextHashCode =
+    new AtomicInteger();
+private static final int HASH_INCREMENT = 0x61c88647;
+private static int nextHashCode() {
+    return nextHashCode.getAndAdd(HASH_INCREMENT);
+}
+</code></pre><p>&#160; &#160; &#160; &#160;可以看到entry数组的下标是由每一个ThreadLocal的threadLocalhashcode决定的，而threadLocalhashcode是一个常量，它是由一个静态变量初始值为0的nextHashcode加上一个0x61c88647决定的，这样就能保证每创建一个threadlocal他的threadlocalhashcode都不一样，但是这并不能保证他在map中的数组坐标也唯一。当下标冲突的时候，采用线性探查法来解决。具体可以看上边threadlocalmap中的set方法，当得到的entry不为null，且k==key是一个threadlocal市就更新里面的value值，如果k为null，就放入该位置。如果key为其他的，就在下一个位置找，直到寻找到的entry为null。如果找到的entry为空就创建一个，并保存进去。然后调用cleansomeslots进行清理，如果没有任何Entry被清理且表的size超过了阈值，就调用rehash()方法。</p>
+<p>&#160; &#160; &#160; &#160;cleansomeslots()会调用expungestaleEntry清理陈旧的Entry。rehash则会调用expungestaleEntries（）清理所有的陈旧的Entry，然后在大于3/4时调用resize()扩充。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可以看到当我们调用setget方法时会自动清理key是null的值，不会造成内存泄露。而当使用线程池的时候使用完该线程，应该显示的调用remove清空entry；</p>
+
+      
+    </div>
+
+    <div>
+      
         
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/02/helloworld/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T12:30:45+08:00" content="2016-04-02">
-              2016-04-02
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/NEXT/" itemprop="url" rel="index">
-                    <span itemprop="name">NEXT</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
+            <a href="/tags/java/" rel="tag">#java</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/02/helloworld/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/helloworld/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/源码/" rel="tag">#源码</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/02/helloworld/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/02/helloworld/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/02/Redis学习(一)/" rel="prev" title="Redis(一)">
+                Redis(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/20/threadlocal源码分析/"
+     data-title="ThreadLocal源码分析"
+     data-content=""
+     data-url="http://yoursite.com/2016/04/20/threadlocal源码分析/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -793,6 +566,14 @@ This class provides thread-local variables.  These variables differ from their n
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/20/threadlocal源码分析/"
+           data-title="ThreadLocal源码分析" data-url="http://yoursite.com/2016/04/20/threadlocal源码分析/">
+      </div>
+    
+  </div>
+
         </div>
         
           
@@ -811,8 +592,17 @@ This class provides thread-local variables.  These variables differ from their n
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/1.png"
@@ -873,6 +663,17 @@ This class provides thread-local variables.  These variables differ from their n
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是ThreadLocal"><span class="nav-number">1.</span> <span class="nav-text">什么是ThreadLocal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal中set-get方法"><span class="nav-number">2.</span> <span class="nav-text">ThreadLocal中set get方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocalMap"><span class="nav-number">3.</span> <span class="nav-text">ThreadLocalMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -969,6 +770,10 @@ This class provides thread-local variables.  These variables differ from their n
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

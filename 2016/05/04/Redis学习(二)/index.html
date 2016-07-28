@@ -68,6 +68,8 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
+  <meta name="keywords" content="数据库,Redis," />
+
 
 
 
@@ -82,15 +84,19 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ZL's blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
+list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis(二)">
+<meta property="og:url" content="http://yoursite.com/2016/05/04/Redis学习(二)/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description">
+<meta property="og:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
+list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
+<meta property="og:updated_time" content="2016-07-28T12:59:14.585Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ZL's blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Redis(二)">
+<meta name="twitter:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
+list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
 
 
 
@@ -108,7 +114,7 @@
   };
 </script>
 
-  <title>  - ZL's blog -  </title>
+  <title> Redis(二) | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -129,9 +135,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,9 +282,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -300,10 +304,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/05/04/Redis学习(二)/" itemprop="url">
-                  Redis(二)
-                </a>
+                Redis(二)
               
             
           </h1>
@@ -369,423 +370,87 @@
       
 
       
-        
-          
-          Redis使用方法&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
-list:&#160;&#160;&#160;&
-          ...
+        <h2 id="Redis使用方法"><a href="#Redis使用方法" class="headerlink" title="Redis使用方法"></a>Redis使用方法</h2><p>&#160;&#160;&#160;&#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。</p>
+<h3 id="list"><a href="#list" class="headerlink" title="list:"></a>list:</h3><p>&#160;&#160;&#160;&#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了几条额外信息（数组长度，最后结点偏移量等）的数组，存储的内容都是在连续的内存中，但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。而linkedlist是一种双向链表。它的结构比较简单，节点中存放pre和next两个指针，还有节点相关的信息。当每增加一个node的时候，就需要重新malloc一块内存。</p>
+<p>&#160;&#160;&#160;&#160;知道list的结构后，其实list方法就是平时我们所学的队列哪些基本方法，lpush(推入队列)、lpop(推出队列)、blpop(推出队列，如果没有元素会阻塞等待知道有元素)、lindex（查询指定位置元素，坐标从0开始）、lrange（取出坐标范围元素）、lrem（删除元素跟pop区别在于rem删除并且返回删除的数量，pop返回删除的元素本身）、linsert（在指定位置向前后者向后插入）、lset（通过位置设置元素值）、rpush（跟lpush都是插入但一个是队列头一个是队列尾插入）</p>
+<p>&#160;&#160;&#160;&#160;list应用场景主要是关注列表，粉丝等。比如说现在做一个关注列表，我们知道redis是键值对存储，对于列表来说，key就是一个字符串标识，value就是我们在讨论的队列或者列表，我们可以用当前用户相关的字符串作为key值，list中就存入你关注的用户id。这样后台很容易查到某个用户中关联的其他人id。</p>
+<h3 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h3><p>&#160;&#160;&#160;&#160;集合对象的编码可以是intset或者hashtable。hashtable是一个哈希表，这里不再多说。来谈一谈这个intset，intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数:int16,int32,int64。intset是一个有序集合，查找元素的复杂度为O(logN)（有序使用二分法），但插入时不一定为O(logN)（同上），因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。</p>
+<p>&#160;&#160;&#160;&#160;常用命令：sadd(添加元素),spop(取出元素),smembers(显示元素),sunion(两个集合的并集),sdiff(两个集合不相交的集合),sinter(两集合交集),sismember(是否存在元素) 等。set中sismemeber是一个区别于list的接口。</p>
+<p>&#160;&#160;&#160;&#160;set应用场景主要是点赞点<br>踩，抽奖，已读，<br>共同好友。尤其是sinter求交集可以很容易得到共同好友，共同爱好这些内容。通过去重属性可以用来去掉重复用户然后抽奖等。通过类似list关注方法可以实现踩赞功能。通过查找ismemeber可以实现是否已读。</p>
 
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/04/Redis学习(二)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+      
+    </div>
+
+    <div>
+      
         
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/02/Redis学习(一)/" itemprop="url">
-                  Redis(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-02T12:30:45+08:00" content="2016-05-02">
-              2016-05-02
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
+            <a href="/tags/数据库/" rel="tag">#数据库</a>
           
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/02/Redis学习(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/02/Redis学习(一)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/Redis/" rel="tag">#Redis</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          redis介绍&#160;&#160;&#160;&#160;Redis是一个开源的，先进的key-value存储可用于构建高性能，可扩展的Web应用程序的解决方案。Redis官方网网站是：http://www.redis.io/。&#160;&#160;&#160;&#160;Redis主要有三个
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/02/Redis学习(一)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/02/Redis学习(一)/" rel="next" title="Redis(一)">
+                <i class="fa fa-chevron-left"></i> Redis(一)
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/threadlocal源码分析/" itemprop="url">
-                  ThreadLocal源码分析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-20T12:30:45+08:00" content="2016-04-20">
-              2016-04-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/20/threadlocal源码分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/20/threadlocal源码分析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          什么是ThreadLocal&#160; &#160; &#160; &#160;首先来看一下jdk1.7中的部分注释：
-
-This class provides thread-local variables.  These variables differ from their normal co
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/20/threadlocal源码分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
+
+    <div class="post-spread">
       
+        <div class="ds-share flat" data-thread-key="2016/05/04/Redis学习(二)/"
+     data-title="Redis(二)"
+     data-content=""
+     data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
 
-  
-  
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
 
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/02/helloworld/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T12:30:45+08:00" content="2016-04-02">
-              2016-04-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/NEXT/" itemprop="url" rel="index">
-                    <span itemprop="name">NEXT</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/02/helloworld/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/helloworld/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/02/helloworld/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -793,6 +458,14 @@ This class provides thread-local variables.  These variables differ from their n
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/04/Redis学习(二)/"
+           data-title="Redis(二)" data-url="http://yoursite.com/2016/05/04/Redis学习(二)/">
+      </div>
+    
+  </div>
+
         </div>
         
           
@@ -811,8 +484,17 @@ This class provides thread-local variables.  These variables differ from their n
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/1.png"
@@ -873,6 +555,17 @@ This class provides thread-local variables.  These variables differ from their n
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -969,6 +662,10 @@ This class provides thread-local variables.  These variables differ from their n
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
