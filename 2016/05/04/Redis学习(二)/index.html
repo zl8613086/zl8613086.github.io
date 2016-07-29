@@ -92,7 +92,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 <meta property="og:site_name" content="ZL's blog">
 <meta property="og:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
 list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是ziplist，linkedlist，ziplist其实相当于一个加了">
-<meta property="og:updated_time" content="2016-07-28T12:59:14.585Z">
+<meta property="og:updated_time" content="2016-07-29T02:17:57.154Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis(二)">
 <meta name="twitter:description" content="Redis使用方法&amp;#160;&amp;#160;&amp;#160;&amp;#160;上一篇中我们主要介绍了Redis的一些优点这篇主要介绍一些常用的方法。Redis中比较常用的是5种：list、set sortedset、hHash、KV等下面介绍这些结构的一些方法。
@@ -377,6 +377,15 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 <h3 id="set"><a href="#set" class="headerlink" title="set:"></a>set:</h3><p>&#160;&#160;&#160;&#160;集合对象的编码可以是intset或者hashtable。hashtable是一个哈希表，这里不再多说。来谈一谈这个intset，intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数:int16,int32,int64。intset是一个有序集合，查找元素的复杂度为O(logN)（有序使用二分法），但插入时不一定为O(logN)（同上），因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。</p>
 <p>&#160;&#160;&#160;&#160;常用命令：sadd(添加元素),spop(取出元素),smembers(显示元素),sunion(两个集合的并集),sdiff(两个集合不相交的集合),sinter(两集合交集),sismember(是否存在元素) 等。set中sismemeber是一个区别于list的接口。</p>
 <p>&#160;&#160;&#160;&#160;set应用场景主要是点赞点<br>踩，抽奖，已读，<br>共同好友。尤其是sinter求交集可以很容易得到共同好友，共同爱好这些内容。通过去重属性可以用来去掉重复用户然后抽奖等。通过类似list关注方法可以实现踩赞功能。通过查找ismemeber可以实现是否已读。</p>
+<h3 id="SortedSet"><a href="#SortedSet" class="headerlink" title="SortedSet:"></a>SortedSet:</h3><p>&#160;&#160;&#160;&#160;sorted set跟set相比增加了一个权重参数，使得集合中元素能按照权重参数（score）进行有序排序</p>
+<p>&#160;&#160;&#160;&#160;常用命令:zadd(向指定集合中添加元素并给出权重分数),zscore(指定集合里指定元素的权重),zrange(指定集合里按照下标输出元素),zrank(指定集合里指定元素按从小到大的顺序的排名或者下标),zcount(指定权重分数范围内元素个数),zrevrank(指定集合里指定元素按从大到小的顺序的排名或者下标)</p>
+<p>&#160;&#160;&#160;&#160;Sorted Set应用场景：排行榜，优先队列等。通过给元素一个分数，控制它们的排名。</p>
+<h3 id="Hash："><a href="#Hash：" class="headerlink" title="Hash："></a>Hash：</h3><p>&#160;&#160;&#160;&#160;redis中的Hash结构其实就是redis的kv中v是一个hashmap,相当于一个map里面还有一个map。Memcached 中，我们经常将一些结构化的信息打包成 hashmap，在客户端序列化后存储为一个字符串的值（一般是 JSON 格式），比如用户的昵称、年龄、性别、积分等。这时候在需要修改其中某一项时，通常需要将字符串（JSON）取出来，然后进行反序列化，修改某一项的值，再序列化成字符串（JSON）存储回去。简单修改一个属性就干这么多事情，消耗必定是很大的，也不适用于一些可能并发操作的场合（比如两个并发的操作都需要修改积分）。而 Redis 的 Hash 结构可以使你像在数据库中 Update 一个属性一样只修改某一项属性值。</p>
+<p>&#160;&#160;&#160;&#160;常用命令：hset(设置属性值),hget(得到属性值),hgetAll(得到指定hash里面map的所有键值对),hexistes(是否存在某属性),hkeys(所有键值),hvals(所有属性值)</p>
+<p>&#160;&#160;&#160;&#160;应用场景：对象属性，不定长属性数。</p>
+<h3 id="KV："><a href="#KV：" class="headerlink" title="KV："></a>KV：</h3><p>&#160;&#160;&#160;&#160;String数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。使用 Strings 类型，可以完全实现目前 Memcached 的功能，并且效率更高。还可以享受 Redis 的定时持久化（可以选择 RDB 模式或者 AOF 模式），操作日志及 Replication 等功能。RDB：持久化在指定时间间隔内生成数据集的快照，而AOF持久化记录服务器执行的所有写操作命令，并在服务器启动后，重新执行这些命令来还原数据集。</p>
+<p>&#160;&#160;&#160;&#160;常用命令：set(设置值),setex(设置一个有过期时间的值),incr(增加值)</p>
+<p>&#160;&#160;&#160;&#160;应用场景：单一数值，验证码，PV，缓存。通过直接设置键值对作为缓存，由于可以设置过期时间可以实现短时间有效的验证码。pv是变化很明显的，如果增加一就去数据库像mysql中去update那数据库很容易就泵掉，使用redis作为缓存的同时，可以使用incrBy这方法一次增加具体的数。</p>
 
       
     </div>
@@ -417,8 +426,8 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/06/虚拟机/" rel="prev" title="虚拟机">
-                虚拟机 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/06/虚拟机/" rel="prev" title="虚拟机内存">
+                虚拟机内存 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -566,7 +575,7 @@ list:&amp;#160;&amp;#160;&amp;#160;&amp;#160;列表对象的编码可以是zipli
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis使用方法"><span class="nav-number">1.</span> <span class="nav-text">Redis使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">1.1.</span> <span class="nav-text">list:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.</span> <span class="nav-text">set:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SortedSet"><span class="nav-number">1.3.</span> <span class="nav-text">SortedSet:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash："><span class="nav-number">1.4.</span> <span class="nav-text">Hash：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KV："><span class="nav-number">1.5.</span> <span class="nav-text">KV：</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
