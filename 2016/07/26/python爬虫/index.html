@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="网络,网络架构," />
+  <meta name="keywords" content="python,爬虫," />
 
 
 
@@ -84,24 +84,31 @@
 
 
 
-<meta name="description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;网络上除了数据量大以外，需要面对的另一问题就是并发量高。
-应用和静态资源分离&amp;#160;&amp;#160;&amp;#160;&amp;#160;当并发量达到一定程度的时候，我们需要将静态资源跟应用程序分离，保存在专门的静态资源服务器，静态资源主要有：图片、视频、js、css和一些资源文件等，这些资源没有状态，可以直接放在相应服务器里面，然后用专门的域名访问。比如新浪图片">
+<meta name="description" content="这是我自己写的一个小爬虫程序，爬的是http://www.mnw.cn/news/world/
+其实使用正则表达式相对比较简单，需要做的就是看网页源码，看一下你需要的内容然后使用正则将他提取出来。
+首先先看一下这个网站以及网站源码
+因为网站都是分页的，我们要抓取很多页的时候要知道每一页的url，下面两个图是我分别打开这个网站的首页，和点击第三页以后的url可以看到第一页就是首页地址后面不加任何路径">
 <meta property="og:type" content="article">
-<meta property="og:title" content="高并发">
-<meta property="og:url" content="http://yoursite.com/2016/05/18/高并发/index.html">
+<meta property="og:title" content="python爬虫">
+<meta property="og:url" content="http://yoursite.com/2016/07/26/python爬虫/index.html">
 <meta property="og:site_name" content="ZL's blog">
-<meta property="og:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;网络上除了数据量大以外，需要面对的另一问题就是并发量高。
-应用和静态资源分离&amp;#160;&amp;#160;&amp;#160;&amp;#160;当并发量达到一定程度的时候，我们需要将静态资源跟应用程序分离，保存在专门的静态资源服务器，静态资源主要有：图片、视频、js、css和一些资源文件等，这些资源没有状态，可以直接放在相应服务器里面，然后用专门的域名访问。比如新浪图片">
-<meta property="og:image" content="http://i.imgur.com/YHUbsCp.png">
-<meta property="og:image" content="http://i.imgur.com/Gm5U7ck.png">
-<meta property="og:image" content="http://i.imgur.com/nv6HVoY.png">
-<meta property="og:image" content="http://i.imgur.com/hVuaCeZ.png">
-<meta property="og:updated_time" content="2016-08-01T06:52:36.275Z">
+<meta property="og:description" content="这是我自己写的一个小爬虫程序，爬的是http://www.mnw.cn/news/world/
+其实使用正则表达式相对比较简单，需要做的就是看网页源码，看一下你需要的内容然后使用正则将他提取出来。
+首先先看一下这个网站以及网站源码
+因为网站都是分页的，我们要抓取很多页的时候要知道每一页的url，下面两个图是我分别打开这个网站的首页，和点击第三页以后的url可以看到第一页就是首页地址后面不加任何路径">
+<meta property="og:image" content="http://i.imgur.com/IERQYru.png">
+<meta property="og:image" content="http://i.imgur.com/V7Tn5rA.png">
+<meta property="og:image" content="http://i.imgur.com/TmNXpem.png">
+<meta property="og:image" content="http://i.imgur.com/irQBvCd.png">
+<meta property="og:image" content="http://i.imgur.com/DVrxpaq.png">
+<meta property="og:updated_time" content="2016-08-01T11:23:28.647Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="高并发">
-<meta name="twitter:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;网络上除了数据量大以外，需要面对的另一问题就是并发量高。
-应用和静态资源分离&amp;#160;&amp;#160;&amp;#160;&amp;#160;当并发量达到一定程度的时候，我们需要将静态资源跟应用程序分离，保存在专门的静态资源服务器，静态资源主要有：图片、视频、js、css和一些资源文件等，这些资源没有状态，可以直接放在相应服务器里面，然后用专门的域名访问。比如新浪图片">
-<meta name="twitter:image" content="http://i.imgur.com/YHUbsCp.png">
+<meta name="twitter:title" content="python爬虫">
+<meta name="twitter:description" content="这是我自己写的一个小爬虫程序，爬的是http://www.mnw.cn/news/world/
+其实使用正则表达式相对比较简单，需要做的就是看网页源码，看一下你需要的内容然后使用正则将他提取出来。
+首先先看一下这个网站以及网站源码
+因为网站都是分页的，我们要抓取很多页的时候要知道每一页的url，下面两个图是我分别打开这个网站的首页，和点击第三页以后的url可以看到第一页就是首页地址后面不加任何路径">
+<meta name="twitter:image" content="http://i.imgur.com/IERQYru.png">
 
 
 
@@ -119,7 +126,7 @@
   };
 </script>
 
-  <title> 高并发 | ZL's blog </title>
+  <title> python爬虫 | ZL's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -309,7 +316,7 @@
             
             
               
-                高并发
+                python爬虫
               
             
           </h1>
@@ -321,8 +328,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-18T22:21:01+08:00" content="2016-05-18">
-              2016-05-18
+            <time itemprop="dateCreated" datetime="2016-07-26T12:30:45+08:00" content="2016-07-26">
+              2016-07-26
             </time>
           </span>
 
@@ -335,8 +342,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -351,8 +358,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/18/高并发/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/18/高并发/" itemprop="commentsCount"></span>
+                <a href="/2016/07/26/python爬虫/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/26/python爬虫/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -375,22 +382,245 @@
       
 
       
-        <p>&#160;&#160;&#160;&#160;网络上除了数据量大以外，需要面对的另一问题就是并发量高。</p>
-<h2 id="应用和静态资源分离"><a href="#应用和静态资源分离" class="headerlink" title="应用和静态资源分离"></a>应用和静态资源分离</h2><p>&#160;&#160;&#160;&#160;当并发量达到一定程度的时候，我们需要将静态资源跟应用程序分离，保存在专门的静态资源服务器，静态资源主要有：图片、视频、js、css和一些资源文件等，这些资源没有状态，可以直接放在相应服务器里面，然后用专门的域名访问。比如新浪图片就是用sinaimg.com来访问。<img src="http://i.imgur.com/YHUbsCp.png" alt=""></p>
-<h2 id="页面缓存"><a href="#页面缓存" class="headerlink" title="页面缓存"></a>页面缓存</h2><p>&#160;&#160;&#160;&#160;页面缓存就是将生成的页面缓存起来，这样就不需要每次都要生成一遍，如果将缓存页面放内存中速度会更快。想有些页面绝大部分是不变化的，只有很少一部分是变化的比如商品数量，评论的踩赞等，可以使用Ajax技术局部更新。</p>
-<h2 id="集群及分布式"><a href="#集群及分布式" class="headerlink" title="集群及分布式"></a>集群及分布式</h2><p>&#160;&#160;&#160;&#160;集群是将相同功能放在一起，同一请求分发到不同服务器，起到分流作用。而分布式是将不同业务放在不同服务器，处理一个请求可能会用到同一服务器，提高处理速度。</p>
-<p>&#160;&#160;&#160;&#160;集群可以是静态资源集群和应用程序集群。因为应用程序是有状态的，对于一些缓存数据必须进行同步，其中最重要的是session。session同步有两种，一种是session变化后同步到其他服务器，另一种是使用专门的缓存来管理session。</p>
-<p><img src="http://i.imgur.com/Gm5U7ck.png" alt=""></p>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>&#160;&#160;&#160;&#160;反向代理服务器是客户端直接访问的服务器，并不是真正的服务器，他从特别的服务期货的资源将结果返回给客户。<br><img src="http://i.imgur.com/nv6HVoY.png" alt=""></p>
-<p>&#160;&#160;&#160;&#160;反向代理器的作用主要有三个：</p>
-<ul>
-<li>可以作为前端服务器跟实际树立请求的服务器集成；</li>
-<li>可以做负载均衡</li>
-<li>转发请求</li>
-</ul>
-<h2 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h2><p>&#160;&#160;&#160;&#160;CDN其实是一种特殊的集群页面缓存服务器，他和普通集群的堕胎页面缓存服务器比主要是它存放的位置和分配请求的方式有点特殊。当接收到请求时，会将客户请求分配到最合适的CDN节点获取数据，比如离你最近的CDN节点，移动的分配到移动的节点等。</p>
-<p><img src="http://i.imgur.com/hVuaCeZ.png" alt=""></p>
+        <p>这是我自己写的一个小爬虫程序，爬的是<a href="http://www.mnw.cn/news/world/" target="_blank" rel="external">http://www.mnw.cn/news/world/</a></p>
+<p>其实使用正则表达式相对比较简单，需要做的就是看网页源码，看一下你需要的内容然后使用正则将他提取出来。</p>
+<p>首先先看一下这个网站以及网站源码<br><img src="http://i.imgur.com/IERQYru.png" alt=""></p>
+<p>因为网站都是分页的，我们要抓取很多页的时候要知道每一页的url，下面两个图是我分别打开这个网站的首页，和点击第三页以后的url可以看到第一页就是首页地址后面不加任何路径，X页的网页url就是<br><a href="http://www.mnw.cn/news/world/index-X.html" target="_blank" rel="external">http://www.mnw.cn/news/world/index-X.html</a> ,可以用一个简单的if判断加字符串拼接得到每一页的url</p>
+<p><img src="http://i.imgur.com/V7Tn5rA.png" alt=""><br><img src="http://i.imgur.com/TmNXpem.png" alt=""></p>
+<p>因为我打算使用爬虫将我项目里的资讯数据库进行填充，根据我所需要的资讯内容，我需要爬虫出新闻的<br>图片（无图片的可以为空或者先找一张其他的放在里面）、新闻的标题、新闻的概述、发布者、新闻链接、时间。<br><img src="http://i.imgur.com/irQBvCd.png" alt=""><br>先来看一下使用火狐浏览器的firebug插件抓到的源码，可以看到新闻条目在网页中是</p>
+<p>有图片：<code>&lt;div class=&quot;item noimg &quot;&gt;</code></p>
+<p>无图片：<code>&lt;div class=&quot;item noimg &quot;&gt;</code></p>
+<p>然后使用正则分别抓取以后再在每一条后面单独住取出想要的内容，详情看一下代码。</p>
+<p>接下来就是抓取出一共有多少页，可以从下图中很容易看到，并抓取出来。</p>
+<p><img src="http://i.imgur.com/DVrxpaq.png" alt=""></p>
+<pre><code># -*- coding: utf-8 -*-
+#---------------------------------------
+#   程序：新闻头条爬虫
+#   版本：1.0
+#   作者：zl
+#   日期：2016-06-16
+#   语言：Python 2.7
+#   操作：输入网址后自动只看楼主并保存到本地文件
+#   功能：将楼主发布的内容打包txt存储到本地。
+#---------------------------------------
 
+import string
+import urllib2
+import re
+import MySQLdb
+import random
+
+#----------- 处理页面上的各种标签 -----------
+class HTML_Tool:
+# 用非 贪婪模式 匹配 \t 或者 \n 或者 空格 或者 超链接 或者 图片
+BgnCharToNoneRex = re.compile(&quot;(\t|\n| |&lt;a.*?&gt;|&lt;img.*?&gt;)&quot;)
+
+# 用非 贪婪模式 匹配 任意&lt;&gt;标签
+EndCharToNoneRex = re.compile(&quot;&lt;.*?&gt;&quot;)
+
+# 用非 贪婪模式 匹配 任意&lt;p&gt;标签
+BgnPartRex = re.compile(&quot;&lt;p.*?&gt;&quot;)
+CharToNewLineRex = re.compile(&quot;(&lt;br/&gt;|&lt;/p&gt;|&lt;tr&gt;|&lt;div&gt;|&lt;/div&gt;)&quot;)
+CharToNextTabRex = re.compile(&quot;&lt;td&gt;&quot;)
+
+# 将一些html的符号实体转变为原始符号
+replaceTab = [(&quot;&amp;lt;&quot;,&quot;&lt;&quot;),(&quot;&amp;gt;&quot;,&quot;&gt;&quot;),(&quot;&amp;amp;&quot;,&quot;&amp;&quot;),(&quot;&amp;amp;&quot;,&quot;\&quot;&quot;),(&quot;&amp;nbsp;&quot;,&quot; &quot;),(&quot;&amp;ldquo;&quot;,&apos;\&quot;&apos;),(&quot;&amp;rdquo;&quot;,&apos;\&quot;&apos;)]
+
+def Replace_Char(self,x):
+x = self.BgnCharToNoneRex.sub(&quot;&quot;,x)
+x = self.BgnPartRex.sub(&quot;\n&quot;,x)
+x = self.CharToNewLineRex.sub(&quot;\n&quot;,x)
+x = self.CharToNextTabRex.sub(&quot;\t&quot;,x)
+x = self.EndCharToNoneRex.sub(&quot;&quot;,x)
+
+for t in self.replaceTab:  
+x = x.replace(t[0],t[1])  
+return x  
+
+class Toutiao_Spider:
+# 申明相关的属性
+def __init__(self,url):  
+self.myUrl = url
+self.datas = []
+
+self.myTool = HTML_Tool()
+print u&apos;已经启动头条新闻爬虫，咔嚓咔嚓&apos;
+
+# 初始化加载页面并将其转码储存
+def Toutiao_news(self):
+# 读取页面的原始信息并将其从utf8转码
+myPage = urllib2.urlopen(self.myUrl).read().decode(&quot;utf-8&quot;)
+# 计算一共有多少页
+endPage = self.page_counter(myPage)   
+# 获取最终的数据
+title=u&apos;国际新闻&apos;
+self.save_data(self.myUrl,title,endPage)
+
+#用来计算一共有多少页
+def page_counter(self,myPage):
+# 匹配 ? 来获取一共有多少页
+#&lt;a href=&quot;http://www.mnw.cn/news/world/index-?.html&quot;&gt;?&lt;/a&gt;
+
+myMatch = re.search(r&apos;&lt;a href=&quot;http://www.mnw.cn/news/world/index-(\d+?).html&quot;&gt;... (\d+?)&lt;/a&gt;&apos;, myPage, re.S)
+if myMatch:  
+#endPage = int(myMatch.group(1))
+endPage=20
+print u&apos;爬虫报告：发现楼主共有%d页的原创内容&apos; % endPage
+else:
+endPage = 0
+print u&apos;爬虫报告：无法计算楼主发布内容有多少页！&apos;
+return endPage
+
+
+
+
+# 用来存储楼主发布的内容
+def save_data(self,url,title,endPage):
+# 加载页面数据到数组中
+self.get_data(url,endPage)
+self.save_mysql();
+print u&apos;爬虫报告：文件已下载到本地并打包成txt文件&apos;
+print u&apos;请按任意键退出...&apos;
+raw_input();
+
+
+
+def save_mysql(self):
+l=len(self.datas)
+try:
+conn=MySQLdb.connect(host=&apos;localhost&apos;,user=&apos;root&apos;,passwd=&apos;root&apos;,db=&apos;test&apos;,port=3306,charset=&apos;utf8&apos;)
+cur=conn.cursor()
+conn.select_db(&apos;toutiao&apos;)
+for ml in self.datas:
+#print ml[&apos;title&apos;]
+#print ml[&apos;html&apos;]
+#print ml[&apos;src&apos;]
+#print ml[&apos;time&apos;]
+#print ml[&apos;content&apos;]
+sql = &quot;INSERT INTO news(title,link,image,like_count,comment_count,created_date,user_id,news_content)VALUES (&apos;%s&apos;, &apos;%s&apos;, &apos;%s&apos;, &apos;%s&apos;, &apos;%s&apos;,&apos;%s&apos;,&apos;%s&apos;,&apos;%s&apos; )&quot; \
+  %(ml[&apos;title&apos;],ml[&apos;html&apos;],ml[&apos;src&apos;], random.randint(0,10),1,ml[&apos;time&apos;],random.randint(1,8),ml[&apos;content&apos;]) 
+cur.execute(sql)
+conn.commit()
+cur.close()
+conn.close()
+except MySQLdb.Error,e:
+print &quot;Mysql Error %d: %s&quot; % (e.args[0], e.args[1])
+
+
+
+
+# 获取页面源码并将其存储到数组中
+def get_data(self,url,endPage):
+realurl = url 
+for i in range(1,endPage+1):
+print u&apos;爬虫报告：爬虫%d号正在加载中...&apos; % i
+if i==1:
+realurl=url
+else:
+realurl=url+&apos;index-&apos;+str(i)+&apos;.html&apos;
+myPage = urllib2.urlopen(realurl).read()
+#print myPage
+# 将myPage中的html代码处理并存储到datas里面
+self.deal_data(myPage.decode(&apos;utf-8&apos;))
+#print self.datas[0][&apos;content&apos;]
+
+
+
+
+# 将内容从页面代码中抠出来
+def deal_data(self,myPage):
+myItems = re.findall(r&apos;&lt;div class=&quot;item &quot;&gt;(.*?)&lt;/div&gt;&apos;,myPage,re.S)
+#print myItems
+for item in myItems:
+#data = self.myTool.Replace_Char(item.replace(&quot;\n&quot;,&quot;&quot;).encode(&apos;utf-8&apos;))
+#print item
+matchhtml=re.search(r&apos;href=&quot;(.*?)&quot;&apos;,item,re.S)
+if matchhtml:
+html=matchhtml.group(1)
+else:
+html=&apos;&apos;
+#print html
+matchsrc=re.search(r&apos;src=&quot;(.*?)&quot;&apos;,item,re.S)
+if matchsrc:
+src=matchsrc.group(1)
+else:
+src=&apos;&apos;
+matchtitle=re.search(r&apos;target=&quot;_blank&quot;&gt;([^\\&lt;]*)&lt;/a&gt;&apos;,item,re.S)
+if matchtitle:
+title=matchtitle.group(1)
+else:
+title=&apos;&apos;
+matchcontent=re.search(r&apos;&lt;p&gt;\s*([\s\S]*)\s*&lt;/p&gt;&apos;,item,re.S)
+if matchcontent:
+content=matchcontent.group(1)
+else:
+content=&apos;&apos;
+#print content
+matchtime=re.search(r&apos;(\d*)-(\d*)-(\d*) (\d*):(\d*)&apos;,item,re.S)
+if matchtime:
+time=matchtime.group(1)+&apos;-&apos;+matchtime.group(2)+&apos;-&apos;+matchtime.group(3)+&apos; &apos;+matchtime.group(4)+&apos;:&apos;+matchtime.group(5)
+else:
+time=&apos;&apos;
+info={&apos;html&apos;:html,&apos;src&apos;:src,&apos;title&apos;:title,&apos;content&apos;:self.myTool.Replace_Char(content),&apos;time&apos;:time}
+#print info
+self.datas.append(info)
+#print myPage
+myItems = re.findall(r&apos;&lt;div class=&quot;item  noimg &quot;&gt;(.*?)&lt;/div&gt;&apos;,myPage,re.S) 
+for item in myItems:
+#print item
+matchhtml=re.search(r&apos;href=&quot;(.*?)&quot;&apos;,item,re.S)
+if matchhtml:
+html=matchhtml.group(1)
+else:
+html=&apos;&apos;
+matchtitle=re.search(r&apos;target=&quot;_blank&quot;&gt;([^\\&lt;]*)&lt;/a&gt;&apos;,item,re.S)
+if matchtitle:
+title=matchtitle.group(1)
+else:
+title=&apos;&apos;
+matchcontent=re.search(r&apos;&lt;p&gt;\s*(.*?)\s*&lt;/p&gt;&apos;,item,re.S)
+if matchcontent:
+content=matchcontent.group(1)
+else:
+content=&apos;&apos;
+matchtime=re.search(r&apos;(\d*)-(\d*)-(\d*) (\d*):(\d*)&apos;,item,re.S)
+if matchtime:
+time=matchtime.group(1)+&apos;-&apos;+matchtime.group(2)+&apos;-&apos;+matchtime.group(3)+&apos; &apos;+matchtime.group(4)+&apos;:&apos;+matchtime.group(5)
+else:
+time=&apos;&apos;
+src=&apos;http://images.nowcoder.com/head/%dm.png&apos; %random.randint(1,1000)
+info={&apos;html&apos;:html,&apos;src&apos;:src,&apos;title&apos;:title,&apos;content&apos;:self.myTool.Replace_Char(content),&apos;time&apos;:time}
+self.datas.append(info)
+
+
+
+
+
+
+
+#-------- 程序入口处 -----------------
+print u&quot;&quot;&quot;#--------------------------------
+#   程序：新闻头条爬虫
+#   版本：1.0
+#   作者：zl
+#   日期：2016-06-16
+#   语言：Python 2.7
+#   操作：输入网址后自动只看楼主并保存到本地文件
+#   功能：将楼主发布的内容打包txt存储到本地。
+#---------------------------------------
+&quot;&quot;&quot;
+
+
+# 以新闻头条国际新闻为例子
+# bdurl = &apos;http://www.mnw.cn/news/world/&apos;
+
+#print u&apos;请输入地址最后的数字串：&apos;
+tturl = &apos;http://www.mnw.cn/news/world/&apos; 
+
+#调用
+mySpider = Toutiao_Spider(tturl)
+mySpider.Toutiao_news()
+</code></pre>
       
     </div>
 
@@ -411,9 +641,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网络/" rel="tag">#网络</a>
+            <a href="/tags/python/" rel="tag">#python</a>
           
-            <a href="/tags/网络架构/" rel="tag">#网络架构</a>
+            <a href="/tags/爬虫/" rel="tag">#爬虫</a>
           
         </div>
       
@@ -422,16 +652,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/16/海量数据/" rel="next" title="海量数据">
-                <i class="fa fa-chevron-left"></i> 海量数据
+              <a href="/2016/07/25/Spring设计模式/" rel="next" title="Spring设计模式">
+                <i class="fa fa-chevron-left"></i> Spring设计模式
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/20/HTTP/" rel="prev" title="HTTP">
-                HTTP <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/26/python正则/" rel="prev" title="python正则">
+                python正则 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -447,10 +677,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/05/18/高并发/"
-     data-title="高并发"
+        <div class="ds-share flat" data-thread-key="2016/07/26/python爬虫/"
+     data-title="python爬虫"
      data-content=""
-     data-url="http://yoursite.com/2016/05/18/高并发/">
+     data-url="http://yoursite.com/2016/07/26/python爬虫/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -477,8 +707,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/18/高并发/"
-           data-title="高并发" data-url="http://yoursite.com/2016/05/18/高并发/">
+      <div class="ds-thread" data-thread-key="2016/07/26/python爬虫/"
+           data-title="python爬虫" data-url="http://yoursite.com/2016/07/26/python爬虫/">
       </div>
     
   </div>
@@ -579,7 +809,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用和静态资源分离"><span class="nav-number">1.</span> <span class="nav-text">应用和静态资源分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面缓存"><span class="nav-number">2.</span> <span class="nav-text">页面缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群及分布式"><span class="nav-number">3.</span> <span class="nav-text">集群及分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反向代理"><span class="nav-number">4.</span> <span class="nav-text">反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CDN"><span class="nav-number">5.</span> <span class="nav-text">CDN</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
