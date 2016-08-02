@@ -1,0 +1,847 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,面试," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;作为Java开发者，我们每天创建很多对象，但我们通常使用依赖管理系统，比如Spring去创建对象。然而这里有很多创建对象的方法，我们会在这篇文章中学到。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Java中有5种创建对象的方式，下面给出它们的例子还有它们的字节码
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;使用new关键字     → 调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java创建对象">
+<meta property="og:url" content="http://yoursite.com/2016/07/03/java创建对象/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;作为Java开发者，我们每天创建很多对象，但我们通常使用依赖管理系统，比如Spring去创建对象。然而这里有很多创建对象的方法，我们会在这篇文章中学到。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Java中有5种创建对象的方式，下面给出它们的例子还有它们的字节码
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;使用new关键字     → 调用">
+<meta property="og:updated_time" content="2016-08-02T08:35:22.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java创建对象">
+<meta name="twitter:description" content="&amp;#160;&amp;#160;&amp;#160;&amp;#160;作为Java开发者，我们每天创建很多对象，但我们通常使用依赖管理系统，比如Spring去创建对象。然而这里有很多创建对象的方法，我们会在这篇文章中学到。
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;Java中有5种创建对象的方式，下面给出它们的例子还有它们的字节码
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;使用new关键字     → 调用">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Java创建对象 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java创建对象
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-03T12:30:45+08:00" content="2016-07-03">
+              2016-07-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/03/java创建对象/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/03/java创建对象/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#160;&#160;&#160;&#160;作为Java开发者，我们每天创建很多对象，但我们通常使用依赖管理系统，比如Spring去创建对象。然而这里有很多创建对象的方法，我们会在这篇文章中学到。</p>
+<p>&#160;&#160;&#160;&#160;Java中有5种创建对象的方式，下面给出它们的例子还有它们的字节码</p>
+<p>&#160;&#160;&#160;&#160;使用new关键字     → 调用了构造函数</p>
+<p>&#160;&#160;&#160;&#160;使用Class类的newInstance方法     → 调用了构造函数</p>
+<p>&#160;&#160;&#160;&#160;使用Constructor类的newInstance方法 → 调用了构造函数</p>
+<p>&#160;&#160;&#160;&#160;使用clone方法     → 没有调用构造函数</p>
+<p>&#160;&#160;&#160;&#160;使用反序列化     → 没有调用构造函数</p>
+<p>&#160;&#160;&#160;&#160;如果你运行了末尾的的程序，你会发现方法1,2,3用构造函数创建对象，方法4,5没有调用构造函数。</p>
+<h2 id="1-使用new关键字"><a href="#1-使用new关键字" class="headerlink" title="1.使用new关键字"></a>1.使用new关键字</h2><p>&#160;&#160;&#160;&#160;这是最常见也是最简单的创建对象的方式了。通过这种方式，我们可以调用任意的构造函数(无参的和带参数的)。</p>
+<pre><code>Employee emp1 = new Employee();
+0: new   #19  // class org/programming/mitra/exercises/Employee
+3: dup
+4: invokespecial #21  // Method org/programming/mitra/exercises/Employee.&quot;&quot;:
+</code></pre><h2 id="2-使用Class类的newInstance方法"><a href="#2-使用Class类的newInstance方法" class="headerlink" title="2.使用Class类的newInstance方法"></a>2.使用Class类的newInstance方法</h2><p>&#160;&#160;&#160;&#160;我们也可以使用Class类的newInstance方法创建对象。这个newInstance方法调用无参的构造函数创建对象。</p>
+<p>&#160;&#160;&#160;&#160;我们可以通过下面方式调用newInstance方法创建对象:</p>
+<pre><code>Employee emp2 = (Employee) Class.forName(&quot;org.programming.mitra.exercises.Employee&quot;).newInstance();
+</code></pre><p>或者</p>
+<pre><code>Employee emp2 = Employee.class.newInstance();
+51: invokevirtual#70// Method java/lang/Class.newInstance:()Ljava/lang/Object;
+</code></pre><h2 id="3-使用Constructor类的newInstance方法"><a href="#3-使用Constructor类的newInstance方法" class="headerlink" title="3.使用Constructor类的newInstance方法"></a>3.使用Constructor类的newInstance方法</h2><p>&#160;&#160;&#160;&#160;和Class类的newInstance方法很像， java.lang.reflect.Constructor类里也有一个newInstance方法可以创建对象。我们可以通过这个newInstance方法调用有参数的和私有的构造函数。</p>
+<pre><code>Constructor&lt;Employee&gt; constructor = Employee.class.getConstructor();
+Employee emp3 = constructor.newInstance();
+111: invokevirtual  #80  // Method java/lang/reflect/Constructor.newInstance:([Ljava/lang/Object;)Ljava/lang/Object;
+</code></pre><p>&#160;&#160;&#160;&#160;这两种newInstance方法就是大家所说的反射。事实上Class的newInstance方法内部调用Constructor的newInstance方法。这也是众多框架，如Spring、Hibernate、Struts等使用后者的原因。</p>
+<h2 id="4-使用clone方法"><a href="#4-使用clone方法" class="headerlink" title="4.使用clone方法"></a>4.使用clone方法</h2><p>&#160;&#160;&#160;&#160;无论何时我们调用一个对象的clone方法，jvm就会创建一个新的对象，将前面对象的内容全部拷贝进去。用clone方法创建对象并不会调用任何构造函数。</p>
+<p>&#160;&#160;&#160;&#160;要使用clone方法，我们需要先实现Cloneable接口并实现其定义的clone方法。</p>
+<pre><code>Employee emp4 = (Employee) emp3.clone();
+162: invokevirtual #87  // Method org/programming/mitra/exercises/Employee.clone ()Ljava/lang/Object;
+</code></pre><h2 id="5-使用反序列化"><a href="#5-使用反序列化" class="headerlink" title="5.使用反序列化"></a>5.使用反序列化</h2><p>&#160;&#160;&#160;&#160;当我们序列化和反序列化一个对象，jvm会给我们创建一个单独的对象。在反序列化时，jvm创建对象并不会调用任何构造函数。<br>为了反序列化一个对象，我们需要让我们的类实现Serializable接口</p>
+<pre><code>ObjectInputStream in = new ObjectInputStream(new FileInputStream(&quot;data.obj&quot;));
+Employee emp5 = (Employee) in.readObject();
+261: invokevirtual  #118   // Method java/io/ObjectInputStream.readObject:()Ljava/lang/Object;
+</code></pre><p>例子</p>
+<p>让我们看一看为下面这个Employee类创建对象：</p>
+<pre><code>class Employee implements Cloneable, Serializable {
+private static final long serialVersionUID = 1L;
+private String name;
+public Employee() {
+System.out.println(&quot;Employee Constructor Called...&quot;);
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+@Override
+public int hashCode() {
+final int prime = 31;
+int result = 1;
+result = prime * result + ((name == null) ? 0 : name.hashCode());
+return result;
+}
+@Override
+public boolean equals(Object obj) {
+if (this == obj)
+return true;
+if (obj == null)
+return false;
+if (getClass() != obj.getClass())
+return false;
+Employee other = (Employee) obj;
+if (name == null) {
+if (other.name != null)
+return false;
+} else if (!name.equals(other.name))
+return false;
+return true;
+}
+@Override
+public String toString() {
+return &quot;Employee [name=&quot; + name + &quot;]&quot;;
+}
+@Override
+public Object clone() {
+Object obj = null;
+try {
+obj = super.clone();
+} catch (CloneNotSupportedException e) {
+e.printStackTrace();
+}
+return obj;
+}
+}
+</code></pre><p>下面的Java程序中，我们将用5种方式创建Employee对象。</p>
+<pre><code>public class ObjectCreation {
+public static void main(String... args) throws Exception {
+// By using new keyword
+Employee emp1 = new Employee();
+emp1.setName(&quot;Naresh&quot;);
+System.out.println(emp1 + &quot;, hashcode : &quot; + emp1.hashCode());
+// By using Class class&apos;s newInstance() method
+Employee emp2 = (Employee) Class.forName(&quot;org.programming.mitra.exercises.Employee&quot;)
+   .newInstance();
+// Or we can simply do this
+// Employee emp2 = Employee.class.newInstance();
+emp2.setName(&quot;Rishi&quot;);
+System.out.println(emp2 + &quot;, hashcode : &quot; + emp2.hashCode());
+// By using Constructor class&apos;s newInstance() method
+Constructor&lt;Employee&gt; constructor = Employee.class.getConstructor();
+Employee emp3 = constructor.newInstance();
+emp3.setName(&quot;Yogesh&quot;);
+System.out.println(emp3 + &quot;, hashcode : &quot; + emp3.hashCode());
+// By using clone() method
+Employee emp4 = (Employee) emp3.clone();
+emp4.setName(&quot;Atul&quot;);
+System.out.println(emp4 + &quot;, hashcode : &quot; + emp4.hashCode());
+// By using Deserialization
+// Serialization
+ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(&quot;data.obj&quot;));
+out.writeObject(emp4);
+out.close();
+//Deserialization
+ObjectInputStream in = new ObjectInputStream(new FileInputStream(&quot;data.obj&quot;));
+Employee emp5 = (Employee) in.readObject();
+in.close();
+emp5.setName(&quot;Akash&quot;);
+System.out.println(emp5 + &quot;, hashcode : &quot; + emp5.hashCode());
+}
+}
+</code></pre><p>程序会输出：</p>
+<pre><code>Employee Constructor Called...
+Employee [name=Naresh], hashcode : -1968815046
+Employee Constructor Called...
+Employee [name=Rishi], hashcode : 78970652
+Employee Constructor Called...
+Employee [name=Yogesh], hashcode : -1641292792
+Employee [name=Atul], hashcode : 2051657
+Employee [name=Akash], hashcode : 63313419
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/面试/" rel="tag">#面试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/02/final-fianlly-finalize/" rel="next" title="final finally finalize">
+                <i class="fa fa-chevron-left"></i> final finally finalize
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/05/DFS/" rel="prev" title="DFS">
+                DFS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/07/03/java创建对象/"
+     data-title="Java创建对象"
+     data-content=""
+     data-url="http://yoursite.com/2016/07/03/java创建对象/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/03/java创建对象/"
+           data-title="Java创建对象" data-url="http://yoursite.com/2016/07/03/java创建对象/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用new关键字"><span class="nav-number">1.</span> <span class="nav-text">1.使用new关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用Class类的newInstance方法"><span class="nav-number">2.</span> <span class="nav-text">2.使用Class类的newInstance方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用Constructor类的newInstance方法"><span class="nav-number">3.</span> <span class="nav-text">3.使用Constructor类的newInstance方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用clone方法"><span class="nav-number">4.</span> <span class="nav-text">4.使用clone方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-使用反序列化"><span class="nav-number">5.</span> <span class="nav-text">5.使用反序列化</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

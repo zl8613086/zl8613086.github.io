@@ -1,0 +1,910 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="SpringMVC是目前主流的Web MVC框架之一。 
+我们使用浏览器通过地址 http://ip:port/contextPath/path进行访问，SpringMVC是如何得知用户到底是访问哪个Controller中的方法，这期间到底发生了什么。
+本文将分析SpringMVC是如何处理请求与Controller之间的映射关系的，让读者知道这个过程中到底发生了什么事情。
+源码分析在分析源码之前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC怎么找到Controller">
+<meta property="og:url" content="http://yoursite.com/2016/07/27/SpringMvc找Controller/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="SpringMVC是目前主流的Web MVC框架之一。 
+我们使用浏览器通过地址 http://ip:port/contextPath/path进行访问，SpringMVC是如何得知用户到底是访问哪个Controller中的方法，这期间到底发生了什么。
+本文将分析SpringMVC是如何处理请求与Controller之间的映射关系的，让读者知道这个过程中到底发生了什么事情。
+源码分析在分析源码之前">
+<meta property="og:image" content="http://i.imgur.com/KQGEzjY.jpg">
+<meta property="og:image" content="http://i.imgur.com/djXxida.png">
+<meta property="og:image" content="http://i.imgur.com/NIldb2D.png">
+<meta property="og:image" content="http://i.imgur.com/HUK8YLl.png">
+<meta property="og:image" content="http://i.imgur.com/A4Mrqh6.png">
+<meta property="og:image" content="http://i.imgur.com/U1r2F1J.png">
+<meta property="og:image" content="http://i.imgur.com/h2Q60bt.png">
+<meta property="og:image" content="http://i.imgur.com/Gwdosqg.png">
+<meta property="og:image" content="http://i.imgur.com/T2beDmx.png">
+<meta property="og:image" content="http://i.imgur.com/DvwUxTt.png">
+<meta property="og:image" content="http://i.imgur.com/q69KD1Q.png">
+<meta property="og:image" content="http://i.imgur.com/9rxiLNK.png">
+<meta property="og:image" content="http://i.imgur.com/lxlZUcK.png">
+<meta property="og:image" content="http://i.imgur.com/fiDDwrM.png">
+<meta property="og:image" content="http://i.imgur.com/cLj09If.png">
+<meta property="og:image" content="http://i.imgur.com/KsrMyoW.png">
+<meta property="og:image" content="http://i.imgur.com/W1KMY2g.png">
+<meta property="og:image" content="http://i.imgur.com/NZN8TP3.png">
+<meta property="og:image" content="http://i.imgur.com/G6Wkonq.png">
+<meta property="og:image" content="http://i.imgur.com/hJXwzK1.png">
+<meta property="og:image" content="http://i.imgur.com/EAHkzaI.png">
+<meta property="og:image" content="http://i.imgur.com/cwSRHAf.png">
+<meta property="og:image" content="http://i.imgur.com/5Ev6eMj.png">
+<meta property="og:image" content="http://i.imgur.com/4HyC054.png">
+<meta property="og:image" content="http://i.imgur.com/jU3IVjE.png">
+<meta property="og:image" content="http://i.imgur.com/1I5CHqi.png">
+<meta property="og:image" content="http://i.imgur.com/ax6JZSj.png">
+<meta property="og:image" content="http://i.imgur.com/Cc1dMWM.jpg">
+<meta property="og:image" content="http://i.imgur.com/ujOLTUE.jpg">
+<meta property="og:image" content="http://i.imgur.com/Vyfl2rP.jpg">
+<meta property="og:image" content="http://i.imgur.com/uMYJDii.jpg">
+<meta property="og:updated_time" content="2016-08-02T15:08:42.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC怎么找到Controller">
+<meta name="twitter:description" content="SpringMVC是目前主流的Web MVC框架之一。 
+我们使用浏览器通过地址 http://ip:port/contextPath/path进行访问，SpringMVC是如何得知用户到底是访问哪个Controller中的方法，这期间到底发生了什么。
+本文将分析SpringMVC是如何处理请求与Controller之间的映射关系的，让读者知道这个过程中到底发生了什么事情。
+源码分析在分析源码之前">
+<meta name="twitter:image" content="http://i.imgur.com/KQGEzjY.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> SpringMVC怎么找到Controller | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC怎么找到Controller
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-27T12:30:45+08:00" content="2016-07-27">
+              2016-07-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/27/SpringMvc找Controller/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/27/SpringMvc找Controller/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SpringMVC是目前主流的Web MVC框架之一。 </p>
+<p>我们使用浏览器通过地址 <a href="http://ip:port/contextPath/path进行访问，SpringMVC是如何得知用户到底是访问哪个Controller中的方法，这期间到底发生了什么。" target="_blank" rel="external">http://ip:port/contextPath/path进行访问，SpringMVC是如何得知用户到底是访问哪个Controller中的方法，这期间到底发生了什么。</a></p>
+<p>本文将分析SpringMVC是如何处理请求与Controller之间的映射关系的，让读者知道这个过程中到底发生了什么事情。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>在分析源码之前，我们先了解一下几个东西。</p>
+<h3 id="1-这个过程中重要的接口和类。"><a href="#1-这个过程中重要的接口和类。" class="headerlink" title="1.这个过程中重要的接口和类。"></a>1.这个过程中重要的接口和类。</h3><p>HandlerMethod类：</p>
+<p>Spring3.1版本之后引入的。 是一个封装了方法参数、方法注解，方法返回值等众多元素的类。</p>
+<p><img src="http://i.imgur.com/KQGEzjY.jpg" alt=""></p>
+<p>它的子类InvocableHandlerMethod有两个重要的属性WebDataBinderFactory和HandlerMethodArgumentResolverComposite， 很明显是对请求进行处理的。</p>
+<p>InvocableHandlerMethod的子类ServletInvocableHandlerMethod有个重要的属性HandlerMethodReturnValueHandlerComposite，很明显是对响应进行处理的。</p>
+<p>ServletInvocableHandlerMethod这个类在HandlerAdapter对每个请求处理过程中，都会实例化一个出来(上面提到的属性由HandlerAdapter进行设置)，分别对请求和返回进行处理。(RequestMappingHandlerAdapter源码，实例化ServletInvocableHandlerMethod的时候分别set了上面提到的重要属性)</p>
+<h3 id="MethodParameter类："><a href="#MethodParameter类：" class="headerlink" title="MethodParameter类："></a>MethodParameter类：</h3><p>　　HandlerMethod类中的parameters属性类型，是一个MethodParameter数组。MethodParameter是一个封装了方法参数具体信息的工具类，包括参数的的索引位置，类型，注解，参数名等信息。</p>
+<p>　　HandlerMethod在实例化的时候，构造函数中会初始化这个数组，这时只初始化了部分数据，在HandlerAdapter对请求处理过程中会完善其他属性，之后交予合适的HandlerMethodArgumentResolver接口处理。</p>
+<p>　　以类DeptController为例：</p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/dept&quot;)
+public class DeptController {
+
+  @Autowired
+  private IDeptService deptService;
+
+  @RequestMapping(&quot;/update&quot;)
+  @ResponseBody
+  public String update(Dept dept) {
+deptService.saveOrUpdate(dept);
+return &quot;success&quot;;
+  }
+
+}
+</code></pre><p>(刚初始化时的数据)<br><img src="http://i.imgur.com/djXxida.png" alt=""><br>　　<br>(HandlerAdapter处理后的数据)<br><img src="http://i.imgur.com/NIldb2D.png" alt=""></p>
+<h3 id="RequestCondition接口："><a href="#RequestCondition接口：" class="headerlink" title="RequestCondition接口："></a>RequestCondition接口：</h3><p>Spring3.1版本之后引入的。 是SpringMVC的映射基础中的请求条件，可以进行combine, compareTo，getMatchingCondition操作。这个接口是映射匹配的关键接口，其中getMatchingCondition方法关乎是否能找到合适的映射。<br><img src="http://i.imgur.com/HUK8YLl.png" alt="">
+　　</p>
+<h3 id="RequestMappingInfo类："><a href="#RequestMappingInfo类：" class="headerlink" title="RequestMappingInfo类："></a>RequestMappingInfo类：</h3><p>Spring3.1版本之后引入的。 是一个封装了各种请求映射条件并实现了RequestCondition接口的类。</p>
+<p>有各种RequestCondition实现类属性，patternsCondition，methodsCondition，paramsCondition，headersCondition，consumesCondition以及producesCondition，这个请求条件看属性名也了解，分别代表http请求的路径模式、方法、参数、头部等信息。<br><img src="http://i.imgur.com/A4Mrqh6.png" alt="">
+　　</p>
+<h3 id="RequestMappingHandlerMapping类："><a href="#RequestMappingHandlerMapping类：" class="headerlink" title="RequestMappingHandlerMapping类："></a>RequestMappingHandlerMapping类：</h3><p> 　　处理请求与HandlerMethod映射关系的一个类。</p>
+<p>2.Web服务器启动的时候，SpringMVC到底做了什么。</p>
+<p>先看AbstractHandlerMethodMapping的initHandlerMethods方法中。<br><img src="http://i.imgur.com/U1r2F1J.png" alt=""><br><img src="http://i.imgur.com/h2Q60bt.png" alt=""><br><img src="http://i.imgur.com/Gwdosqg.png" alt=""><br>我们进入createRequestMappingInfo方法看下是如何构造RequestMappingInfo对象的。<br><img src="http://i.imgur.com/T2beDmx.png" alt=""></p>
+<p>PatternsRequestCondition构造函数：</p>
+<p><img src="http://i.imgur.com/DvwUxTt.png" alt=""></p>
+<p>类对应的RequestMappingInfo存在的话，跟方法对应的RequestMappingInfo进行combine操作。</p>
+<p><img src="http://i.imgur.com/q69KD1Q.png" alt=""></p>
+<p>然后使用符合条件的method来注册各种HandlerMethod。</p>
+<p><img src="http://i.imgur.com/9rxiLNK.png" alt=""></p>
+<p>下面我们来看下各种RequestCondition接口的实现类的combine操作。</p>
+<p>PatternsRequestCondition：</p>
+<p><img src="http://i.imgur.com/lxlZUcK.png" alt=""></p>
+<p><img src="http://i.imgur.com/fiDDwrM.png" alt=""></p>
+<p>RequestMethodsRequestCondition：</p>
+<p>方法的请求条件，用个set直接add即可。</p>
+<p><img src="http://i.imgur.com/cLj09If.png" alt=""></p>
+<p>其他相关的RequestConditon实现类读者可自行查看源码。</p>
+<p>最终，RequestMappingHandlerMapping中两个比较重要的属性</p>
+<p>private final Map<t, handlermethod=""> handlerMethods = new LinkedHashMap<t, handlermethod="">();</t,></t,></p>
+<p>private final MultiValueMap<string, t=""> urlMap = new LinkedMultiValueMap<string, t="">();</string,></string,></p>
+<p>T为RequestMappingInfo。</p>
+<p>构造完成。</p>
+<p>我们知道，SpringMVC的分发器DispatcherServlet会根据浏览器的请求地址获得HandlerExecutionChain。</p>
+<p>这个过程我们看是如何实现的。</p>
+<p>首先看HandlerMethod的获得(直接看关键代码了)：</p>
+<p><img src="http://i.imgur.com/KsrMyoW.png" alt=""></p>
+<p>这里的比较器是使用RequestMappingInfo的compareTo方法(RequestCondition接口定义的)。</p>
+<p><img src="http://i.imgur.com/W1KMY2g.png" alt=""></p>
+<p>然后构造HandlerExecutionChain加上拦截器</p>
+<p><img src="http://i.imgur.com/NZN8TP3.png" alt=""></p>
+<p>实例</p>
+<p>写了这么多，来点例子让我们验证一下吧。</p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/wildcard&quot;)
+public class TestWildcardController {
+
+  @RequestMapping(&quot;/test/**&quot;)
+  @ResponseBody
+  public String test1(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;TestWildcardController -&gt; /test/**&quot;);
+return view;
+  }
+
+  @RequestMapping(&quot;/test/*&quot;)
+  @ResponseBody
+  public String test2(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;TestWildcardController -&gt; /test*&quot;);
+return view;
+  }
+
+  @RequestMapping(&quot;test?&quot;)
+  @ResponseBody
+  public String test3(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;TestWildcardController -&gt; test?&quot;);
+return view;
+  }
+
+  @RequestMapping(&quot;test/*&quot;)
+  @ResponseBody
+  public String test4(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;TestWildcardController -&gt; test/*&quot;);
+return view;
+  }
+
+}
+</code></pre><p>由于这里的每个pattern都带了*因此，都不会加入到urlMap中，但是handlerMethods还是有的。</p>
+<p><img src="http://i.imgur.com/G6Wkonq.png" alt=""></p>
+<p>当我们访问：<a href="http://localhost:8888/SpringMVCDemo/wildcard/test1的时候。" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/wildcard/test1的时候。</a></p>
+<p>会先根据 “/wildcard/test1” 找urlMap对应的RequestMappingInfo集合，找不到的话取handlerMethods集合中所有的key集合(也就是RequestMappingInfo集合)。</p>
+<p>然后进行匹配，匹配根据RequestCondition的getMatchingCondition方法。<br><img src="http://i.imgur.com/hJXwzK1.png" alt=""></p>
+<p>最终匹配到2个RequestMappingInfo：</p>
+<p><img src="http://i.imgur.com/EAHkzaI.png" alt=""></p>
+<p>然后会使用比较器进行排序。</p>
+<p>之前也分析过，比较器是有优先级的。</p>
+<p>我们看到，RequestMappingInfo除了pattern，其他属性都是一样的。</p>
+<p>我们看下PatternsRequestCondition比较的逻辑：<br><img src="http://i.imgur.com/cwSRHAf.png" alt=""></p>
+<p><img src="http://i.imgur.com/5Ev6eMj.png" alt=""></p>
+<p>因此，/test*的通配符比/test?的多，因此，最终选择了/test?</p>
+<p><img src="http://i.imgur.com/4HyC054.png" alt=""></p>
+<p>直接比较优先于通配符。</p>
+<p><img src="http://i.imgur.com/jU3IVjE.png" alt=""></p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/priority&quot;)
+public class TestPriorityController {
+
+  @RequestMapping(method = RequestMethod.GET)
+  @ResponseBody
+  public String test1(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;其他condition相同，带有method属性的优先级高&quot;);
+return view;
+  }
+
+  @RequestMapping()
+  @ResponseBody
+  public String test2(ModelAndView view) {
+view.setViewName(&quot;/test/test&quot;);
+view.addObject(&quot;attr&quot;, &quot;其他condition相同，不带method属性的优先级高&quot;);
+return view;
+  }
+
+}
+</code></pre><p> 这里例子，其他requestCondition都一样，只有RequestMethodCondition不一样。</p>
+<p><img src="http://i.imgur.com/1I5CHqi.png" alt=""></p>
+<p>看出，方法多的优先级越多。</p>
+<p><img src="http://i.imgur.com/ax6JZSj.png" alt=""></p>
+<p>至于其他的RequestCondition，大家自行查看源码吧。</p>
+<h2 id="资源文件映射"><a href="#资源文件映射" class="headerlink" title="资源文件映射"></a>资源文件映射</h2><p>以上分析均是基于Controller方法的映射(RequestMappingHandlerMapping)。</p>
+<p>SpringMVC中还有静态文件的映射，SimpleUrlHandlerMapping。</p>
+<p>DispatcherServlet找对应的HandlerExecutionChain的时候会遍历属性handlerMappings，这个一个实现了HandlerMapping接口的集合。</p>
+<p>由于我们在*-dispatcher.xml中加入了以下配置：</p>
+<pre><code>&lt;mvc:resources location=&quot;/static/&quot; mapping=&quot;/static/**&quot;/&gt;
+</code></pre><p> Spring解析配置文件会使用ResourcesBeanDefinitionParser进行解析的时候，会实例化出SimpleUrlHandlerMapping。</p>
+<p><img src="http://i.imgur.com/Cc1dMWM.jpg" alt=""></p>
+<p><img src="http://i.imgur.com/ujOLTUE.jpg" alt=""></p>
+<p>其中注册的HandlerMethod为ResourceHttpRequestHandler。</p>
+<p>访问地址：<a href="http://localhost:8888/SpringMVCDemo/static/js/jquery-1.11.0.js" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/static/js/jquery-1.11.0.js</a><br><img src="http://i.imgur.com/Vyfl2rP.jpg" alt=""></p>
+<p><img src="http://i.imgur.com/uMYJDii.jpg" alt=""></p>
+<p>地址匹配到/static/**。</p>
+<p>最终SimpleUrlHandlerMapping找到对应的Handler -&gt; ResourceHttpRequestHandler。</p>
+<p>ResourceHttpRequestHandler进行handleRequest的时候，直接输出资源文件的文本内容。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大致上整理了一下SpringMVC对请求的处理，包括其中比较关键的类和接口，希望对读者有帮助。</p>
+<p>让自己对SpringMVC有了更深入的认识，也为之后分析数据绑定，拦截器、HandlerAdapter等打下基础。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://jinnianshilongnian.iteye.com/blog/1684403" target="_blank" rel="external">http://jinnianshilongnian.iteye.com/blog/1684403</a></p>
+<p><a href="http://my.oschina.net/HeliosFly/blog/212329" target="_blank" rel="external">http://my.oschina.net/HeliosFly/blog/212329</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC/" rel="tag">#SpringMVC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/26/python爬虫/" rel="next" title="python爬虫">
+                <i class="fa fa-chevron-left"></i> python爬虫
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/07/27/SpringMvc找Controller/"
+     data-title="SpringMVC怎么找到Controller"
+     data-content=""
+     data-url="http://yoursite.com/2016/07/27/SpringMvc找Controller/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/27/SpringMvc找Controller/"
+           data-title="SpringMVC怎么找到Controller" data-url="http://yoursite.com/2016/07/27/SpringMvc找Controller/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-这个过程中重要的接口和类。"><span class="nav-number">1.1.</span> <span class="nav-text">1.这个过程中重要的接口和类。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MethodParameter类："><span class="nav-number">1.2.</span> <span class="nav-text">MethodParameter类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestCondition接口："><span class="nav-number">1.3.</span> <span class="nav-text">RequestCondition接口：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestMappingInfo类："><span class="nav-number">1.4.</span> <span class="nav-text">RequestMappingInfo类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestMappingHandlerMapping类："><span class="nav-number">1.5.</span> <span class="nav-text">RequestMappingHandlerMapping类：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源文件映射"><span class="nav-number">2.</span> <span class="nav-text">资源文件映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
