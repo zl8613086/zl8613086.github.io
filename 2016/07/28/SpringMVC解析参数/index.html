@@ -1,0 +1,1060 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言SpringMVC中Controller的方法参数可以是Integer，Double，自定义对象，ServletRequest，ServletResponse，ModelAndView等等，非常灵活。本文将分析SpringMVC是如何对这些参数进行处理的，使读者能够处理自定义的一些参数。
+现象本文使用的demo基于maven。我们先来看一看对应的现象。 
+@Controller
+@Reques">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC解析参数">
+<meta property="og:url" content="http://yoursite.com/2016/07/28/SpringMVC解析参数/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="前言SpringMVC中Controller的方法参数可以是Integer，Double，自定义对象，ServletRequest，ServletResponse，ModelAndView等等，非常灵活。本文将分析SpringMVC是如何对这些参数进行处理的，使读者能够处理自定义的一些参数。
+现象本文使用的demo基于maven。我们先来看一看对应的现象。 
+@Controller
+@Reques">
+<meta property="og:image" content="http://i.imgur.com/8Mp9jxG.jpg">
+<meta property="og:image" content="http://i.imgur.com/1Jb93DK.jpg">
+<meta property="og:image" content="http://i.imgur.com/zHucxL9.jpg">
+<meta property="og:image" content="http://i.imgur.com/uYhvu0k.jpg">
+<meta property="og:image" content="http://i.imgur.com/2bF1KOd.jpg">
+<meta property="og:image" content="http://i.imgur.com/WLOey5E.jpg">
+<meta property="og:image" content="http://i.imgur.com/HfXE6Re.jpg">
+<meta property="og:image" content="http://i.imgur.com/dN3ignr.jpg">
+<meta property="og:image" content="http://i.imgur.com/VsCfho5.jpg">
+<meta property="og:image" content="http://i.imgur.com/i0e4pIR.jpg">
+<meta property="og:image" content="http://i.imgur.com/cOojPYM.jpg">
+<meta property="og:image" content="http://i.imgur.com/GOenPTB.jpg">
+<meta property="og:image" content="http://i.imgur.com/TTDSvq6.jpg">
+<meta property="og:image" content="http://i.imgur.com/4fOI60p.jpg">
+<meta property="og:image" content="http://i.imgur.com/FyfFNxP.png">
+<meta property="og:image" content="http://i.imgur.com/enzvjWY.png">
+<meta property="og:image" content="http://i.imgur.com/U7XpfDV.jpg">
+<meta property="og:image" content="http://i.imgur.com/s3pR2QZ.jpg">
+<meta property="og:image" content="http://i.imgur.com/SrcL5Sp.png">
+<meta property="og:image" content="http://i.imgur.com/82cxJym.png">
+<meta property="og:image" content="http://i.imgur.com/BXJiaRm.png">
+<meta property="og:image" content="http://i.imgur.com/5jASU5x.png">
+<meta property="og:image" content="http://i.imgur.com/LHYguB1.png">
+<meta property="og:image" content="http://i.imgur.com/mT46S12.png">
+<meta property="og:image" content="http://i.imgur.com/XL1TiDZ.png">
+<meta property="og:image" content="http://i.imgur.com/9njvywE.png">
+<meta property="og:updated_time" content="2016-08-03T03:04:02.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC解析参数">
+<meta name="twitter:description" content="前言SpringMVC中Controller的方法参数可以是Integer，Double，自定义对象，ServletRequest，ServletResponse，ModelAndView等等，非常灵活。本文将分析SpringMVC是如何对这些参数进行处理的，使读者能够处理自定义的一些参数。
+现象本文使用的demo基于maven。我们先来看一看对应的现象。 
+@Controller
+@Reques">
+<meta name="twitter:image" content="http://i.imgur.com/8Mp9jxG.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> SpringMVC解析参数 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC解析参数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-28T12:30:45+08:00" content="2016-07-28">
+              2016-07-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/28/SpringMVC解析参数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/28/SpringMVC解析参数/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>SpringMVC中Controller的方法参数可以是Integer，Double，自定义对象，ServletRequest，ServletResponse，ModelAndView等等，非常灵活。本文将分析SpringMVC是如何对这些参数进行处理的，使读者能够处理自定义的一些参数。</p>
+<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>本文使用的demo基于maven。我们先来看一看对应的现象。 </p>
+<pre><code>@Controller
+@RequestMapping(value = &quot;/test&quot;)
+public class TestController {
+
+  @RequestMapping(&quot;/testRb&quot;)
+  @ResponseBody
+  public Employee testRb(@RequestBody Employee e) {
+return e;
+  }
+
+  @RequestMapping(&quot;/testCustomObj&quot;)
+  @ResponseBody
+  public Employee testCustomObj(Employee e) {
+return e;
+  }
+
+  @RequestMapping(&quot;/testCustomObjWithRp&quot;)
+  @ResponseBody
+  public Employee testCustomObjWithRp(@RequestParam Employee e) {
+return e;
+  }
+
+  @RequestMapping(&quot;/testDate&quot;)
+  @ResponseBody
+  public Date testDate(Date date) {
+return date;
+  }
+
+}
+</code></pre><p>首先这是一个Controller，有4个方法。他们对应的参数分别是带有@RequestBody的自定义对象、自定义对象、带有@RequestParam的自定义对象、日期对象。</p>
+<p>接下来我们一个一个方法进行访问看对应的现象是如何的。</p>
+<p>首先第一个testRb：</p>
+<p><img src="http://i.imgur.com/8Mp9jxG.jpg" alt=""></p>
+<p>第二个testCustomObj：</p>
+<p><img src="http://i.imgur.com/1Jb93DK.jpg" alt=""></p>
+<p>第三个testCustomObjWithRp：</p>
+<p><img src="http://i.imgur.com/zHucxL9.jpg" alt=""></p>
+<p>第四个testDate：</p>
+<p><img src="http://i.imgur.com/uYhvu0k.jpg" alt=""></p>
+<p>为何返回的Employee对象会被自动解析为xml</p>
+<p>为何Employee参数会被解析，带有@RequestParam的Employee参数不会被解析，甚至报错？</p>
+<p>为何日期类型不能被解析？</p>
+<p>SpringMVC到底是如何处理这些方法的参数的？</p>
+<p>@RequestBody、@RequestParam这两个注解有什么区别？</p>
+<p>带着这几个问题。我们开始进行分析。</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>本文所分析的源码是Spring版本4.0.2</p>
+<p>在分析源码之前，首先让我们来看下SpringMVC中两个重要的接口。</p>
+<p>两个接口分别对应请求方法参数的处理、响应返回值的处理，分别是HandlerMethodArgumentResolver和HandlerMethodReturnValueHandler，这两个接口都是Spring3.1版本之后加入的。</p>
+<p><img src="http://i.imgur.com/2bF1KOd.jpg" alt="">   </p>
+<p><img src="http://i.imgur.com/WLOey5E.jpg" alt="">    </p>
+<p>SpringMVC处理请求大致是这样的：</p>
+<p>首先被DispatcherServlet截获，DispatcherServlet通过handlerMapping获得HandlerExecutionChain，然后获得HandlerAdapter。</p>
+<p>HandlerAdapter在内部对于每个请求，都会实例化一个ServletInvocableHandlerMethod进行处理，ServletInvocableHandlerMethod在进行处理的时候，会分两部分别对请求跟响应进行处理。</p>
+<p>之后HandlerAdapter得到ModelAndView，然后做相应的处理。</p>
+<p>本文将重点介绍ServletInvocableHandlerMethod对请求以及响应的处理。</p>
+<p><img src="http://i.imgur.com/HfXE6Re.jpg" alt=""></p>
+<ol>
+<li>处理请求的时候，会根据ServletInvocableHandlerMethod的属性argumentResolvers（这个属性是它的父类InvocableHandlerMethod中定义的）进行处理，其中argumentResolvers属性是一个HandlerMethodArgumentResolverComposite类(这里使用了组合模式的一种变形)，这个类是实现了HandlerMethodArgumentResolver接口的类，里面有各种实现了HandlerMethodArgumentResolver的List集合。</li>
+</ol>
+<p><img src="http://i.imgur.com/dN3ignr.jpg" alt=""></p>
+<ol>
+<li>处理响应的时候，会根据ServletInvocableHandlerMethod的属性returnValueHandlers(自身属性)进行处理，returnValueHandlers属性是一个HandlerMethodReturnValueHandlerComposite类(这里使用了组合模式的一种变形)，这个类是实现了HandlerMethodReturnValueHandler接口的类，里面有各种实现了HandlerMethodReturnValueHandler的List集合。</li>
+</ol>
+<p><img src="http://i.imgur.com/VsCfho5.jpg" alt=""></p>
+<p>ServletInvocableHandlerMethod的returnValueHandlers和argumentResolvers这两个属性都是在ServletInvocableHandlerMethod进行实例化的时候被赋值的(使用RequestMappingHandlerAdapter的属性进行赋值)。<br><img src="http://i.imgur.com/i0e4pIR.jpg" alt=""></p>
+<p>RequestMappingHandlerAdapter的argumentResolvers和returnValueHandlers这两个属性是在RequestMappingHandlerAdapter进行实例化的时候被Spring容器注入的。</p>
+<p><img src="http://i.imgur.com/cOojPYM.jpg" alt=""></p>
+<p>其中默认的ArgumentResolvers:</p>
+<p><img src="http://i.imgur.com/GOenPTB.jpg" alt=""></p>
+<p>默认的returnValueHandlers：</p>
+<p><img src="http://i.imgur.com/TTDSvq6.jpg" alt=""></p>
+<p>我们在json、xml自动转换那篇文章中已经了解，使用@ResponseBody注解的话最终返回值会被RequestResponseBodyMethodProcessor这个HandlerMethodReturnValueHandler实现类处理。</p>
+<p>我们通过源码发现，RequestResponseBodyMethodProcessor这个类其实同时实现了HandlerMethodReturnValueHandler和HandlerMethodArgumentResolver这两个接口。</p>
+<p><img src="http://i.imgur.com/4fOI60p.jpg" alt=""></p>
+<p>RequestResponseBodyMethodProcessor支持的请求类型是Controller方法参数中带有@RequestBody注解，支持的响应类型是Controller方法带有@ResponseBody注解。 </p>
+<p><img src="http://i.imgur.com/FyfFNxP.png" alt=""></p>
+<p>RequestResponseBodyMethodProcessor响应的具体处理是使用消息转换器。</p>
+<p><img src="http://i.imgur.com/enzvjWY.png" alt=""></p>
+<p>处理请求的时候使用内部的readWithMessageConverters方法。<br><img src="http://i.imgur.com/U7XpfDV.jpg" alt=""></p>
+<p>然后会执行父类(AbstractMessageConverterMethodArgumentResolver)的readWithMessageConverters方法。</p>
+<p><img src="http://i.imgur.com/s3pR2QZ.jpg" alt=""></p>
+<p>下面来我们来看看常用的HandlerMethodArgumentResolver实现类(本文粗略讲下，有兴趣的读者可自行研究)。</p>
+<ol>
+<li><p>RequestParamMethodArgumentResolver</p>
+<p>支持带有@RequestParam注解的参数或带有MultipartFile类型的参数</p>
+</li>
+<li><p>RequestParamMapMethodArgumentResolver</p>
+<p>支持带有@RequestParam注解的参数 &amp;&amp; @RequestParam注解的属性value存在 &amp;&amp; 参数类型是实现Map接口的属性</p>
+</li>
+<li><p>PathVariableMethodArgumentResolver</p>
+</li>
+</ol>
+<p>支持带有@PathVariable注解的参数 且如果参数实现了Map接口，@PathVariable注解需带有value属性</p>
+<ol>
+<li>MatrixVariableMethodArgumentResolver</li>
+</ol>
+<p>支持带有@MatrixVariable注解的参数 且如果参数实现了Map接口，@MatrixVariable注解需带有value属性 </p>
+<ol>
+<li><p>RequestResponseBodyMethodProcessor</p>
+<p>本文已分析过</p>
+</li>
+<li><p>ServletRequestMethodArgumentResolver</p>
+<p>参数类型是实现或继承或是WebRequest、ServletRequest、MultipartRequest、HttpSession、Principal、Locale、TimeZone、InputStream、Reader、HttpMethod这些类。</p>
+</li>
+</ol>
+<p>（这就是为何我们在Controller中的方法里添加一个HttpServletRequest参数，Spring会为我们自动获得HttpServletRequest对象的原因）</p>
+<ol>
+<li><p>ServletResponseMethodArgumentResolver</p>
+<p>参数类型是实现或继承或是ServletResponse、OutputStream、Writer这些类</p>
+</li>
+<li><p>RedirectAttributesMethodArgumentResolver</p>
+<p>参数是实现了RedirectAttributes接口的类</p>
+</li>
+<li><p>HttpEntityMethodProcessor</p>
+<p>参数类型是HttpEntity</p>
+</li>
+</ol>
+<p>从名字我们也看的出来， 以Resolver结尾的是实现了HandlerMethodArgumentResolver接口的类，以Processor结尾的是实现了HandlerMethodArgumentResolver和HandlerMethodReturnValueHandler的类。</p>
+<p>下面来我们来看看常用的HandlerMethodReturnValueHandler实现类。</p>
+<ol>
+<li>ModelAndViewMethodReturnValueHandler</li>
+</ol>
+<p>返回值类型是ModelAndView或其子类</p>
+<ol>
+<li>ModelMethodProcessor</li>
+</ol>
+<p>返回值类型是Model或其子类</p>
+<ol>
+<li>ViewMethodReturnValueHandler</li>
+</ol>
+<p>返回值类型是View或其子类 </p>
+<ol>
+<li>HttpHeadersReturnValueHandler</li>
+</ol>
+<p>返回值类型是HttpHeaders或其子类  </p>
+<ol>
+<li>ModelAttributeMethodProcessor</li>
+</ol>
+<p>返回值有@ModelAttribute注解</p>
+<ol>
+<li>ViewNameMethodReturnValueHandler</li>
+</ol>
+<p>返回值是void或String</p>
+<p>其余没讲过的读者可自行查看源码。</p>
+<p>下面开始解释为何本文开头出现那些现象的原因：</p>
+<ol>
+<li>第一个方法testRb以及地址 <a href="http://localhost:8888/SpringMVCDemo/test/testRb?name=1&amp;age=3" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/test/testRb?name=1&amp;age=3</a></li>
+</ol>
+<p>　　这个方法的参数使用了@RequestBody，之前已经分析过，被RequestResponseBodyMethodProcessor进行处理。之后根据http请求头部的contentType然后选择合适的消息转换器进行读取。</p>
+<p>　　很明显，我们的消息转换器只有默认的那些跟部分json以及xml转换器，且传递的参数name=1&amp;age=3，传递的头部中没有content-type，默认使用了application/octet-stream，因此触发了HttpMediaTypeNotSupportedException异常</p>
+<p>　　解放方案： 我们将传递数据改成json，同时http请求的Content-Type改成application/json即可。</p>
+<p><img src="http://i.imgur.com/SrcL5Sp.png" alt=""></p>
+<p><img src="http://i.imgur.com/82cxJym.png" alt=""></p>
+<p><img src="http://i.imgur.com/BXJiaRm.png" alt=""></p>
+<p>完美解决。</p>
+<ol>
+<li>testCustomObj方法以及地址 <a href="http://localhost:8888/SpringMVCDemo/test/testCustomObj?name=1&amp;age=3" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/test/testCustomObj?name=1&amp;age=3</a></li>
+</ol>
+<p>这个请求会找到ServletModelAttributeMethodProcessor这个resolver。默认的resolver中有两个ServletModelAttributeMethodProcessor，只不过实例化的时候属性annotationNotRequired一个为true，1个为false。这个ServletModelAttributeMethodProcessor处理参数支持@ModelAttribute注解，annotationNotRequired属性为true的话，参数不是简单类型就通过，因此选择了ServletModelAttributeMethodProcessor，最终通过DataBinder实例化Employee对象，并写入对应的属性。</p>
+<ol>
+<li>testCustomObjWithRp方法以及地址 <a href="http://localhost:8888/SpringMVCDemo/test/testCustomObjWithRp?name=1&amp;age=3" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/test/testCustomObjWithRp?name=1&amp;age=3</a></li>
+</ol>
+<p>这个请求会找到RequestParamMethodArgumentResolver(使用了@RequestParam注解)。RequestParamMethodArgumentResolver在处理参数的时候使用request.getParameter(参数名)即request.getParameter(“e”)得到，很明显我们的参数传的是name=1&amp;age=3。因此得到null，RequestParamMethodArgumentResolver处理missing value会触发MissingServletRequestParameterException异常。 ［粗略讲下，有兴趣的读者请自行查看源码］</p>
+<p> 解决方案：去掉@RequestParam注解，让ServletModelAttributeMethodProcessor来处理。</p>
+<ol>
+<li>testDate方法以及地址 <a href="http://localhost:8888/SpringMVCDemo/test/testDate?date=2014-05-15" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/test/testDate?date=2014-05-15</a></li>
+</ol>
+<p>这个请求会找到RequestParamMethodArgumentResolver。因为这个方法与第二个方法一样，有两个RequestParamMethodArgumentResolver，属性useDefaultResolution不同。RequestParamMethodArgumentResolver支持简单类型，ServletModelAttributeMethodProcessor是支持非简单类型。最终步骤跟第三个方法一样，我们的参数名是date，于是通过request.getParameter(“date”)找到date字符串(这里参数名如果不是date，那么最终页面是空白的，因为没有@RequestParam注解，参数不是必须的，RequestParamMethodArgumentResolver处理null值返回null)。最后通过DataBinder找到合适的属性编辑器进行类型转换。最终找到java.util.Date对象的构造函数 public Date(String s)，由于我们传递的格式不是标准的UTC时间格式，因此最终触发了IllegalArgumentException异常。</p>
+<p> 解决方案：</p>
+<ol>
+<li>传递参数的格式修改成标准的UTC时间格式：<a href="http://localhost:8888/SpringMVCDemo/test/testDate?date=Sat" target="_blank" rel="external">http://localhost:8888/SpringMVCDemo/test/testDate?date=Sat</a>, 17 May 2014 16:30:00 GMT</li>
+</ol>
+<p><img src="http://i.imgur.com/5jASU5x.png" alt=""></p>
+<p> 2.在Controller中加入自定义属性编辑器。</p>
+<pre><code>@InitBinder
+public void initBinder(WebDataBinder binder) {
+  SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);
+  binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+}
+</code></pre><p> 这个@InitBinder注解在实例化ServletInvocableHandlerMethod的时候被注入到WebDataBinderFactory中的，而WebDataBinderFactory是ServletInvocableHandlerMethod的一个属性。在RequestMappingHandlerAdapter源码的803行getDataBinderFactory就是得到的WebDataBinderFactory。</p>
+<p><img src="http://i.imgur.com/LHYguB1.png" alt=""></p>
+<p>之后RequestParamMethodArgumentResolver通过WebDataBinderFactory创建的WebDataBinder里的自定义属性编辑器找到合适的属性编辑器(我们自定义的属性编辑器是用CustomDateEditor处理Date对象，而testDate的参数刚好是Date)，最终CustomDateEditor把这个String对象转换成Date对象。</p>
+<h2 id="编写自定义的HandlerMethodArgumentResolver"><a href="#编写自定义的HandlerMethodArgumentResolver" class="headerlink" title="编写自定义的HandlerMethodArgumentResolver"></a>编写自定义的HandlerMethodArgumentResolver</h2><p>通过前面的分析，我们明白了SpringMVC处理Controller中的方法的参数流程。</p>
+<p>现在，如果方法中有两个参数，且都是自定义类参数，那该如何处理呢？</p>
+<p>很明显，要处理这个只能自己实现一个实现HandlerMethodArgumentResolver的类。</p>
+<p>先定义1个注解FormObj：</p>
+<pre><code>@Target({ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface FormObj {
+//参数别名
+String value() default &quot;&quot;;
+//是否展示, 默认展示
+boolean show() default true;
+}
+</code></pre><p>然后是HandlerMethodArgumentResolver：</p>
+<pre><code>public class FormObjArgumentResolver implements HandlerMethodArgumentResolver {
+
+@Override
+public boolean supportsParameter(MethodParameter parameter) {
+return parameter.hasParameterAnnotation(FormObj.class);
+}
+
+@Override
+public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+FormObj formObj = parameter.getParameterAnnotation(FormObj.class);
+
+String alias = getAlias(formObj, parameter);
+
+//拿到obj, 先从ModelAndViewContainer中拿，若没有则new1个参数类型的实例
+Object obj = (mavContainer.containsAttribute(alias)) ?
+mavContainer.getModel().get(alias) : createAttribute(alias, parameter, binderFactory, webRequest);
+
+
+//获得WebDataBinder，这里的具体WebDataBinder是ExtendedServletRequestDataBinder
+WebDataBinder binder = binderFactory.createBinder(webRequest, obj, alias);
+
+Object target = binder.getTarget();
+
+if(target != null) {
+//绑定参数
+bindParameters(webRequest, binder, alias);
+//JSR303 验证
+validateIfApplicable(binder, parameter);
+if (binder.getBindingResult().hasErrors()) {
+if (isBindExceptionRequired(binder, parameter)) {
+throw new BindException(binder.getBindingResult());
+}
+}
+}
+
+if(formObj.show()) {
+mavContainer.addAttribute(alias, target);
+}
+
+return target;
+}
+
+
+private Object createAttribute(String alias, MethodParameter parameter, WebDataBinderFactory binderFactory, NativeWebRequest webRequest) {
+return BeanUtils.instantiateClass(parameter.getParameterType());
+}
+
+private void bindParameters(NativeWebRequest request, WebDataBinder binder, String alias) {
+ServletRequest servletRequest = request.getNativeRequest(ServletRequest.class);
+
+MockHttpServletRequest newRequest = new MockHttpServletRequest();
+
+Enumeration&lt;String&gt; enu = servletRequest.getParameterNames();
+while(enu.hasMoreElements()) {
+String paramName = enu.nextElement();
+if(paramName.startsWith(alias)) {
+newRequest.setParameter(paramName.substring(alias.length()+1), request.getParameter(paramName));
+}
+}
+((ExtendedServletRequestDataBinder)binder).bind(newRequest);
+}
+
+protected void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
+Annotation[] annotations = parameter.getParameterAnnotations();
+for (Annotation annot : annotations) {
+if (annot.annotationType().getSimpleName().startsWith(&quot;Valid&quot;)) {
+Object hints = AnnotationUtils.getValue(annot);
+binder.validate(hints instanceof Object[] ? (Object[]) hints : new Object[] {hints});
+break;
+}
+}
+}
+
+protected boolean isBindExceptionRequired(WebDataBinder binder, MethodParameter parameter) {
+int i = parameter.getParameterIndex();
+Class&lt;?&gt;[] paramTypes = parameter.getMethod().getParameterTypes();
+boolean hasBindingResult = (paramTypes.length &gt; (i + 1) &amp;&amp; Errors.class.isAssignableFrom(paramTypes[i + 1]));
+
+return !hasBindingResult;
+}
+
+private String getAlias(FormObj formObj, MethodParameter parameter) {
+//得到FormObj的属性value，也就是对象参数的简称
+String alias = formObj.value();
+if(alias == null || StringUtils.isBlank(alias)) {
+//如果简称为空，取对象简称的首字母小写开头
+String simpleName = parameter.getParameterType().getSimpleName();
+alias = simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1);
+}
+return alias;
+}
+
+
+}
+对应Controller：
+
+@Controller
+@RequestMapping(value = &quot;/foc&quot;)
+public class FormObjController {
+
+@RequestMapping(&quot;/test1&quot;)
+public String test1(@FormObj Dept dept, @FormObj Employee emp) {
+return &quot;index&quot;;
+}
+
+@RequestMapping(&quot;/test2&quot;)
+public String test2(@FormObj(&quot;d&quot;) Dept dept, @FormObj(&quot;e&quot;) Employee emp) {
+return &quot;index&quot;;
+}
+
+@RequestMapping(&quot;/test3&quot;)
+public String test3(@FormObj(value = &quot;d&quot;, show = false) Dept dept, @FormObj(&quot;e&quot;) Employee emp) {
+return &quot;index&quot;;
+}
+
+}
+</code></pre><p>结果如下：</p>
+<p><img src="http://i.imgur.com/mT46S12.png" alt=""></p>
+<p><img src="http://i.imgur.com/XL1TiDZ.png" alt=""></p>
+<p><img src="http://i.imgur.com/9njvywE.png" alt=""></p>
+<p>转自<a href="http://www.cnblogs.com/fangjian0423/tag/springmvc/" target="_blank" rel="external">http://www.cnblogs.com/fangjian0423/tag/springmvc/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC/" rel="tag">#SpringMVC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/27/SpringMvc找Controller/" rel="next" title="SpringMVC怎么找到Controller">
+                <i class="fa fa-chevron-left"></i> SpringMVC怎么找到Controller
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/07/28/SpringMVC解析参数/"
+     data-title="SpringMVC解析参数"
+     data-content=""
+     data-url="http://yoursite.com/2016/07/28/SpringMVC解析参数/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/28/SpringMVC解析参数/"
+           data-title="SpringMVC解析参数" data-url="http://yoursite.com/2016/07/28/SpringMVC解析参数/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#现象"><span class="nav-number">2.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">3.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写自定义的HandlerMethodArgumentResolver"><span class="nav-number">4.</span> <span class="nav-text">编写自定义的HandlerMethodArgumentResolver</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

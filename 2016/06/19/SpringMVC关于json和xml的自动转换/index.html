@@ -1,0 +1,916 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC,Json," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="现象本文使用的demo基于maven
+我们先来看一看对应的现象。 我们这里的配置文件 *-dispatcher.xml中的关键配置如下(其他常规的配置文件不在讲解，可参考本文一开始提到的入门blog)：
+(视图配置省略)
+&amp;lt;mvc:resources location=&amp;quot;/static/&amp;quot; mapping=&amp;quot;/static/**&amp;quot;/&amp;gt;
+&amp;lt;m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC解析参数">
+<meta property="og:url" content="http://yoursite.com/2016/06/19/SpringMVC关于json和xml的自动转换/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="现象本文使用的demo基于maven
+我们先来看一看对应的现象。 我们这里的配置文件 *-dispatcher.xml中的关键配置如下(其他常规的配置文件不在讲解，可参考本文一开始提到的入门blog)：
+(视图配置省略)
+&amp;lt;mvc:resources location=&amp;quot;/static/&amp;quot; mapping=&amp;quot;/static/**&amp;quot;/&amp;gt;
+&amp;lt;m">
+<meta property="og:image" content="http://i.imgur.com/P0FMO79.png">
+<meta property="og:image" content="http://i.imgur.com/rcpJGRG.png">
+<meta property="og:image" content="http://i.imgur.com/glRtnUR.png">
+<meta property="og:image" content="http://i.imgur.com/TPj00lK.png">
+<meta property="og:image" content="http://i.imgur.com/7MqK5wj.png">
+<meta property="og:image" content="http://i.imgur.com/RqU7wSp.png">
+<meta property="og:image" content="http://i.imgur.com/z9VrvsU.png">
+<meta property="og:image" content="http://i.imgur.com/nyHBdeq.png">
+<meta property="og:image" content="http://i.imgur.com/dms8HGr.png">
+<meta property="og:image" content="http://i.imgur.com/dO2B43b.png">
+<meta property="og:image" content="http://i.imgur.com/3MyRol1.png">
+<meta property="og:image" content="http://i.imgur.com/ZowjiXR.png">
+<meta property="og:image" content="http://i.imgur.com/mx6i49H.png">
+<meta property="og:image" content="http://i.imgur.com/QxuDKbi.png">
+<meta property="og:image" content="http://i.imgur.com/p1mcqrK.png">
+<meta property="og:image" content="http://i.imgur.com/Ln0g6vh.png">
+<meta property="og:image" content="http://i.imgur.com/KQQCQHf.png">
+<meta property="og:image" content="http://i.imgur.com/YXFIiEL.png">
+<meta property="og:image" content="http://i.imgur.com/dehrYQz.png">
+<meta property="og:image" content="http://i.imgur.com/8XYgRLO.png">
+<meta property="og:image" content="http://i.imgur.com/4rEqsg2.png">
+<meta property="og:image" content="http://i.imgur.com/7NzMpAx.png">
+<meta property="og:image" content="http://i.imgur.com/5ntGUvn.png">
+<meta property="og:image" content="http://i.imgur.com/ejA3BSN.png">
+<meta property="og:image" content="http://i.imgur.com/13hnysc.png">
+<meta property="og:image" content="http://i.imgur.com/LELPxoe.png">
+<meta property="og:updated_time" content="2016-08-03T02:28:58.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC解析参数">
+<meta name="twitter:description" content="现象本文使用的demo基于maven
+我们先来看一看对应的现象。 我们这里的配置文件 *-dispatcher.xml中的关键配置如下(其他常规的配置文件不在讲解，可参考本文一开始提到的入门blog)：
+(视图配置省略)
+&amp;lt;mvc:resources location=&amp;quot;/static/&amp;quot; mapping=&amp;quot;/static/**&amp;quot;/&amp;gt;
+&amp;lt;m">
+<meta name="twitter:image" content="http://i.imgur.com/P0FMO79.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> SpringMVC解析参数 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC解析参数
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-19T12:30:45+08:00" content="2016-06-19">
+              2016-06-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/19/SpringMVC关于json和xml的自动转换/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/19/SpringMVC关于json和xml的自动转换/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>本文使用的demo基于maven</p>
+<p>我们先来看一看对应的现象。 我们这里的配置文件 *-dispatcher.xml中的关键配置如下(其他常规的配置文件不在讲解，可参考本文一开始提到的入门blog)：</p>
+<p>(视图配置省略)</p>
+<pre><code>&lt;mvc:resources location=&quot;/static/&quot; mapping=&quot;/static/**&quot;/&gt;
+&lt;mvc:annotation-driven/&gt;
+&lt;context:component-scan base-package=&quot;org.format.demo.controller&quot;/&gt;
+</code></pre><p>pom中需要有以下依赖(Spring依赖及其他依赖不显示)：</p>
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.codehaus.jackson&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-core-asl&lt;/artifactId&gt;
+  &lt;version&gt;1.9.13&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.codehaus.jackson&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-mapper-asl&lt;/artifactId&gt;
+  &lt;version&gt;1.9.13&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><p>这个依赖是json序列化的依赖。</p>
+<p>ok。我们在Controller中添加一个method：</p>
+<pre><code>@RequestMapping(&quot;/xmlOrJson&quot;)
+@ResponseBody
+public Map&lt;String, Object&gt; xmlOrJson() {
+Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
+map.put(&quot;list&quot;, employeeService.list());
+return map;
+}
+</code></pre><p><img src="http://i.imgur.com/P0FMO79.png" alt=""><br>直接访问地址：</p>
+<p>我们看到，短短几行配置。使用@ResponseBody注解之后，Controller返回的对象 自动被转换成对应的json数据，在这里不得不感叹SpringMVC的强大。</p>
+<p>我们好像也没看到具体的配置，唯一看到的就是*-dispatcher.xml中的一句配置：<mvc:annotation-driven>。其实就是这个配置，导致了java对象自动转换成json对象的现象。</mvc:annotation-driven></p>
+<p>那么spring到底是如何实现java对象到json对象的自动转换的呢？ 为什么转换成了json数据，如果想转换成xml数据，那该怎么办？</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>本文使用的spring版本是4.0.2。  </p>
+<p>在讲解<mvc:annotation-driven>这个配置之前，我们先了解下Spring的消息转换机制。@ResponseBody这个注解就是使用消息转换机制，最终通过json的转换器转换成json数据的。</mvc:annotation-driven></p>
+<p>HttpMessageConverter接口就是Spring提供的http消息转换接口。有关这方面的知识大家可以参考”参考资料”中的第二条链接，里面讲的很清楚。<br><img src="http://i.imgur.com/rcpJGRG.png" alt=""></p>
+<p>下面开始分析<mvc:annotation-driven>这句配置:</mvc:annotation-driven></p>
+<p>这句代码在spring中的解析类是：</p>
+<p><img src="http://i.imgur.com/glRtnUR.png" alt=""></p>
+<p>在AnnotationDrivenBeanDefinitionParser源码的152行parse方法中：</p>
+<p>分别实例化了RequestMappingHandlerMapping，ConfigurableWebBindingInitializer，RequestMappingHandlerAdapter等诸多类。</p>
+<p>其中RequestMappingHandlerMapping和RequestMappingHandlerAdapter这两个类比较重要。</p>
+<p>RequestMappingHandlerMapping处理请求映射的，处理@RequestMapping跟请求地址之间的关系。</p>
+<p>RequestMappingHandlerAdapter是请求处理的适配器，也就是请求之后处理具体逻辑的执行，关系到哪个类的哪个方法以及转换器等工作，这个类是我们讲的重点，其中它的属性messageConverters是本文要讲的重点。</p>
+<p><img src="http://i.imgur.com/TPj00lK.png" alt=""></p>
+<p>私有方法:getMessageConverters</p>
+<p><img src="http://i.imgur.com/7MqK5wj.png" alt=""></p>
+<p>从代码中我们可以，RequestMappingHandlerAdapter设置messageConverters的逻辑：</p>
+<p>1.如果<mvc:annotation-driven>节点有子节点message-converters，那么它的转换器属性messageConverters也由这些子节点组成。</mvc:annotation-driven></p>
+<p>message-converters的子节点配置如下：</p>
+<pre><code>&lt;mvc:annotation-driven&gt;
+  &lt;mvc:message-converters&gt;
+&lt;bean class=&quot;org.example.MyHttpMessageConverter&quot;/&gt;
+&lt;bean class=&quot;org.example.MyOtherHttpMessageConverter&quot;/&gt;
+  &lt;/mvc:message-converters&gt;
+&lt;/mvc:annotation-driven&gt;
+</code></pre><p>2.message-converters子节点不存在或它的属性register-defaults为true的话，加入其他的转换器：ByteArrayHttpMessageConverter、StringHttpMessageConverter、ResourceHttpMessageConverter等。</p>
+<p>我们看到这么一段：</p>
+<p><img src="http://i.imgur.com/RqU7wSp.png" alt=""></p>
+<p>这些boolean属性是哪里来的呢，它们是AnnotationDrivenBeanDefinitionParser的静态变量。</p>
+<p><img src="http://i.imgur.com/z9VrvsU.png" alt=""></p>
+<p> 其中ClassUtils中的isPresent方法如下：<br><img src="http://i.imgur.com/nyHBdeq.png" alt=""></p>
+<p>看到这里，读者应该明白了为什么本文一开始在pom文件中需要加入对应的jackson依赖，为了让json转换器jackson成为默认转换器之一。</p>
+<p><mvc:annotation-driven>的作用读者也明白了。</mvc:annotation-driven></p>
+<p>下面我们看如何通过消息转换器将java对象进行转换的。</p>
+<p>RequestMappingHandlerAdapter在进行handle的时候，会委托给HandlerMethod（具体由子类ServletInvocableHandlerMethod处理）的invokeAndHandle方法进行处理，这个方法又转接给HandlerMethodReturnValueHandlerComposite处理。</p>
+<p>HandlerMethodReturnValueHandlerComposite维护了一个HandlerMethodReturnValueHandler列表。HandlerMethodReturnValueHandler是一个对返回值进行处理的策略接口，这个接口非常重要。关于这个接口的细节。然后找到对应的HandlerMethodReturnValueHandler对结果值进行处理。</p>
+<p>最终找到RequestResponseBodyMethodProcessor这个Handler（由于使用了@ResponseBody注解）。</p>
+<p>RequestResponseBodyMethodProcessor的supportsReturnType方法：</p>
+<p><img src="http://i.imgur.com/dms8HGr.png" alt=""></p>
+<p>然后使用handleReturnValue方法进行处理：<br><img src="http://i.imgur.com/dO2B43b.png" alt=""></p>
+<p>我们看到，这里使用了转换器。　　</p>
+<p>具体的转换方法：</p>
+<p><img src="http://i.imgur.com/3MyRol1.png" alt=""><br><img src="http://i.imgur.com/ZowjiXR.png" alt=""></p>
+<p>至于为何是请求头部的Accept数据，读者可以进去debug这个getAcceptableMediaTypes方法看看。 我就不罗嗦了～～～</p>
+<p> ok。至此，我们走遍了所有的流程。</p>
+<p>现在，回过头来看。为什么一开始的demo输出了json数据？</p>
+<p>我们来分析吧。</p>
+<p>由于我们只配置了<mvc:annotation-driven>，因此使用spring默认的那些转换器。</mvc:annotation-driven></p>
+<p><img src="http://i.imgur.com/mx6i49H.png" alt=""></p>
+<p>很明显，我们看到了2个xml和1个json转换器。 要看能不能转换，得看HttpMessageConverter接口的public boolean canWrite(Class&lt;?&gt; clazz, MediaType mediaType)方法是否返回true来决定的。</p>
+<p>我们先分析SourceHttpMessageConverter：</p>
+<p>它的canWrite方法被父类AbstractHttpMessageConverter重写了。</p>
+<p><img src="http://i.imgur.com/QxuDKbi.png" alt=""></p>
+<p><img src="http://i.imgur.com/p1mcqrK.png" alt=""></p>
+<p><img src="http://i.imgur.com/Ln0g6vh.png" alt=""></p>
+<p>发现SUPPORTED_CLASSES中没有Map类(本文demo返回的是Map类)，因此不支持。</p>
+<p>下面看Jaxb2RootElementHttpMessageConverter：</p>
+<p>这个类直接重写了canWrite方法。</p>
+<p><img src="http://i.imgur.com/KQQCQHf.png" alt=""></p>
+<p>需要有XmlRootElement注解。 很明显，Map类当然没有。</p>
+<p>最终MappingJackson2HttpMessageConverter匹配，进行json转换。（为何匹配，请读者自行查看源码）</p>
+<h2 id="实例讲解"><a href="#实例讲解" class="headerlink" title="实例讲解"></a>实例讲解</h2><p> 我们分析了转换器的转换过程之后，下面就通过实例来验证我们的结论吧。</p>
+<p>首先，我们先把xml转换器实现。</p>
+<p>之前已经分析，默认的转换器中是支持xml的。下面我们加上注解试试吧。</p>
+<p>由于Map是jdk源码中的部分，因此我们用Employee来做demo。</p>
+<p>因此，Controller加上一个方法：</p>
+<pre><code>@RequestMapping(&quot;/xmlOrJsonSimple&quot;)
+@ResponseBody
+public Employee xmlOrJsonSimple() {
+return employeeService.getById(1);
+}
+</code></pre><p>实体中加上@XmlRootElement注解</p>
+<p><img src="http://i.imgur.com/YXFIiEL.png" alt=""></p>
+<p>结果如下：</p>
+<p><img src="http://i.imgur.com/dehrYQz.png" alt=""></p>
+<p>我们发现，解析成了xml。</p>
+<p>这里为什么解析成xml，而不解析成json呢？</p>
+<p>之前分析过，消息转换器是根据class和mediaType决定的。</p>
+<p>我们使用firebug看到：</p>
+<p><img src="http://i.imgur.com/8XYgRLO.png" alt=""></p>
+<p>我们发现Accept有xml，没有json。因此解析成xml了。</p>
+<p>我们再来验证，同一地址，HTTP头部不同Accept。看是否正确。</p>
+<pre><code>$.ajax({
+url: &quot;${request.contextPath}/employee/xmlOrJsonSimple&quot;,
+success: function(res) {
+console.log(res);
+},
+headers: {
+&quot;Accept&quot;: &quot;application/xml&quot;
+}
+});
+</code></pre><p><img src="http://i.imgur.com/4rEqsg2.png" alt=""></p>
+<pre><code>$.ajax({
+url: &quot;${request.contextPath}/employee/xmlOrJsonSimple&quot;,
+success: function(res) {
+console.log(res);
+},
+headers: {
+&quot;Accept&quot;: &quot;application/json&quot;
+}
+});
+</code></pre><p><img src="http://i.imgur.com/7NzMpAx.png" alt=""></p>
+<p>验证成功。</p>
+<h2 id="关于配置"><a href="#关于配置" class="headerlink" title="关于配置"></a>关于配置</h2><p>如果不想使用<mvc:annotation-driven>中默认的RequestMappingHandlerAdapter的话，我们可以在重新定义这个bean，spring会覆盖掉默认的RequestMappingHandlerAdapter。</mvc:annotation-driven></p>
+<pre><code>&lt;bean class=&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter&quot;&gt;
+  &lt;property name=&quot;messageConverters&quot;&gt;
+&lt;list&gt;
+  &lt;bean class=&quot;org.springframework.http.converter.ByteArrayHttpMessageConverter&quot;/&gt;
+  &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;/&gt;
+  &lt;bean class=&quot;org.springframework.http.converter.ResourceHttpMessageConverter&quot;/&gt;
+&lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre><p>或者如果只想换messageConverters的话。</p>
+<pre><code>&lt;mvc:annotation-driven&gt;
+  &lt;mvc:message-converters&gt;
+&lt;bean class=&quot;org.example.MyHttpMessageConverter&quot;/&gt;
+&lt;bean class=&quot;org.example.MyOtherHttpMessageConverter&quot;/&gt;
+  &lt;/mvc:message-converters&gt;
+&lt;/mvc:annotation-driven&gt;
+</code></pre><p>如果还想用其他converters的话。</p>
+<p><img src="http://i.imgur.com/5ntGUvn.png" alt=""></p>
+<p>以上是spring-mvc jar包中的converters。</p>
+<p>这里我们使用转换xml的MarshallingHttpMessageConverter。</p>
+<p>这个converter里面使用了marshaller进行转换</p>
+<p><img src="http://i.imgur.com/ejA3BSN.png" alt=""></p>
+<p>我们这里使用XStreamMarshaller。　　</p>
+<p><img src="http://i.imgur.com/13hnysc.png" alt=""></p>
+<p><img src="http://i.imgur.com/LELPxoe.png" alt=""></p>
+<p>json没有转换器，返回406.</p>
+<p>至于xml格式的问题，大家自行解决吧。 这里用的是XStream～。</p>
+<p>使用这种方式，pom别忘记了加入xstream的依赖：</p>
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;com.thoughtworks.xstream&lt;/groupId&gt;
+  &lt;artifactId&gt;xstream&lt;/artifactId&gt;
+  &lt;version&gt;1.4.7&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC/" rel="tag">#SpringMVC</a>
+          
+            <a href="/tags/Json/" rel="tag">#Json</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/11/Next_Permutation/" rel="next" title="Next Permutation">
+                <i class="fa fa-chevron-left"></i> Next Permutation
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/03/java创建对象/" rel="prev" title="Java创建对象">
+                Java创建对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/06/19/SpringMVC关于json和xml的自动转换/"
+     data-title="SpringMVC解析参数"
+     data-content=""
+     data-url="http://yoursite.com/2016/06/19/SpringMVC关于json和xml的自动转换/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/19/SpringMVC关于json和xml的自动转换/"
+           data-title="SpringMVC解析参数" data-url="http://yoursite.com/2016/06/19/SpringMVC关于json和xml的自动转换/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#现象"><span class="nav-number">1.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例讲解"><span class="nav-number">3.</span> <span class="nav-text">实例讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于配置"><span class="nav-number">4.</span> <span class="nav-text">关于配置</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
