@@ -1,0 +1,768 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网络,TCP/ip," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="TCP拥塞控制首先了解几个概念，为下面的叙述做铺垫
+拥塞窗口（cwnd）：TCP拥塞控制中的主要参数，表示发送端下一次最多可以发送的数据分包的个数，是来自发送端的流量控制。
+接收端窗口（rwnd）：又称通知窗口（Advertise Window），接受端目前每次所能接收的数据分组的最大个数，是来自接收端的流量控制。
+慢开始门限（ssthresh）：当拥塞窗口增长到慢开始门限时，启动拥塞避免算法（后">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP(二)">
+<meta property="og:url" content="http://yoursite.com/2016/06/08/TCPIP(6)/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="TCP拥塞控制首先了解几个概念，为下面的叙述做铺垫
+拥塞窗口（cwnd）：TCP拥塞控制中的主要参数，表示发送端下一次最多可以发送的数据分包的个数，是来自发送端的流量控制。
+接收端窗口（rwnd）：又称通知窗口（Advertise Window），接受端目前每次所能接收的数据分组的最大个数，是来自接收端的流量控制。
+慢开始门限（ssthresh）：当拥塞窗口增长到慢开始门限时，启动拥塞避免算法（后">
+<meta property="og:image" content="http://i.imgur.com/50rdayt.png">
+<meta property="og:image" content="http://i.imgur.com/VPd24FT.png">
+<meta property="og:updated_time" content="2016-08-04T03:13:58.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP(二)">
+<meta name="twitter:description" content="TCP拥塞控制首先了解几个概念，为下面的叙述做铺垫
+拥塞窗口（cwnd）：TCP拥塞控制中的主要参数，表示发送端下一次最多可以发送的数据分包的个数，是来自发送端的流量控制。
+接收端窗口（rwnd）：又称通知窗口（Advertise Window），接受端目前每次所能接收的数据分组的最大个数，是来自接收端的流量控制。
+慢开始门限（ssthresh）：当拥塞窗口增长到慢开始门限时，启动拥塞避免算法（后">
+<meta name="twitter:image" content="http://i.imgur.com/50rdayt.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> TCP(二) | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TCP(二)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-08T22:21:01+08:00" content="2016-06-08">
+              2016-06-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/08/TCPIP(6)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/TCPIP(6)/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="TCP拥塞控制"><a href="#TCP拥塞控制" class="headerlink" title="TCP拥塞控制"></a>TCP拥塞控制</h2><p>首先了解几个概念，为下面的叙述做铺垫</p>
+<p>拥塞窗口（cwnd）：TCP拥塞控制中的主要参数，表示发送端下一次最多可以发送的数据分包的个数，是来自发送端的流量控制。</p>
+<p>接收端窗口（rwnd）：又称通知窗口（Advertise Window），接受端目前每次所能接收的数据分组的最大个数，是来自接收端的流量控制。</p>
+<p>慢开始门限（ssthresh）：当拥塞窗口增长到慢开始门限时，启动拥塞避免算法（后面会具体阐述）。</p>
+<p>拥塞控制常用算法：慢开始、拥塞避免、快重传、快恢复。</p>
+<p>最初，发送方不知道接收方的容纳能力，如果初次就发送较大量的数据，极有可能造成整个网络的瘫痪，TCP为了防止此类问题的出现，在通信一开始就会通过一个叫慢开始的算法得到的数值，对发送数据量进行控制。</p>
+<h3 id="慢开始："><a href="#慢开始：" class="headerlink" title="慢开始："></a>慢开始：</h3><p>由于需要考虑拥塞控制和流量控制两个方面的内容，发送端的发送窗口为min(cwnd，rwnd)，但是rwnd是由对端确定的，网络环境对其没有影响，所以在考虑拥塞的时候我们一般不考虑rwnd的值，我们暂时只讨论如何确定cwnd值的大小。</p>
+<p>在执行慢开始算法时，拥塞窗口 cwnd的初始值为 1，发送第一个报文段。当发送端收到来自接收端的ACK之后，拥塞窗口开始以1、2、4这样的指数形式增长。当拥塞窗口cwnd 增长到慢开始门限值 ssthresh 时，就改为执行拥塞避免算法，拥塞窗口按线性规律增长。</p>
+<h3 id="拥塞避免："><a href="#拥塞避免：" class="headerlink" title="拥塞避免："></a>拥塞避免：</h3><p>最初，拥塞窗口指数增长，可以很快进行大数据的发送，最大限度的利用网络宽带资源。当达到慢开始门限值，开始进入拥塞避免阶段，拥塞窗口开始加法增加。这样就可以避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值。</p>
+<h3 id="快重传与快速恢复"><a href="#快重传与快速恢复" class="headerlink" title="快重传与快速恢复"></a>快重传与快速恢复</h3><p>上面都没有遇到网络拥塞，当真正遇到网络拥塞时，如何处理呢？当发送方连续收到三个重复的ACK之后，TCP会进入快速重传、快速恢复的阶段。</p>
+<p>为什么叫快速重传呢？如果当发送端接收到三个重复的确认ACK时，则断定分组丢失，立即重传丢失的报文段，而不必等待重传计时器超时，相比之下，前者速度更快。</p>
+<p>快速恢复的主要步骤：</p>
+<p>当收到3个重复ACK时，把ssthresh设置为cwnd的一半，把cwnd设置为ssthresh的值加3，然后重传丢失的报文段。</p>
+<p>再收到重复的ACK时，拥塞窗口增加1。</p>
+<p>当收到新的数据包的ACK时，把cwnd设置为第一步中的ssthresh的值。原因是因为该ACK确认了新的数据，说明从重复ACK时的数据都已收到，该恢复过程已经结束，可以回到恢复之前的状态了，也即再次进入拥塞避免状态。<br><img src="http://i.imgur.com/50rdayt.png" alt=""></p>
+<p>当TCP通信开始之后，网络吞吐量会逐渐上升，但是随着网络拥堵的发生，吞吐量也会急速下降。于是会再次进入吞吐量慢慢上升的过程。但是所谓TCP的吞吐量的特点就好像是在逐渐占领网络宽带的感觉。</p>
+<h2 id="TCP疑问解答"><a href="#TCP疑问解答" class="headerlink" title="TCP疑问解答"></a>TCP疑问解答</h2><h3 id="为什么采用三次握手而不是二次握手？"><a href="#为什么采用三次握手而不是二次握手？" class="headerlink" title="为什么采用三次握手而不是二次握手？"></a>为什么采用三次握手而不是二次握手？</h3><p>client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达server。本来这是一个早已失效的报文段。但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。于是就向client发出确认报文段，同意建立连接。假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。”</p>
+<h3 id="TCP三次握手时，第三次握手失败怎么办？"><a href="#TCP三次握手时，第三次握手失败怎么办？" class="headerlink" title="TCP三次握手时，第三次握手失败怎么办？"></a>TCP三次握手时，第三次握手失败怎么办？</h3><p>如果三次都成功的话：</p>
+<p>客户端发出了SYN包给服务器,客户端进入SYN_SEND状态。</p>
+<p>服务器收到SYN包后发出SYN+ACK数据包,服务器进入SYN_RECV状态。</p>
+<p>客户端收到SYN+ACK后发出ACK给服务器,客户端进入ESTABLISH状态</p>
+<p>服务器收到最后的ACK，服务器进入ESTABLISH状态。</p>
+<p>我们了解一下TCP状态转换图和状态伪码可以发现：</p>
+<pre><code>case：SYN_RECV状态
+if(收到ACK报文)
+进入ESTABLISH状态
+if(超时)
+发送RTS报文，进入CLOSED状态
+if(收到“关闭报文”)
+发送FIN报文，进入FIN_WAIT_1状态
+if(收到RTS报文)
+进入LISTEN状态
+if(收到其他报文段或报文)
+发出差错报文
+break
+</code></pre><p>当第三次握手失败时的处理操作，可以看出当失败时服务器并不会重传ACK报文，而是直接发送RTS报文段，进入CLOSED状态。这样做的目的是为了防止SYN洪泛攻击。</p>
+<p>何为SYN洪泛攻击呢？在TCP连接建立过程中很容易碰到严重的的安全问题，称为SYN洪泛攻击。当一个或多个恶意攻击者向服务器发送大量的SYN报文时，服务器认为不同客户发来了打开请求，于是就回分配资源。然后，服务器向假冒的客户发送SYN＋ACK报文，而这些报文都丢失了。如果在第三次握手这段很短的时间内，服务器大量资源被占用而没有被利用，服务器会因为资源耗尽而无法接受合法客户的连接请求。这种SYN洪泛攻击称为拒绝服务攻击的安全攻击，即攻击者用大量的请求垄断一个系统，使这个系统因超载而拒绝为合法的请求提供服务。（更多内容请参考TCP/IP协议簇一书）</p>
+<h3 id="关闭连接时半关闭选项的四向握手"><a href="#关闭连接时半关闭选项的四向握手" class="headerlink" title="关闭连接时半关闭选项的四向握手"></a>关闭连接时半关闭选项的四向握手</h3><p>TCP连接是全双工的，所以它允许两个方向的数据传输被独立关闭。换言之，通信的一端可以发送结束报文段给对方，告诉它本端已经完成了数据的发送，但允许继续接收来自对方的数据，直到对方也发送结束报文段以关闭连接。TCP连接的这种状态称为半关闭（half close）状态。</p>
+<p>当客户端向服务器发送一个FIN报文段后，此连接被半关闭了。服务器发送ACK报文段来接受这个半关闭。但是服务器仍然可以发送数据，当服务器把处理完的数据都发送完毕之后，发送FIN报文段（半关闭），并且被客户发来的ACK予以确认（关闭）。</p>
+<h3 id="当关闭连接时最后一个ACK丢失怎么办？"><a href="#当关闭连接时最后一个ACK丢失怎么办？" class="headerlink" title="当关闭连接时最后一个ACK丢失怎么办？"></a>当关闭连接时最后一个ACK丢失怎么办？</h3><p>如果最后一个ACK丢失的话，TCP就会认为它的FIN丢失，进行重发FIN。在客户端收到FIN后，就会设置一个2MSL计时器，2MSL计时器可以使客户等待足够长的时间，使得在ACK丢失的情况下，可以等到下一个FIN的到来。如果在TIME－WAIT状态汇总有一个新的FIN到达了，客户就会发送一个新的ACK，并重新设置2MSL计时器。</p>
+<p>示例图解如下：<br><img src="http://i.imgur.com/VPd24FT.png" alt=""></p>
+<p>半关闭终止时间图</p>
+<p>如果重传FIN到达客户端时，客户端已经进入CLOSED状态时，那么客户就永远收不到这个重传的FIN报文段，服务器收不到ACK，服务器无法关闭连接。</p>
+<p>但是服务器并不会一直无法关闭，服务器会进行不断的探查，会发送十个间隔为75秒的探查，如果探查都没有收到回应，则认为客户端已经关闭，服务器也将关闭，终止链接。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络/" rel="tag">#网络</a>
+          
+            <a href="/tags/TCP-ip/" rel="tag">#TCP/ip</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/07/排序算法稳定性/" rel="next" title="排序算法稳定性">
+                <i class="fa fa-chevron-left"></i> 排序算法稳定性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/11/Next_Permutation/" rel="prev" title="Next Permutation">
+                Next Permutation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/06/08/TCPIP(6)/"
+     data-title="TCP(二)"
+     data-content=""
+     data-url="http://yoursite.com/2016/06/08/TCPIP(6)/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/08/TCPIP(6)/"
+           data-title="TCP(二)" data-url="http://yoursite.com/2016/06/08/TCPIP(6)/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP拥塞控制"><span class="nav-number">1.</span> <span class="nav-text">TCP拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢开始："><span class="nav-number">1.1.</span> <span class="nav-text">慢开始：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拥塞避免："><span class="nav-number">1.2.</span> <span class="nav-text">拥塞避免：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快重传与快速恢复"><span class="nav-number">1.3.</span> <span class="nav-text">快重传与快速恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP疑问解答"><span class="nav-number">2.</span> <span class="nav-text">TCP疑问解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么采用三次握手而不是二次握手？"><span class="nav-number">2.1.</span> <span class="nav-text">为什么采用三次握手而不是二次握手？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP三次握手时，第三次握手失败怎么办？"><span class="nav-number">2.2.</span> <span class="nav-text">TCP三次握手时，第三次握手失败怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭连接时半关闭选项的四向握手"><span class="nav-number">2.3.</span> <span class="nav-text">关闭连接时半关闭选项的四向握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当关闭连接时最后一个ACK丢失怎么办？"><span class="nav-number">2.4.</span> <span class="nav-text">当关闭连接时最后一个ACK丢失怎么办？</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
