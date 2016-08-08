@@ -1,0 +1,750 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式,Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="一, 简单工厂模式:突然有一天，在梦里拥有了阿拉丁神灯.灯神说: “我可以给你创造一个女朋友哦”这时候我的心里…嘿嘿嘿…“但是只能满足你一个地理条件，目前只有三个选项: 四川, 河北, 山东. 你挑一个? “ 灯神又说.“那我选: 四川…或者…”没等我说完，嘭的一下，出来个一个火辣的川妹子…用代码来展示就是:// 神灯拥有的三种选项public enum GFType {      SI_CHUA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单工厂、工厂、抽象工厂">
+<meta property="og:url" content="http://yoursite.com/2016/08/08/简单工厂、工厂、抽象工厂/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="一, 简单工厂模式:突然有一天，在梦里拥有了阿拉丁神灯.灯神说: “我可以给你创造一个女朋友哦”这时候我的心里…嘿嘿嘿…“但是只能满足你一个地理条件，目前只有三个选项: 四川, 河北, 山东. 你挑一个? “ 灯神又说.“那我选: 四川…或者…”没等我说完，嘭的一下，出来个一个火辣的川妹子…用代码来展示就是:// 神灯拥有的三种选项public enum GFType {      SI_CHUA">
+<meta property="og:updated_time" content="2016-08-08T06:22:18.697Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单工厂、工厂、抽象工厂">
+<meta name="twitter:description" content="一, 简单工厂模式:突然有一天，在梦里拥有了阿拉丁神灯.灯神说: “我可以给你创造一个女朋友哦”这时候我的心里…嘿嘿嘿…“但是只能满足你一个地理条件，目前只有三个选项: 四川, 河北, 山东. 你挑一个? “ 灯神又说.“那我选: 四川…或者…”没等我说完，嘭的一下，出来个一个火辣的川妹子…用代码来展示就是:// 神灯拥有的三种选项public enum GFType {      SI_CHUA">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 简单工厂、工厂、抽象工厂 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                简单工厂、工厂、抽象工厂
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-08T12:30:45+08:00" content="2016-08-08">
+              2016-08-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/08/简单工厂、工厂、抽象工厂/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/08/简单工厂、工厂、抽象工厂/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一, 简单工厂模式:<br>突然有一天，在梦里拥有了阿拉丁神灯.<br>灯神说: “我可以给你创造一个女朋友哦”<br>这时候我的心里…嘿嘿嘿…<br>“但是只能满足你一个地理条件，目前只有三个选项: 四川, 河北, 山东. 你挑一个? “ 灯神又说.<br>“那我选: 四川…或者…”<br>没等我说完，嘭的一下，出来个一个火辣的川妹子…<br>用代码来展示就是:<br>// 神灯拥有的三种选项<br>public enum GFType {<br>      SI_CHUAN,<br>      HE_BEI,<br>      SHAN<em>DONG<br>}<br>// 和女朋友吃什么由她的家乡口味来定，但是shopping是一定的了 -</em>-<br>public abstract class BaseGF {<br>      public abstract void eatFood();<br>      public void shopping() {<br>            System.out.println(“Go shopping every day…”);<br>      };<br>}<br>public class SiChuanGF extends BaseGF {<br>      @Override<br>      public void eatFood() {<br>            System.out.println(“Eat sichuan food…”);<br>      }<br>}<br>public class ShanDongGF extends BaseGF {<br>      @Override<br>      public void eatFood() {<br>            System.out.println(“Eat shandong food…”);<br>      }<br>}<br>// 神灯为我们创建女朋友的工厂<br>public class GFFactory {<br>      public static BaseGF createGF(GFType gFType) {<br>            switch (gFType) {<br>                  case SI_CHUAN:<br>                        return new SiChuanGF();<br>                  case SHAN_DONG:<br>                        return new ShanDongGF();<br>                  default:<br>                  case HE_BEI:<br>                        return new HeBeiGF();<br>            }<br>      }<br>}<br>// 这个就是神灯的创建女朋友的程序了<br>public class Main {<br>      public static void main(String[] args) {<br>            BaseGF siChuanGirl = GFFactory.createGF(GFType.SI_CHUAN);<br>            siChuanGirl.eatFood();<br>            siChuanGirl.shopping();</p>
+<p>//          BaseGF shanDongGirl = GFFactory.createGF(GFType.SHAN_DONG);<br>//          shanDongGirl.eatFood();<br>//          shanDongGirl.shopping();<br>//<br>//          BaseGF heBeiGirl = GFFactory.createGF(GFType.HE_BEI);<br>//          heBeiGirl.eatFood();<br>//          heBeiGirl.shopping();<br>      }<br>}</p>
+<p>// 有了女朋友之后是这样的 -_-<br>Eat sichuan food…<br>Go shopping every day…<br>// Eat shandong food…<br>// Go shopping every day…<br>// Eat hebei food…<br>// Go shopping every day…<br>简单工厂模式: 专门定义一个类用来负责创建其他类的实例，被创建的实例通常都具有共同的父类.</p>
+<p>简单工厂模式UML类图.png<br>二, 工厂模式<br>因为我刚才还没决定，神灯就帮我把川妹子创建出来了，所以我嘟囔着，我这还没决定呢啊，大哥，你这手速有点快吧<br>神灯: “…你这个人真的是难伺候”<br>我: “我能不能要一个彩云之南的妹子? “<br>神灯: “彩云之南是哪? “<br>我: “云南啊”<br>神灯: “…你怎么这么麻烦，你知道我要改多少东西吗，我的enum(GFType)要改, GFFactory要增加case”<br>我: “神灯大哥，好人做到底么，好不好? “<br>神灯: “要不我给你一个接口好了，你自己想创建哪里的就创建那里的”<br>我的内心…嘿嘿嘿…<br>用代码展示就是:<br>// 创建女朋友的接口，想要哪里的女朋友，实现这个接口就可以了<br>public interface IGFFactory {<br>      BaseGF createGF();<br>}<br>// 没有改变<br>public abstract class BaseGF {<br>      public abstract void eatFood();<br>      public void shopping() {<br>            System.out.println(“Go shopping every day…”);<br>      };<br>}<br>// 创建川妹子的工厂<br>public class SiChuanGFFactory implements IGFFactory {<br>      @Override<br>      public BaseGF createGF() {<br>            return new SiChuanGF();<br>      }<br>}<br>// 这个类也没有改变<br>public class SiChuanGF extends BaseGF {<br>      @Override<br>      public void eatFood() {<br>            System.out.println(“Eat sichuan food…”);<br>      }<br>}<br>// 我想要的云南的妹子的创建工厂<br>public class YunNanGFFactory implements IGFFactory {<br>      @Override<br>      public BaseGF createGF() {<br>            return new YunNanGF();<br>      }<br>}<br>// 云南妹子<br>public class YunNanGF extends BaseGF {<br>      @Override<br>      public void eatFood() {<br>            System.out.println(“Eat 牛干巴, 炸土豆, 小锅米线, 卤米线…”);<br>      }<br>}<br>// 这个时候一切准备就绪，创建一个云南的妹子吧…嘿嘿嘿…嘭…<br>public class Main {<br>      public static void main(String[] args) {<br>            IGFFactory yunNanGFFactory = new YunNanGFFactory();<br>            BaseGF yunNanGF = yunNanGFFactory.createGF();<br>            yunNanGF.eatFood();<br>            yunNanGF.shopping();</p>
+<p>//          IGFFactory siChuanGFFactory = new SiChuanGFFactory();<br>//          BaseGF siChuanGF = siChuanGFFactory.createGF();<br>//          siChuanGF.eatFood();<br>//          siChuanGF.shopping();<br>      }<br>}</p>
+<p>// 有了个云南妹子，然后就开始吃各种小吃了<br>Eat 牛干巴, 炸土豆, 小锅米线, 卤米线…<br>Go shopping every day…<br>// Eat sichuan food…<br>// Go shopping every day…<br>从此我和我的云南妹子过上了幸福的生活.<br>工厂模式： 定义一个用于创建对象的接口，让子类决定实例化哪一个类。工厂方法使一个类的实例化延迟到其子类.</p>
+<p>工厂模式UML类图.png<br>三, 抽象工厂模式<br>好多年以后，我准备和我的云南妹子准备结婚了. 但是我们发现好像少点什么，对，就是妹子的父母还没见啊. 然后我们去找神灯大哥帮忙.<br>神灯说: “小子，挺幸福呗”<br>我说: “还得多谢神灯大哥啊，全都靠你”<br>神灯: “来找我是不是有什么需求啊(内心: 是不是又特么改需求了)? “<br>我: “我还没见过妹子的父母咧，帮帮忙啊”<br>神灯: “…”<br>用代码展示(以妹子的父亲为例子):<br>// IGFFactory增加一个创建妹子父亲的方法<br>public interface IGFFactory {<br>      BaseGF createGF();<br>      IGFFather createGFFather();<br>}<br>// 父亲接口<br>public interface IGFFather {<br>      // 对于闺女和我的事情的建议<br>      void suggestionToGirl();<br>}<br>public class SiChuanGFFactory implements IGFFactory {<br>      @Override<br>      public BaseGF createGF() {<br>            return new SiChuanGF();<br>      }</p>
+<pre><code>@Override
+public IGFFather createGFFather() {
+      return new SiChuanGFFather();
+}
+</code></pre><p>}<br>// 四川妹子的父亲实现类<br>public class SiChuanGFFather implements IGFFather {<br>      @Override<br>      public void suggestionToGirl() {<br>            // 同意了<br>            System.out.println(“Agree …”);<br>      }<br>}<br>public class YunNanGFFactory implements IGFFactory {<br>      @Override<br>      public BaseGF createGF() {<br>            return new YunNanGF();<br>      }</p>
+<pre><code>@Override
+public IGFFather createGFFather() {
+      return new YunNanGFFather();
+}
+</code></pre><p>}<br>// 云南妹子的父亲实现类<br>public class YunNanGFFather implements IGFFather {<br>      @Override<br>      public void suggestionToGirl() {<br>            // 不发表意见…<br>            System.out.println(“Silence …”);<br>      }<br>}<br>// 我们又一次找到了神灯，满意了吧</p>
+<p>public class Main {<br>      public static void main(String[] args) {<br>            IGFFactory yunNanGFFactory = new YunNanGFFactory();<br>            BaseGF yunNanGF = yunNanGFFactory.createGF();<br>            yunNanGF.eatFood();<br>            yunNanGF.shopping();</p>
+<pre><code>IGFFather yunNanGFFather = yunNanGFFactory.createGFFather();
+yunNanGFFather.suggestionToGirl();
+</code></pre><p>//          IGFFactory siChuanGFFactory = new SiChuanGFFactory();<br>//          BaseGF siChuanGF = siChuanGFFactory.createGF();<br>//          siChuanGF.eatFood();<br>//          siChuanGF.shopping();<br>//<br>//          IGFFather siChuanGFFather = siChuanGFFactory.createGFFather();<br>//          siChuanGFFather.suggestionToGirl();<br>      }<br>}</p>
+<p>// 结果是这样滴…<br>Eat 牛干巴, 炸洋芋, 小锅米线, 卤米线…<br>Go shopping every day…<br>Silence …<br>// Eat sichuan food…<br>// Go shopping every day…<br>// Agree …<br>抽象工厂模式: 提供一个创建一系列相关或者相互依赖对象的接口，而无需指定他们具体的类.</p>
+<p>抽象工厂模式UML类图.png<br>就这样，我和我的云南妹子去见了她父母，然后过上了幸福的生活.<br><a href="https://github.com/christmasjason/DesignPatterns" target="_blank" rel="external">https://github.com/christmasjason/DesignPatterns</a></p>
+<p>写在最后: 欢迎大家提出问题或者意见，谢谢<br>相关文章: 【女朋友系列之化妆篇】装饰模式<br> 推荐拓展阅读<br> 举报文章  著作权归作者所有<br>如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作！</p>
+<p>¥ 打赏支持<br> 喜欢  91 分享到微博 分享到微信 更多分享<br>×<br>喜欢的用户<br> 杰米 2016.07.31 04:14<br> Martin_Joy 2016.07.14 20:28<br> 南约克郡 2016.07.13 15:27<br> sky琪仔 2016.07.12 10:09<br> MambaMonth 2016.07.10 17:28<br> 鱼人孑 2016.07.10 13:19<br> 追风917 2016.07.09 18:46<br> Dogline_ha 2016.07.08 19:32<br> 毛骗导演 2016.07.08 19:30<br> 萌呆的蜗牛 2016.07.08 19:11<br> 厕所蹲个驴 2016.07.08 18:21<br> 丑八怪丶 2016.07.08 16:12<br> 占线中 2016.07.08 06:54<br> 小青鬼话 2016.07.08 06:48<br> r17171709 2016.07.08 06:24<br>47条评论 （ 按时间正序· 按时间倒序· 按喜欢排序 ） 添加新评论<br>100<br>xthmily<br>2 楼 · 2016.07.05 14:44<br>文章 可以转载吗 :smiley:</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @xthmily 可以的，注明出处就好 :smiley:  :smiley:<br>回复 2016.07.05 16:44<br>xthmily： @ChristmasJason 恩 好的<br>回复 2016.07.06 13:35<br> 添加新回复<br>3<br>李爽166<br>3 楼 · 2016.07.05 16:50<br>厉害</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @李爽166  :smile:  :smile:<br>回复 2016.07.05 22:10<br> 添加新回复<br>100<br>小伙挺帅<br>4 楼 · 2016.07.05 19:20<br>第二个和第三个貌似一样吧，都是抽象工厂模式</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @小伙挺帅 这个正好是工厂模式和抽象工厂模式的区别: 工厂方法模式只有一个抽象产品类，而抽象工厂模式有多个.<br>回复 2016.07.05 22:10<br>小伙挺帅： @ChristmasJason 原来是这样，thx<br>回复 2016.07.05 23:47<br> 添加新回复<br>12<br>pro_cookie<br>5 楼 · 2016.07.05 20:45<br>有没有OC版的 swift看的不是很带感觉</p>
+<p>喜欢(0) 回复<br>南大： @pro_cookie 这是java<br>回复 2016.07.05 21:24<br>pro_cookie： @南大  :fearful: 我不想跟你说话了<br>回复 2016.07.05 21:25<br>ChristmasJason： @pro_cookie  :joy:  :joy:<br>回复 2016.07.05 22:10<br>Bonew01： 傻白甜？ :joy:<br>回复 2016.07.06 10:32<br>wowo草民： @pro_cookie 这位大兄弟你是来搞笑的吗。。:smile:。不过话说应该看的懂吧。<br>回复 2016.07.06 23:46<br>收起  添加新回复<br>100<br>monkey_liu<br>6 楼 · 2016.07.06 09:01<br>看不出工厂模式的优点呀。为何不直接new产品，而是要封装到工厂类呢，产生了那么多工厂类</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @monkey_liu 工厂模式解除了客户端和具体的类的耦合，这样即使我们以后要修改相关的实现类，也不需要去修改客户端的代码了，因为我们把变化的点封装了起来，即把new操作移交到了一个具体的类（客户端也轻松了，不需要知道对象是怎么创建出来的，只需要告诉工厂，想要什么类型的，工厂就会创建出来）.  :smile:  :smile:<br>回复 2016.07.06 09:58<br>monkey_liu： @ChristmasJason 解除了客户端和具体的类这个我认同~简单工厂模式也觉得挺好的（一个工厂类可以生成各种类型的产品，客户端不需要管怎么生成，传进去一个类型就好了），但是工厂模式，给每个产品都创建一个工厂，这个会不会太繁琐了，是封装了变化，但也只是封装了new操作呀，感觉new操作也不会变化了以后。换句话说，我不太清楚工厂模式比简单工厂好在哪儿，感觉不出为每一个产品都创建一个只封装了new操作的工厂类的意义在哪儿。谢谢赐教~ :smiley:<br>回复 2016.07.06 14:48<br>ChristmasJason： @monkey_liu 这里有个开放-封闭原则，对扩展开放，对修改封闭。如果用简单工厂的话，每增加一种产品（扩展），都要去增加factory的case（修改，违背了开放-封闭原则）；但是用工厂模式，我们就不用去改factory（对修改封闭），而只是去增加对应新增那个产品类的工厂，实现工厂接口就可以了（对扩展开放）。不知道说清楚没有 :blush:  :blush:<br>回复 2016.07.06 20:05<br>monkey_liu： @ChristmasJason 恩恩，谢谢啦~~~<br>回复 2016.07.07 08:57<br>南约克郡： @ChristmasJason 讲得好<br>回复 2016.07.13 15:31<br>收起  添加新回复<br>100<br>Eric胡<br>7 楼 · 2016.07.06 09:35<br>抽象问题具象化,加上理解,很容易记住工厂模式</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @Eric胡 嗯哪，是的 :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>July丶ye<br>8 楼 · 2016.07.06 09:46<br>可以，会玩</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @July丶ye 谢谢 :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>夜冥孤魂<br>9 楼 · 2016.07.06 10:35<br>生动有趣，浅显易懂</p>
+<p>喜欢(1) 回复<br>ChristmasJason： @夜冥孤魂 谢谢 :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>路过问好<br>10 楼 · 2016.07.06 15:10<br>浅显易懂，好用！</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @路过问好 谢谢 :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>SunnyZhan<br>11 楼 · 2016.07.06 16:25<br>有料到👏</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @SunnyZhan 谢谢  :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>WzxJiang<br>12 楼 · 2016.07.06 16:44<br>写的很好</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @WzxJiang 谢谢  :smile:<br>回复 2016.07.07 10:41<br> 添加新回复<br>100<br>尤尤的尤尤<br>13 楼 · 2016.07.06 17:20<br>妈呀，只有我看不懂吗</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @尤尤的尤尤 我争取下次写的能让你看懂  :smile:<br>回复 2016.07.07 10:42<br> 添加新回复<br>100<br>我爱伸懒腰<br>14 楼 · 2016.07.06 19:54<br>这个写的很好，但是宝宝看到后来自己晕了</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @青锋徐来 谢谢，不过宝宝可以再看看，哈哈 :smile:<br>回复 2016.07.07 10:44<br> 添加新回复<br>100<br>秒赞不是偶然<br>15 楼 · 2016.07.06 20:57<br>工厂模式 代码耦合度最高的一种设计模式</p>
+<p>喜欢(0) 回复<br>ChristmasJason： @秒赞不是偶然  :smile:  :smile:<br>回复 2016.07.07 10:44<br> 添加新回复<br>100<br>何下下<br>16 楼 · 2016.07.07 18:13<br>没有明白工厂模式里面那个实现接口类里面出现的@override重写标记！</p>
+<p>喜欢(0) 回复<br>加载更多 </p>
+<p>写下你的评论…<br> 发 表  Ctrl+Enter 发表<br>被以下专题收入，发现更多相似内容：</p>
+<p>180<br>程序员<br> 添加关注<br>如果你是程序员，或者有一颗喜欢写程序的心，喜欢分享技术干货、项目经验、程序员日常囧事等等，欢迎投稿《程序员》专题。 投稿须知： …<br>20287篇文章 · 136421人关注<br>180<br>首页投稿<br> 添加关注<br>玩转简书的第一步，从这个专题开始。 想上首页热门榜么？好内容想被更多人看到么？来投稿吧！如果被拒也不要灰心哦～入选文章会进一个队…<br>86353篇文章 · 120539人关注<br>180<br>@IT<br> 添加关注<br>简书上的IT大社群。 内容符合 IT 大分类皆可投稿，入选本专题对内容质量不做过高要求以提高内容流通性。其中的优质内容有机会上首…<br>7005篇文章 · 73531人关注</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag">#设计模式</a>
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/07/Java内存泄漏/" rel="next" title="Java内存泄漏">
+                <i class="fa fa-chevron-left"></i> Java内存泄漏
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/08/简单工厂、工厂、抽象工厂/"
+     data-title="简单工厂、工厂、抽象工厂"
+     data-content=""
+     data-url="http://yoursite.com/2016/08/08/简单工厂、工厂、抽象工厂/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/08/简单工厂、工厂、抽象工厂/"
+           data-title="简单工厂、工厂、抽象工厂" data-url="http://yoursite.com/2016/08/08/简单工厂、工厂、抽象工厂/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
