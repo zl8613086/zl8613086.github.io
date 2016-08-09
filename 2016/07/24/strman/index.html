@@ -1,0 +1,966 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,工具," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Java8字符串处理库strman-java的学习和使用
+一、介绍strman-java 是Java8的字符串处理库，它的灵感来自 dleitee/strman 。
+Strmen-java 是一个字符串处理工具，你可以通过 maven 将它引入到项目中。除了 Java 本身的字符串处理方式外，我们还可以使用 Apache Common Langs 里的 StringUtils 来简化 String">
+<meta property="og:type" content="article">
+<meta property="og:title" content="strman">
+<meta property="og:url" content="http://yoursite.com/2016/07/24/strman/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="Java8字符串处理库strman-java的学习和使用
+一、介绍strman-java 是Java8的字符串处理库，它的灵感来自 dleitee/strman 。
+Strmen-java 是一个字符串处理工具，你可以通过 maven 将它引入到项目中。除了 Java 本身的字符串处理方式外，我们还可以使用 Apache Common Langs 里的 StringUtils 来简化 String">
+<meta property="og:updated_time" content="2016-08-09T09:43:55.267Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="strman">
+<meta name="twitter:description" content="Java8字符串处理库strman-java的学习和使用
+一、介绍strman-java 是Java8的字符串处理库，它的灵感来自 dleitee/strman 。
+Strmen-java 是一个字符串处理工具，你可以通过 maven 将它引入到项目中。除了 Java 本身的字符串处理方式外，我们还可以使用 Apache Common Langs 里的 StringUtils 来简化 String">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> strman | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                strman
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-24T15:46:01+08:00" content="2016-07-24">
+              2016-07-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/24/strman/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/24/strman/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Java8字符串处理库strman-java的学习和使用</p>
+<h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>strman-java 是Java8的字符串处理库，它的灵感来自 dleitee/strman 。</p>
+<p>Strmen-java 是一个字符串处理工具，你可以通过 maven 将它引入到项目中。除了 Java 本身的字符串处理方式外，我们还可以使用 Apache Common Langs 里的 StringUtils 来简化 String 的操作。但以上两种方式对于我们日常编程中最容易碰到的字符串处理来说，仍然显得有些不足。 Strmen-java 为我们提供了一个非常完整且强大的解决方案，使用它可以解决几乎所有字符串处理场景。</p>
+<h2 id="二、开始使用"><a href="#二、开始使用" class="headerlink" title="二、开始使用"></a>二、开始使用</h2><p>为了能在你的 Java 应用程序中使用 strman-java ，可以把这个包下载下来添加到你项目的 lib 目录中，如果使用的是 Maven 做项目管理，则只需要在你的 pom.xml 中加入如下依赖即可：</p>
+<pre><code>&lt;dependency&gt;  
+   &lt;groupId&gt;com.shekhargulati&lt;/groupId&gt;
+   &lt;artifactId&gt;strman&lt;/artifactId&gt;
+   &lt;version&gt;0.2.0&lt;/version&gt;
+   &lt;type&gt;jar&lt;/type&gt;
+&lt;/dependency&gt;
+</code></pre><p>如果是 Gradle 用户则在 build.gradle 文件中添加如下代码：</p>
+<pre><code>compile(group: &apos;com.shekhargulati&apos;, name: &apos;strman&apos;, version: &apos;0.2.0&apos;, ext: &apos;jar&apos;){  
+transitive=true
+}
+</code></pre><h2 id="三、使用示例"><a href="#三、使用示例" class="headerlink" title="三、使用示例"></a>三、使用示例</h2><p>下面便是 Strman-java 的使用示例：</p>
+<pre><code>import strman.Strman;  
+import java.util.Arrays;  
+import java.util.Optional;
+
+ /**
+ * strman-java包的测试使用类
+ * Created by blinkfox on 16/7/17.
+ */
+public class StrmanTest {
+
+public static void main(String[] args) {
+    // append 在一个字符串后追加任意个数的字符串
+    String s1 = Strman.append(&quot;f&quot;, &quot;o&quot;, &quot;o&quot;, &quot;b&quot;, &quot;a&quot;, &quot;r&quot;);
+    System.out.println(&quot;append:&quot; + s1); // result =&gt; &quot;foobar&quot;
+
+    // prepend 在一个字符串前追加任意个数的字符串
+    String s1pre = Strman.prepend(&quot;r&quot;, &quot;f&quot;, &quot;o&quot;, &quot;o&quot;, &quot;b&quot;, &quot;a&quot;);
+    System.out.println(&quot;prepend:&quot; + s1pre); // result =&gt; &quot;foobar&quot;
+
+    // appendArray 在一个字符串后先后追加一个字符串数组中的元素
+    String s2 = Strman.appendArray(&quot;f&quot;, new String[]{&quot;o&quot;, &quot;o&quot;, &quot;b&quot;, &quot;a&quot;, &quot;r&quot;});
+    System.out.println(&quot;append:&quot; + s2); //  result =&gt; &quot;foobar&quot;
+
+    // at 根据字符串的索引获取到对应的字符。如果索引是负数,则逆向获取,超出则抛出异常
+    Optional&lt;String&gt; s3 = Strman.at(&quot;foobar&quot;, 3);
+    System.out.println(&quot;at:&quot; + s3.get()); // result =&gt; &quot;b&quot;
+
+    // between 得到一个字符串中,开始字符串和结束字符串之间的字符串的数组
+    String[] s4 = Strman.between(&quot;[abc], [def]&quot;, &quot;[&quot;, &quot;]&quot;);
+    System.out.println(&quot;between:&quot; + Arrays.toString(s4)); // result =&gt; &quot;[abc, def]&quot;
+
+    // chars 得到一个字符串中所有字符构成的字符串数组
+    String[] s5 = Strman.chars(&quot;title&quot;);
+    System.out.println(&quot;chars:&quot; + Arrays.toString(s5)); // result =&gt; &quot;[t, i, t, l, e]&quot;
+
+    // collapseWhitespace 替换掉连续的多个空格为一个空格
+    String s6 = Strman.collapseWhitespace(&quot;foo    bar&quot;);
+    System.out.println(&quot;chars:&quot; + s6); // result =&gt; &quot;foo bar&quot;
+
+    // contains 判断一个字符串是否包含另外一个字符串,第三个参数,表示字符串大小写是否敏感
+    boolean s7 = Strman.contains(&quot;foo bar&quot;, &quot;foo&quot;);
+    boolean s8 = Strman.contains(&quot;foo bar&quot;, &quot;FOO&quot;, false);
+    System.out.println(&quot;contains:&quot; + s7 + &quot;, &quot; + s8); // result =&gt; &quot;true, true&quot;
+
+    // containsAll 判断一个字符串是否包含某字符串数组中的所有元素
+    boolean s9 = Strman.containsAll(&quot;foo bar&quot;, new String[]{&quot;foo&quot;, &quot;bar&quot;});
+    boolean s10 = Strman.containsAll(&quot;foo bar&quot;, new String[]{&quot;FOO&quot;, &quot;bar&quot;}, false);
+    System.out.println(&quot;containsAll:&quot; + s9 + &quot;, &quot; + s10); // result =&gt; &quot;true, true&quot;
+
+    // containsAny 判断一个字符串是否包含某字符串数组中的任意一个元素
+    boolean s11 = Strman.containsAny(&quot;foo bar&quot;, new String[]{&quot;FOO&quot;, &quot;BAR&quot;, &quot;Test&quot;}, false);
+    System.out.println(&quot;containsAny:&quot; + s11); // result =&gt; &quot;true&quot;
+
+    // countSubstr 判断一个字符串包含某字符串的个数
+    long s12 = Strman.countSubstr(&quot;aaaAAAaaa&quot;, &quot;aaa&quot;);
+    long s13 = Strman.countSubstr(&quot;aaaAAAaaa&quot;, &quot;aaa&quot;, false, false);
+    System.out.println(&quot;countSubstr:&quot; + s12 + &quot;, &quot; + s13); // result =&gt; &quot;2, 3&quot;
+
+    // endsWith 判断一个字符串是否以某个字符串结尾
+    boolean s14 = Strman.endsWith(&quot;foo bar&quot;, &quot;bar&quot;);
+    boolean s15 = Strman.endsWith(&quot;foo bar&quot;, &quot;BAR&quot;, false);
+    System.out.println(&quot;endsWith:&quot; + s14 + &quot;, &quot; + s15); // result =&gt; &quot;true, true&quot;
+
+    // ensureLeft 确保一个字符串以某个字符串开头,如果不是,则在前面追加该字符串,并将字符串结果返回
+    String s16 = Strman.ensureLeft(&quot;foobar&quot;, &quot;foo&quot;);
+    String s17 = Strman.ensureLeft(&quot;bar&quot;, &quot;foo&quot;);
+    String s18 = Strman.ensureLeft(&quot;foobar&quot;, &quot;FOO&quot;, false);
+    System.out.println(&quot;ensureLeft:&quot; + s16 + &quot;, &quot; + s17 + &quot;, &quot; + s18);
+    // result =&gt; &quot;foobar, foobar, foobar&quot;
+
+    // ensureRight 确保一个字符串以某个字符串开头,如果不是,则在前面追加该字符串,并将字符串结果返回
+    String s16r = Strman.ensureRight(&quot;foobar&quot;, &quot;bar&quot;);
+    String s17r = Strman.ensureRight(&quot;foo&quot;, &quot;bar&quot;);
+    String s18r = Strman.ensureRight(&quot;fooBAR&quot;, &quot;bar&quot;, false);
+    System.out.println(&quot;ensureRight:&quot; + s16r + &quot;, &quot; + s17r + &quot;, &quot; + s18r);
+    // result =&gt; &quot;foobar, foobar, fooBAR&quot;
+
+    // base64Encode 将字符串转成Base64编码的字符串
+    String s19 = Strman.base64Encode(&quot;strman&quot;);
+    System.out.println(&quot;base64Encode:&quot; + s19); // result =&gt; &quot;c3RybWFu&quot;
+
+    // binDecode 将二进制编码（16位）转成字符串字符
+    String s20 = Strman.binDecode(&quot;0000000001000001&quot;);
+    System.out.println(&quot;binDecode:&quot; + s20); // result =&gt; &quot;A&quot;
+
+    // binEncode 将字符串字符转成二进制编码（16位）
+    String s21 = Strman.binEncode(&quot;A&quot;);
+    System.out.println(&quot;binEncode:&quot; + s21); // result =&gt; &quot;0000000001000001&quot;
+
+    // decDecode 将十进制编码（5位）转成字符串字符
+    String s22 = Strman.decDecode(&quot;00065&quot;);
+    System.out.println(&quot;decDecode:&quot; + s22); // result =&gt; &quot;A&quot;
+
+    // decEncode 将字符串转成十进制编码（5位）
+    String s23 = Strman.decEncode(&quot;A&quot;);
+    System.out.println(&quot;decEncode:&quot; + s23); // result =&gt; &quot;00065&quot;
+
+    // first 得到从字符串开始到索引n的字符串
+    String s24 = Strman.first(&quot;foobar&quot;, 3);
+    System.out.println(&quot;first:&quot; + s24); // result =&gt; &quot;foo&quot;
+
+    // last 得到从字符串结尾倒数索引n的字符串
+    String s24l = Strman.last(&quot;foobar&quot;, 3);
+    System.out.println(&quot;last:&quot; + s24l); // result =&gt; &quot;bar&quot;
+
+    // head 得到字符串的第一个字符
+    String s25 = Strman.head(&quot;foobar&quot;);
+    System.out.println(&quot;head:&quot; + s25); // result =&gt; &quot;f&quot;
+
+    // hexDecode 将字符串字符转成十六进制编码（4位）
+    String s26 = Strman.hexDecode(&quot;0041&quot;);
+    System.out.println(&quot;hexDecode:&quot; + s26); // result =&gt; &quot;A&quot;
+
+    // hexEncode 将十六进制编码（4位）转成字符串字符
+    String s27 = Strman.hexEncode(&quot;A&quot;);
+    System.out.println(&quot;hexEncode:&quot; + s27); // result =&gt; &quot;0041&quot;
+
+    // inequal 测试两个字符串是否相等
+    boolean s28 = Strman.inequal(&quot;a&quot;, &quot;b&quot;);
+    System.out.println(&quot;inequal:&quot; + s28); // result =&gt; &quot;true&quot;
+
+    // insert 将子字符串插入到字符串某索引位置处
+    String s29 = Strman.insert(&quot;fbar&quot;, &quot;oo&quot;, 1);
+    System.out.println(&quot;insert:&quot; + s29); // result =&gt; &quot;foobar&quot;
+
+    // leftPad 将字符串从左补齐直到总长度为n为止
+    String s30 = Strman.leftPad(&quot;1&quot;, &quot;0&quot;, 5);
+    System.out.println(&quot;leftPad:&quot; + s30); // result =&gt; &quot;00001&quot;
+
+    // rightPad 将字符串从右补齐直到总长度为n为止
+    String s30r = Strman.rightPad(&quot;1&quot;, &quot;0&quot;, 5);
+    System.out.println(&quot;rightPad:&quot; + s30r); // result =&gt; &quot;10000&quot;
+
+    // lastIndexOf 此方法返回在指定值的最后一个发生的调用字符串对象中的索引，从偏移量中向后搜索
+    int s31 = Strman.lastIndexOf(&quot;foobarfoobar&quot;, &quot;F&quot;, false);
+    System.out.println(&quot;lastIndexOf:&quot; + s31); // result =&gt; &quot;6&quot;
+
+    // leftTrim 移除字符串最左边的所有空格
+    String s32 = Strman.leftTrim(&quot;   strman   &quot;);
+    System.out.println(&quot;leftTrim:&quot; + s32); // result =&gt; &quot;strman   &quot;
+
+    // rightTrim 移除字符串最右边的所有空格
+    String s32r = Strman.rightTrim(&quot;   strman   &quot;);
+    System.out.println(&quot;rightTrim:&quot; + s32r); // result =&gt; &quot;   strman&quot;
+
+    // removeEmptyStrings 移除字符串数组中的空字符串
+    String[] s33 = Strman.removeEmptyStrings(new String[]{&quot;aa&quot;, &quot;&quot;, &quot;   &quot;, &quot;bb&quot;, &quot;cc&quot;, null});
+    System.out.println(&quot;removeEmptyStrings:&quot; + Arrays.toString(s33));
+    // result =&gt; &quot;[aa, bb, cc]&quot;
+
+    // removeLeft 得到去掉前缀（如果存在的话）后的新字符串
+    String s34 = Strman.removeLeft(&quot;foobar&quot;, &quot;foo&quot;);
+    System.out.println(&quot;removeLeft:&quot; + s34); // result =&gt; &quot;bar&quot;
+
+    // removeRight 得到去掉后缀（如果存在的话）后的新字符串
+    String s34r = Strman.removeRight(&quot;foobar&quot;, &quot;bar&quot;);
+    System.out.println(&quot;removeRight:&quot; + s34r); // result =&gt; &quot;foo&quot;
+
+    // removeNonWords 得到去掉不是字符的字符串
+    String s35 = Strman.removeNonWords(&quot;foo&amp;bar-&quot;);
+    System.out.println(&quot;removeNonWords:&quot; + s35); // result =&gt; &quot;foobar&quot;
+
+    // removeSpaces 移除所有空格
+    String s36 = Strman.removeSpaces(&quot;   str  man   &quot;);
+    System.out.println(&quot;removeSpaces:&quot; + s36); // result =&gt; &quot;   strman&quot;
+
+    // repeat 得到给定字符串和重复次数的新字符串
+    String s37 = Strman.repeat(&quot;1&quot;, 3);
+    System.out.println(&quot;repeat:&quot; + s37); // result =&gt; &quot;111&quot;
+
+    // reverse 得到反转后的字符串
+    String s38 = Strman.reverse(&quot;foobar&quot;);
+    System.out.println(&quot;reverse:&quot; + s38); // result =&gt; &quot;raboof&quot;
+
+    // safeTruncate 安全的截断字符串，不切一个字的一半,它总是返回最后一个完整的单词
+    String s39 = Strman.safeTruncate(&quot;A Javascript string manipulation library.&quot;, 19, &quot;...&quot;);
+    System.out.println(&quot;safeTruncate:&quot; + s39); // result =&gt; &quot;A Javascript...&quot;
+
+    // truncate 不太安全的截断字符串
+    String s40 = Strman.truncate(&quot;A Javascript string manipulation library.&quot;, 19, &quot;...&quot;);
+    System.out.println(&quot;truncate:&quot; + s40); // result =&gt; &quot;A Javascript str...&quot;
+
+    // htmlDecode 将html字符反转义
+    String s41 = Strman.htmlDecode(&quot;Ш&quot;);
+    System.out.println(&quot;htmlDecode:&quot; + s41); // result =&gt; &quot;Ш&quot;
+
+    // htmlEncode 将html字符转义
+    String s42 = Strman.htmlEncode(&quot;Ш&quot;);
+    System.out.println(&quot;htmlEncode:&quot; + s42); // result =&gt; &quot;Ш&quot;
+
+    // shuffle 将给定字符串转成随机字符顺序的字符串
+    String s43 = Strman.shuffle(&quot;shekhar&quot;);
+    System.out.println(&quot;shuffle:&quot; + s43); // result =&gt; &quot;rhsheak&quot;
+
+    // slugify 将字符串分段(用&quot;-&quot;分段)
+    String s44 = Strman.slugify(&quot;foo bar&quot;);
+    System.out.println(&quot;slugify:&quot; + s44); // result =&gt; &quot;foo-bar&quot;
+
+    // transliterate 删除所有非有效字符,如:á =&gt; a
+    String s45 = Strman.transliterate(&quot;fóõ bár&quot;);
+    System.out.println(&quot;transliterate:&quot; + s45); // result =&gt; &quot;foo bar&quot;
+
+    // surround 给定的“前缀”和“后缀”来包裹一个字符串
+    String s46 = Strman.surround(&quot;div&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;);
+    System.out.println(&quot;surround:&quot; + s46); // result =&gt; &quot;&lt;div&gt;&quot;
+
+    // tail 得到去掉第一个字符后的字符串
+    String s47 = Strman.tail(&quot;foobar&quot;);
+    System.out.println(&quot;tail:&quot; + s47); // result =&gt; &quot;oobar&quot;
+
+    // toCamelCase 转成驼峰式的字符串
+    String s48 = Strman.toCamelCase(&quot;Camel Case&quot;);
+    String s48_2 = Strman.toCamelCase(&quot;camel-case&quot;);
+    System.out.println(&quot;tail:&quot; + s48 + &quot;, &quot; + s48_2); // result =&gt; &quot;camelCase, camelCase&quot;
+
+    // toStudlyCase 转成Studly式的字符串
+    String s49 = Strman.toStudlyCase(&quot;hello world&quot;);
+    System.out.println(&quot;toStudlyCase:&quot; + s49); // result =&gt; &quot;HelloWorld&quot;
+
+    // toDecamelize 转成Decamelize式的字符串
+    String s50 = Strman.toDecamelize(&quot;helloWorld&quot;, null);
+    System.out.println(&quot;toDecamelize:&quot; + s50); // result =&gt; &quot;hello world&quot;
+
+    // toKebabCase 转成Kebab式的字符串
+    String s51 = Strman.toKebabCase(&quot;hello World&quot;);
+    System.out.println(&quot;toKebabCase:&quot; + s51); // result =&gt; &quot;hello-world&quot;
+
+    // toSnakeCase 转成Snake式的字符串
+    String s52 = Strman.toSnakeCase(&quot;hello world&quot;);
+    System.out.println(&quot;toSnakeCase:&quot; + s52); // result =&gt; &quot;hello_world&quot;
+}
+
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/工具/" rel="tag">#工具</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/22/策略模式和状态模式/" rel="next" title="策略模式和状态模式比较">
+                <i class="fa fa-chevron-left"></i> 策略模式和状态模式比较
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/25/Spring设计模式/" rel="prev" title="Spring设计模式">
+                Spring设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/07/24/strman/"
+     data-title="strman"
+     data-content=""
+     data-url="http://yoursite.com/2016/07/24/strman/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/24/strman/"
+           data-title="strman" data-url="http://yoursite.com/2016/07/24/strman/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、介绍"><span class="nav-number">1.</span> <span class="nav-text">一、介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、开始使用"><span class="nav-number">2.</span> <span class="nav-text">二、开始使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、使用示例"><span class="nav-number">3.</span> <span class="nav-text">三、使用示例</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
