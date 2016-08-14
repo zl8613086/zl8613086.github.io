@@ -1,0 +1,746 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网站,并发," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="自《大型网站技术架构》
+负载均衡&amp;#160;&amp;#160;&amp;#160;&amp;#160;在服务器集群中，每次请求在集群任意一台机器上去处理，得到的结果应该完全一样。这样只要能保证用户的请求的分流分发到不同服务器上，既可以得到正确结果，又可以解决单台服务器压力太大问题。这里的HTTP请求分发就靠的是负载均衡服务器。如下图：
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;负载均衡技术多种多样，但主要是以下几">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载均衡">
+<meta property="og:url" content="http://yoursite.com/2016/08/14/应用服务器集群伸缩性设计（负载均衡）/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="自《大型网站技术架构》
+负载均衡&amp;#160;&amp;#160;&amp;#160;&amp;#160;在服务器集群中，每次请求在集群任意一台机器上去处理，得到的结果应该完全一样。这样只要能保证用户的请求的分流分发到不同服务器上，既可以得到正确结果，又可以解决单台服务器压力太大问题。这里的HTTP请求分发就靠的是负载均衡服务器。如下图：
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;负载均衡技术多种多样，但主要是以下几">
+<meta property="og:image" content="http://i.imgur.com/xqxBuyF.png">
+<meta property="og:image" content="http://i.imgur.com/eGFWZfN.png">
+<meta property="og:image" content="http://i.imgur.com/XIRyu7C.png">
+<meta property="og:image" content="http://i.imgur.com/vHab8Ax.png">
+<meta property="og:image" content="http://i.imgur.com/tbRNO4j.png">
+<meta property="og:image" content="http://i.imgur.com/RBgMSm5.png">
+<meta property="og:updated_time" content="2016-08-14T08:50:10.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="负载均衡">
+<meta name="twitter:description" content="自《大型网站技术架构》
+负载均衡&amp;#160;&amp;#160;&amp;#160;&amp;#160;在服务器集群中，每次请求在集群任意一台机器上去处理，得到的结果应该完全一样。这样只要能保证用户的请求的分流分发到不同服务器上，既可以得到正确结果，又可以解决单台服务器压力太大问题。这里的HTTP请求分发就靠的是负载均衡服务器。如下图：
+&amp;#160;&amp;#160;&amp;#160;&amp;#160;负载均衡技术多种多样，但主要是以下几">
+<meta name="twitter:image" content="http://i.imgur.com/xqxBuyF.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 负载均衡 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                负载均衡
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-14T15:21:01+08:00" content="2016-08-14">
+              2016-08-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/架构/" itemprop="url" rel="index">
+                    <span itemprop="name">架构</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/14/应用服务器集群伸缩性设计（负载均衡）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/14/应用服务器集群伸缩性设计（负载均衡）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>自《大型网站技术架构》</p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>&#160;&#160;&#160;&#160;在服务器集群中，每次请求在集群任意一台机器上去处理，得到的结果应该完全一样。这样只要能保证用户的请求的分流分发到不同服务器上，既可以得到正确结果，又可以解决单台服务器压力太大问题。这里的HTTP请求分发就靠的是负载均衡服务器。如下图：<br><img src="http://i.imgur.com/xqxBuyF.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;负载均衡技术多种多样，但主要是以下几种：</p>
+<h3 id="HTTP重定向负载均衡"><a href="#HTTP重定向负载均衡" class="headerlink" title="HTTP重定向负载均衡"></a>HTTP重定向负载均衡</h3><p>&#160;&#160;&#160;&#160;利用HTTP重定向协议实现负载均衡，如下图：<br><img src="http://i.imgur.com/eGFWZfN.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;HTTP重定向服务器是一台普通服务器，他根据用户请求的HTTP，将真正应该处理请求的服务器地址写进重定向响应中（响应吗302），返回给用户浏览器以后，用户再去访问真正的服务器。如上图所示，用户首先请求www.mysite.com,然后通过DNS服务器解析得到ip地址为114.100.80.10,然后用户访问114.100.80.10(即HTTP重定向服务器)，重定向服务器分局自己的均衡算法，得到一台式机服务器IP，并返回给浏览器。用户浏览器自动重定向重新请求新服务器完成访问。</p>
+<p>&#160;&#160;&#160;&#160;这种负载均衡技术优点是很简单，但是缺点是需要两次请求才能完成一次访问，性能较差。而且重定向服务器处理能力的瓶颈也严重限制了这种方案的推广，再加上使用HTTP302重定向可能使搜索引擎判断为SEO作弊，会降低搜索排名。</p>
+<h3 id="DNS域名解析负载均衡"><a href="#DNS域名解析负载均衡" class="headerlink" title="DNS域名解析负载均衡"></a>DNS域名解析负载均衡</h3><p>&#160;&#160;&#160;&#160;DNS方式就是在DNS服务器配置多个A记录，如：www.mysite.com IN A 114.100,80.1、www.mysite.com IN A 114.100,80.2、www.mysite.com IN A 114.100,80.3。每次域名解析都会根据负载均衡算法返回一个IP地址。如图返回一个114.100.80.3，浏览器根据这个地址去访问还早呢是物理服务器。</p>
+<p><img src="http://i.imgur.com/XIRyu7C.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;DNS方式优点在于可以将负载均衡的工作交给DNS服务器，不需要网站去管理，同时很多DNS服务器海鲫鱼地理位置域名解析，会返回一个离用户最近的地址，加快访问速度。但是这种但是也有缺点，因为DNS服务器多级解析并且有缓存，当有服务器下线不再使用后，不能保证DNS缓存能够及时响应变化，会出现一些差错，导致请求失败。</p>
+<p>&#160;&#160;&#160;&#160;现在很多大型网站会将这种方法作为第一季负载均衡手段，就是域名解析得到的是下一层的负载均衡服务器。</p>
+<h3 id="反向代理均衡"><a href="#反向代理均衡" class="headerlink" title="反向代理均衡"></a>反向代理均衡</h3><p>&#160;&#160;&#160;&#160;反向代理方式如图：<br><img src="http://i.imgur.com/vHab8Ax.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;反向代理将根据请求负载均衡算法发到不同web服务器上。web服务器处理完响应也会通过反向代理返回给用户。上图中用户请求的地址是反向代理服务器地址114.100.80.10,反向代理服务器收到请求后，会根据均衡算法得到真实地址10.0.0.3，并将请求转发给服务器。10.0.0.3处理完请求返回给反向代理服务器，反向代理服务器再返回给用户。</p>
+<p>&#160;&#160;&#160;&#160;这种方式优点在于将负载均衡跟反向代理服务器功能集成在一起，部署简单。缺点在于，由于所有请求和响应都要经过反向代理服务器，其性能很容易成为瓶颈。</p>
+<h3 id="IP负载均衡"><a href="#IP负载均衡" class="headerlink" title="IP负载均衡"></a>IP负载均衡</h3><p><img src="http://i.imgur.com/tbRNO4j.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;用户请求114.100.80.10后，负载均衡服务器获取网络数据包，同时根据均衡算法得到真实web服务器地址10.0.0.1然后将数据目的地址改为10.0.0.1。真实服务器处理完后发送给负载均衡服务器，负载均衡服务器，再将数据包原地址修改为自身IP地址发送给用户浏览器。</p>
+<p>&#160;&#160;&#160;&#160;IP负载均衡在内核进程完成数据分发，叫反向代理（在应用程序中分发）有封号的处理性能。但是所有请求响应都经过负载均衡服务器，负载均衡服务器也很容易受制于性能带宽等。</p>
+<h3 id="数据链路层均衡"><a href="#数据链路层均衡" class="headerlink" title="数据链路层均衡"></a>数据链路层均衡</h3><p>&#160;&#160;&#160;&#160;这种方式是指在通信协议的数据链路层修改mac地址进行负载均衡。</p>
+<p><img src="http://i.imgur.com/RBgMSm5.png" alt=""></p>
+<p>&#160;&#160;&#160;&#160;这种方式又称作三角传输模式，负载均衡数据分发过程不修改IP地址，只修改mac地址，通过配置真实物理服务器集群所有机器虚拟IP和负载均衡服务器IP一直，从未带到不修改数据包源地址和目的地址就可以进行数据分发的目的，由于实际处理请求的真实物理服务器IP和数据请求目的IP一直，不需要通过负载均衡服务器进行地址转换，可将响应数据包直接返回给用户浏览器，避免负载均衡服务器网卡带宽成为瓶颈。</p>
+<p>&#160;&#160;&#160;&#160;如图用户请求负载均衡服务器114.100.80.10后，负载均衡服务器将请求目的mac地址改为00:0c:29:d2，并不修改IP地址，由于服务器IP地址都相同，所以可以发送到mac地址为00:0c:29:d2对应服务器，该服务器处理完请求后发送响应数据到网站的网关服务器，网关服务器直接将数据包发送到用户浏览器上，相应数据不需要经过负载均衡服务器。</p>
+<h3 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h3><h4 id="轮询"><a href="#轮询" class="headerlink" title="轮询"></a>轮询</h4><p>&#160;&#160;&#160;&#160;所有请求被依次分发到每台服务器，每台服务器请求数据相同。</p>
+<h4 id="加权轮询"><a href="#加权轮询" class="headerlink" title="加权轮询"></a>加权轮询</h4><p>&#160;&#160;&#160;&#160;根据服务器性能分配权重分发请求。</p>
+<h4 id="随机"><a href="#随机" class="headerlink" title="随机"></a>随机</h4><p>&#160;&#160;&#160;&#160;因为随机本身就很均衡所以这中方法简单高效，也可以甲醛随机。</p>
+<h4 id="最少链接"><a href="#最少链接" class="headerlink" title="最少链接"></a>最少链接</h4><p>&#160;&#160;&#160;&#160;记录服务器连接数，将请求分发到最少连接数服务器。</p>
+<h4 id="源地址散列"><a href="#源地址散列" class="headerlink" title="源地址散列"></a>源地址散列</h4><p>&#160;&#160;&#160;&#160;根据来源IP进行Hash计算，得到服务器，这种方式使得同一个用户总是分配到同一台服务器，不需要考虑session同步问题。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网站/" rel="tag">#网站</a>
+          
+            <a href="/tags/并发/" rel="tag">#并发</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/13/volatile/" rel="next" title="volatile">
+                <i class="fa fa-chevron-left"></i> volatile
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/14/应用服务器集群伸缩性设计（负载均衡）/"
+     data-title="负载均衡"
+     data-content=""
+     data-url="http://yoursite.com/2016/08/14/应用服务器集群伸缩性设计（负载均衡）/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/14/应用服务器集群伸缩性设计（负载均衡）/"
+           data-title="负载均衡" data-url="http://yoursite.com/2016/08/14/应用服务器集群伸缩性设计（负载均衡）/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#负载均衡"><span class="nav-number">1.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP重定向负载均衡"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP重定向负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS域名解析负载均衡"><span class="nav-number">1.2.</span> <span class="nav-text">DNS域名解析负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向代理均衡"><span class="nav-number">1.3.</span> <span class="nav-text">反向代理均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP负载均衡"><span class="nav-number">1.4.</span> <span class="nav-text">IP负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据链路层均衡"><span class="nav-number">1.5.</span> <span class="nav-text">数据链路层均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#负载均衡算法"><span class="nav-number">1.6.</span> <span class="nav-text">负载均衡算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#轮询"><span class="nav-number">1.6.1.</span> <span class="nav-text">轮询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加权轮询"><span class="nav-number">1.6.2.</span> <span class="nav-text">加权轮询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#随机"><span class="nav-number">1.6.3.</span> <span class="nav-text">随机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最少链接"><span class="nav-number">1.6.4.</span> <span class="nav-text">最少链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源地址散列"><span class="nav-number">1.6.5.</span> <span class="nav-text">源地址散列</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
