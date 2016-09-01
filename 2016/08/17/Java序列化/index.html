@@ -1,0 +1,995 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="java 序列化&amp;#160;&amp;#160;&amp;#160;&amp;#160;RMI 技术是完全基于 Java 序列化技术的，服务器端接口调用所需要的参数对象来至于客户端，它们通过网络相互传输。框架中很多再用到RMI技术，所以总结一下Java序列化的知识。
+如何序列化一个对象一个对象能够序列化的前提是实现 Serializable 接口， Serializable 接口没有方法，更像是个标记。有了这个标记的 C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java序列化">
+<meta property="og:url" content="http://yoursite.com/2016/08/17/Java序列化/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="java 序列化&amp;#160;&amp;#160;&amp;#160;&amp;#160;RMI 技术是完全基于 Java 序列化技术的，服务器端接口调用所需要的参数对象来至于客户端，它们通过网络相互传输。框架中很多再用到RMI技术，所以总结一下Java序列化的知识。
+如何序列化一个对象一个对象能够序列化的前提是实现 Serializable 接口， Serializable 接口没有方法，更像是个标记。有了这个标记的 C">
+<meta property="og:updated_time" content="2016-09-01T05:13:43.875Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java序列化">
+<meta name="twitter:description" content="java 序列化&amp;#160;&amp;#160;&amp;#160;&amp;#160;RMI 技术是完全基于 Java 序列化技术的，服务器端接口调用所需要的参数对象来至于客户端，它们通过网络相互传输。框架中很多再用到RMI技术，所以总结一下Java序列化的知识。
+如何序列化一个对象一个对象能够序列化的前提是实现 Serializable 接口， Serializable 接口没有方法，更像是个标记。有了这个标记的 C">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Java序列化 | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java序列化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-17T10:21:01+08:00" content="2016-08-17">
+              2016-08-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/17/Java序列化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/17/Java序列化/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="java-序列化"><a href="#java-序列化" class="headerlink" title="java 序列化"></a>java 序列化</h2><p>&#160;&#160;&#160;&#160;RMI 技术是完全基于 Java 序列化技术的，服务器端接口调用所需要的参数对象来至于客户端，它们通过网络相互传输。框架中很多再用到RMI技术，所以总结一下Java序列化的知识。</p>
+<h3 id="如何序列化一个对象"><a href="#如何序列化一个对象" class="headerlink" title="如何序列化一个对象"></a>如何序列化一个对象</h3><p>一个对象能够序列化的前提是实现 Serializable 接口， Serializable 接口没有方法，更像是个标记。有了这个标记的 Class 就能被序列化机制处理。我们先来看一个简单的例子</p>
+<p>Student.java</p>
+<pre><code>package com.zl.dubbo.demo.provider;
+
+import java.io.Serializable;
+
+/**
+ * Created by zl on 2016/8/1.
+ */
+public class Student implements Serializable{
+private int id;
+private String name;
+private int age;
+
+public Student() {
+}
+
+public Student(int id, String name, int age) {
+this.id = id;
+this.name = name;
+this.age = age;
+}
+
+public int getId() {
+return id;
+}
+
+public void setId(int id) {
+this.id = id;
+}
+
+public String getName() {
+return name;
+}
+
+public void setName(String name) {
+this.name = name;
+}
+
+public int getAge() {
+return age;
+}
+
+public void setAge(int age) {
+this.age = age;
+}
+
+@Override
+public String toString() {
+return &quot;Student{&quot; +
+&quot;id=&quot; + id +
+&quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +
+&quot;, age=&quot; + age +
+&apos;}&apos;;
+}
+}
+</code></pre><p>School.java</p>
+<pre><code>package com.zl.dubbo.demo.provider;
+
+import java.io.Serializable;
+
+/**
+ * Created by zl on 2016/9/1.
+ */
+public class School implements Serializable{
+private Student student;
+private String name;
+
+public School(Student student, String name) {
+this.student = student;
+this.name = name;
+}
+
+@Override
+public String toString() {
+return &quot;School{&quot; +
+&quot;student=&quot; + student +
+&quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +
+&apos;}&apos;;
+}
+}
+</code></pre><p>Main</p>
+<pre><code>ObjectOutputStream os=new ObjectOutputStream(new FileOutputStream(&quot;1.txt&quot;));
+ Student ns=new Student(1,&quot;123&quot;,25);
+ School school=new School(ns,&quot;XX小学&quot;);
+ os.writeObject(school);
+ ObjectInputStream oi=new ObjectInputStream(new FileInputStream(&quot;1.txt&quot;));
+ Schoole news= (School) oi.readObject();
+ System.out.println(news);
+</code></pre><p>结果</p>
+<pre><code>Schoole{student=Student{id=1, name=&apos;123&apos;, age=25}, name=&apos;XX小学&apos;}
+</code></pre><p>我们可以看到，读取到的对象与保存的对象状态一样。这里有几点需要说明一下：</p>
+<p>1、        基本类型 的数据可以直接序列化</p>
+<p>2、        对象要被序列化，它的类必须要实现Serializable接口;如果一个类中有引用类型的实例变量，这个引用类型也要实现Serializable接口。比如上面 的例子中，School类中有一个Student类型 的实例就是，要想让School的对象成功序列化，那么Student也必须要实现Serializable接口。</p>
+<h3 id="transient"><a href="#transient" class="headerlink" title="transient"></a>transient</h3><p>紧接着上面，如果school里面的student类没有实现Serializable接口，那么就会报类似下面这个错：</p>
+<pre><code>Exception in thread &quot;main&quot; java.io.NotSerializableException: com.zl.dubbo.demo.provider.Student
+at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1184)
+at java.io.ObjectOutputStream.defaultWriteFields(ObjectOutputStream.java:1548)
+at java.io.ObjectOutputStream.writeSerialData(ObjectOutputStream.java:1509)
+at java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1432)
+at java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1178)
+at java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:348)
+at com.zl.dubbo.demo.provider.test.main(test.java:20)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)
+</code></pre><p>如果你还想序列化，就需要用到java提供的关键字transient</p>
+<p>新的Student类不实现Serializable接口，而School里面的Student前面加上关键字transient</p>
+<pre><code>private transient Student student;
+</code></pre><p>结果如下</p>
+<pre><code>School{student=null, name=&apos;XX小学&apos;}
+</code></pre><p>可以看到School被成功序列化 ，因为我们加了一个transient关键字，所以我们序列化相当于跳过了Student 因而被直接赋值null。</p>
+<h3 id="writeobject-readObject"><a href="#writeobject-readObject" class="headerlink" title="writeobject readObject"></a>writeobject readObject</h3><p><font color="red">那么问题来了！！！！</font>如果我Student既不实现Serializable接口，又想序列化怎么办？ 这时候我们需要用到一组私有（回调）方法（这个我们马上在代码中看到），可以在要被序列化的类中实现它们，在序列化和的序列化的过程中它们会被自动调用。所以在这组方法中我们可以调用ObjectOutputStream/ObjectInputStream的一些有用方法来实现对象状态的保存。下面还是通过例子来说明：</p>
+<pre><code>package com.zl.dubbo.demo.provider;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+/**
+ * Created by zl on 2016/9/1.
+ */
+public class School implements Serializable{
+private transient Student student;
+private String name;
+
+public School(Student student, String name) {
+    this.student = student;
+    this.name = name;
+}
+
+@Override
+public String toString() {
+    return &quot;School{&quot; +
+            &quot;student=&quot; + student +
+            &quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +
+            &apos;}&apos;;
+}
+private void writeObject(ObjectOutputStream out){
+    try {
+        out.defaultWriteObject(); //这个方法会把这当前中非静态变量和非transient变量写到流中
+        //在这里我们就把name写到了流中。
+        //因为我们要保存Book的状态，所以我们还要想办法把其状态写入流中
+        out.writeInt(student.getId());//ObjectOutputStream中提供了写基本类型数据的方法
+        out.writeInt(student.getAge());
+        out.writeObject(student.getName());
+        //out.close();//注意，这句千万不能有，否刚将直接导致写入失败
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+//这个方法会在反序列化的过程中被调用
+private void readObject(ObjectInputStream in){
+    try {
+        in.defaultReadObject(); //和defaultWriteObject()方法相对应，默认的反序列化方法，会从流中读取
+        //非静态变量和非transient变量
+        int id1  = in.readInt(); //用这个方法来读取一个int型值，这里我们是读取书号
+        int age1 = in.readInt();
+       String name= (String) in.readObject();
+        student  = new Student(id1,name,age1); //这里我们就通过读取的 保存的状态构造 了一个和原来一样的Book对象
+        //in.close();同样的这句也不能有
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+}
+</code></pre><p>可以看到结果如下</p>
+<pre><code>School{student=Student{id=1, name=&apos;123&apos;, age=25}, name=&apos;XX小学&apos;}
+</code></pre><h3 id="父类Serializable接口问题"><a href="#父类Serializable接口问题" class="headerlink" title="父类Serializable接口问题"></a>父类Serializable接口问题</h3><p>两个问题：</p>
+<p>1、        如果一个类没有实现Serializable接口，但是它的基类实现 了，这个类可不可以序列化？</p>
+<p>2、        和上面相反，如果一个类实现了Serializable接口，但是它的父类没有实现 ，这个类可不可以序列化？</p>
+<p>第1个问题：一个类实现 了某接口，那么它的所有子类都间接实现了此接口，所以它可以被 序列化。</p>
+<p>第2个问题：Object是每个类的超类，但是它没有实现 Serializable接口，但是我们照样在序列化对象，所以说明一个类要序列化，它的父类不一定要实现Serializable接口。但是在父类中定义 的状态能被正确 的保存以及读取吗？</p>
+<p>先来看看代码</p>
+<pre><code>package com.zl.dubbo.demo.provider;
+
+import java.io.Serializable;
+
+/**
+ * Created by zl on 2016/9/1.
+ */
+public class Student {
+private int id;
+private String name;
+private int age;
+
+
+public Student(int id, String name, int age) {
+    this.id = id;
+    this.name = name;
+    this.age = age;
+}
+
+public int getId() {
+    return id;
+}
+
+public void setId(int id) {
+    this.id = id;
+}
+
+public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    this.name = name;
+}
+
+public int getAge() {
+    return age;
+}
+
+public void setAge(int age) {
+    this.age = age;
+}
+
+@Override
+public String toString() {
+    return &quot;Student{&quot; +
+            &quot;id=&quot; + id +
+            &quot;, name=&apos;&quot; + name + &apos;\&apos;&apos; +
+            &quot;, age=&quot; + age +
+            &apos;}&apos;;
+}
+}
+
+
+package com.zl.dubbo.demo.provider;
+
+import java.io.Serializable;
+
+/**
+ * Created by zl on 2016/9/1.
+ */
+public class NewStudent extends Student implements Serializable{
+public NewStudent(int id, String name, int age) {
+super(id, name, age);
+}
+
+@Override
+public String toString() {
+return &quot;NewStudent{}&quot;+super.toString();
+}
+}
+</code></pre><p>newStudent继承Student但是Student没有实现Serializable接口</p>
+<pre><code>ObjectOutputStream os=new ObjectOutputStream(new FileOutputStream(&quot;1.txt&quot;));
+ NewStudent ns=new NewStudent(1,&quot;123&quot;,25);
+ os.writeObject(ns);
+ System.out.println(&quot;write ....&quot;);
+ ObjectInputStream oi=new ObjectInputStream(new FileInputStream(&quot;1.txt&quot;));
+ NewStudent news= (NewStudent) oi.readObject();
+ System.out.println(news);
+</code></pre><p>结果如下：</p>
+<pre><code>write ....
+Exception in thread &quot;main&quot; java.io.InvalidClassException: com.zl.dubbo.demo.provider.NewStudent; no valid constructor
+at java.io.ObjectStreamClass$ExceptionInfo.newInvalidClassException(ObjectStreamClass.java:150)
+at java.io.ObjectStreamClass.checkDeserialize(ObjectStreamClass.java:790)
+at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1782)
+at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1353)
+at java.io.ObjectInputStream.readObject(ObjectInputStream.java:373)
+at com.zl.dubbo.demo.provider.test.main(test.java:14)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)
+</code></pre><p>可以看到出现错误，并且可以看到序列化成功但是反序列化失败，从错误可以看到父类没有无参构造器造成了错误，我们家一个无参构造器再看一下</p>
+<pre><code>public Student() {
+}
+</code></pre><p>结果：</p>
+<pre><code>write ....
+NewStudent{}Student{id=0, name=&apos;null&apos;, age=0}
+</code></pre><p>可以看到反序列化成功，但是也是没有数据，所以我们可以得到答案，如果父类没有实现Serializable接口，那么会调用父类无参构造函数进行反序列化，如果没有则报错。</p>
+<p>未完待补充。。。。。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/14/应用服务器集群伸缩性设计（负载均衡）/" rel="next" title="负载均衡">
+                <i class="fa fa-chevron-left"></i> 负载均衡
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/20/HTTP2.0/" rel="prev" title="HTTP/2.0 相比1.0有哪些重大改进？">
+                HTTP/2.0 相比1.0有哪些重大改进？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/17/Java序列化/"
+     data-title="Java序列化"
+     data-content=""
+     data-url="http://yoursite.com/2016/08/17/Java序列化/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/17/Java序列化/"
+           data-title="Java序列化" data-url="http://yoursite.com/2016/08/17/Java序列化/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">52</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-序列化"><span class="nav-number">1.</span> <span class="nav-text">java 序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何序列化一个对象"><span class="nav-number">1.1.</span> <span class="nav-text">如何序列化一个对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transient"><span class="nav-number">1.2.</span> <span class="nav-text">transient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeobject-readObject"><span class="nav-number">1.3.</span> <span class="nav-text">writeobject readObject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父类Serializable接口问题"><span class="nav-number">1.4.</span> <span class="nav-text">父类Serializable接口问题</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
