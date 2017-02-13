@@ -1,0 +1,958 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="title: 自定义json序列化规则date: 2017-02-13 10:23:02
+tags:这边文章主要是讲如何自定义json序列化返回字段，有的时候由于业务需求同一个sql语句我们需要返回其中不同字段如下图，可以利用这篇文章的方法来解决。   
+/**
+* 返回所有简介、名称以及Id
+*/
+@RequestMapping(&amp;quot;list&amp;quot;)
+@ResponseBody">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZL's blog">
+<meta property="og:url" content="http://yoursite.com/2017/02/13/自定义json序列化规则/index.html">
+<meta property="og:site_name" content="ZL's blog">
+<meta property="og:description" content="title: 自定义json序列化规则date: 2017-02-13 10:23:02
+tags:这边文章主要是讲如何自定义json序列化返回字段，有的时候由于业务需求同一个sql语句我们需要返回其中不同字段如下图，可以利用这篇文章的方法来解决。   
+/**
+* 返回所有简介、名称以及Id
+*/
+@RequestMapping(&amp;quot;list&amp;quot;)
+@ResponseBody">
+<meta property="og:updated_time" content="2017-02-13T03:10:30.813Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ZL's blog">
+<meta name="twitter:description" content="title: 自定义json序列化规则date: 2017-02-13 10:23:02
+tags:这边文章主要是讲如何自定义json序列化返回字段，有的时候由于业务需求同一个sql语句我们需要返回其中不同字段如下图，可以利用这篇文章的方法来解决。   
+/**
+* 返回所有简介、名称以及Id
+*/
+@RequestMapping(&amp;quot;list&amp;quot;)
+@ResponseBody">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6290473885917775000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | ZL's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ZL's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Walk steps step by step</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'SoL_6ZfyzAjPMAMqwSbj','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-13T10:23:02+08:00" content="2017-02-13">
+              2017-02-13
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/13/自定义json序列化规则/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/13/自定义json序列化规则/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<p>title: 自定义json序列化规则<br>date: 2017-02-13 10:23:02</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p>这边文章主要是讲如何自定义json序列化返回字段，有的时候由于业务需求同一个sql语句我们需要返回其中不同字段如下图，可以利用这篇文章的方法来解决。   </p>
+<pre><code>/**
+* 返回所有简介、名称以及Id
+*/
+@RequestMapping(&quot;list&quot;)
+@ResponseBody
+public List&lt;Article&gt; findAllNameAndId() {
+      return newsService.findAll();
+}
+
+/**
+* 返回所有目录详情
+*/
+@RequestMapping(&quot;detail&quot;)
+@ResponseBody
+public List&lt;Article&gt; findAllArticles() {
+    return newsService.findAll();
+}  
+</code></pre><p>Spring MVC 默认使用转json框架是 jackson。 大家也知道， jackson 可以在实体类内加注解，来指定序列化规则，但是那样比较不灵活，不能实现我们目前想要达到的这种情况。<br>这篇文章主要讲的就是通过自定义注解，来更加灵活，细粒化控制 json 格式的转换。<br>最终我们需要实现如下的效果:</p>
+<pre><code>@RequestMapping(value = &quot;{id}&quot;, method = RequestMethod.GET)
+// 返回时候不包含 filter 内的 createTime, updateTime 字段
+@JSON(type = Article.class, filter=&quot;createTime,updateTime&quot;)  
+public Article get(@PathVariable String id) {
+    return articleService.get(id);
+}
+@RequestMapping(value=&quot;list&quot;, method = RequestMethod.GET)
+// 返回时只包含 include 内的 id, name 字段 
+@JSON(type = Article.class  , include=&quot;id,name&quot;)
+public List&lt;Article&gt; findAll() {
+    return articleService.findAll();
+}
+</code></pre><p>##jackson 编程式过滤字段<br>jackson 中， 我们可以在实体类上加上 @JsonFilter 注解，并且通过 ObjectMapper.setFilterProvider 来进行过滤规则的设置。 这里简单介绍一下 setFilterProvider 的使用  </p>
+<pre><code> @JsonFilter(&quot;ID-TITLE&quot;)
+class Article {
+  private String id;
+  private String title;
+  private String content;
+ // ... getter/setter
+}
+
+// Demo
+class Demo {
+  public void main(String args[]) {
+    ObjectMapper mapper = new ObjectMapper();
+    // SimpleBeanPropertyFilter.filterOutAllExcept(&quot;id,title&quot;)
+    // 过滤除了 id,title 以外的所有字段，也就是序列化的时候，只包含 id 和 title
+    mapper.setFilterProvider(new SimpleFilterProvider().addFilter(&quot;ID-TITLE&quot;,
+                SimpleBeanPropertyFilter.filterOutAllExcept(&quot;id,title&quot;))); 
+
+    String filterOut = mapper.writeValueAsString(new Article());
+
+    mapper = new ObjectMapper();
+    // SimpleBeanPropertyFilter.serializeAllExcept(&quot;id,title&quot;)
+    // 序列化所有字段，但是排除 id 和 title，也就是除了 id 和 title之外，其他字段都包含进 json
+    mapper.setFilterProvider(new SimpleFilterProvider().addFilter(&quot;ID-TITLE&quot;,
+            SimpleBeanPropertyFilter.serializeAllExcept(filter.split(&quot;id,title&quot;))));
+
+    String serializeAll = mapper.writeValueAsString(new Article());
+
+    System.out.println(&quot;filterOut:&quot; + filterOut);
+    System.out.println(&quot;serializeAll :&quot; + serializeAll);   
+  }
+}
+
+输出结果
+filterOut:{id: &quot;&quot;, title: &quot;&quot;}
+serializeAll:{content:&quot;&quot;}
+</code></pre><p>##封装json转换<br>通过上面的代码，我们发现，可以使用 setFilterProvider 来灵活的处理需要过滤的字段。不过上面的方法还有一些缺陷就是，还是要在 原来的 model 上加注解，这里我们使用 ObjectMapper.addMixIn(Class&lt;?&gt; type, Class&lt;?&gt; mixinType) 方法，这个方法就是讲两个类的注解混合，让第一个参数的类能够拥有第二个参数类的注解。让需要过滤的 model 和 @JsonFilter 注解解除耦合</p>
+<pre><code>package diamond.cms.server.json;
+
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
+/**
+ * depend on jackson
+ * @author Diamond
+ */
+public class CustomerJsonSerializer {
+
+    static final String DYNC_INCLUDE = &quot;DYNC_INCLUDE&quot;;
+    static final String DYNC_FILTER = &quot;DYNC_FILTER&quot;;
+    ObjectMapper mapper = new ObjectMapper();
+
+    @JsonFilter(DYNC_FILTER)
+    interface DynamicFilter {
+    }
+
+    @JsonFilter(DYNC_INCLUDE)
+    interface DynamicInclude {
+    }
+
+    /**
+     * @param clazz 需要设置规则的Class
+     * @param include 转换时包含哪些字段
+     * @param filter 转换时过滤哪些字段
+     */
+    public void filter(Class&lt;?&gt; clazz, String include, String filter) {
+        if (clazz == null) return;
+        if (include != null &amp;&amp; include.length() &gt; 0) {
+            mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_INCLUDE,
+                    SimpleBeanPropertyFilter.filterOutAllExcept(include.split(&quot;,&quot;))));
+            mapper.addMixIn(clazz, DynamicInclude.class);
+        } else if (filter !=null &amp;&amp; filter.length() &gt; 0) {
+            mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_FILTER,
+                    SimpleBeanPropertyFilter.serializeAllExcept(filter.split(&quot;,&quot;))));
+            mapper.addMixIn(clazz, DynamicFilter.class);
+        }
+    }
+
+    public String toJson(Object object) throws JsonProcessingException {
+        return mapper.writeValueAsString(object);
+    }
+}
+</code></pre><p>我们之前的 Demo 可以变成:</p>
+<pre><code>// Demo
+class Demo {
+      public void main(String args[]) {
+    CustomerJsonSerializer cjs= new CustomerJsonSerializer();
+    // 设置转换 Article 类时，只包含 id, name
+    cjs.filter(Article.class, &quot;id,name&quot;, null);  
+
+    String include = cjs.toJson(new Article()); 
+
+    cjs = new CustomerJsonSerializer();
+    // 设置转换 Article 类时，过滤掉 id, name
+    cjs.filter(Article.class, null, &quot;id,name&quot;);  
+
+    String filter = cjs.toJson(new Article());
+
+    System.out.println(&quot;include: &quot; + include);
+    System.out.println(&quot;filter: &quot; + filter);   
+  }
+}
+// -----------------------------------
+输出结果
+include: {id: &quot;&quot;, title: &quot;&quot;}
+filter: {content:&quot;&quot;}    
+</code></pre><p>#自定义@JSON注解<br>我们需要实现文章开头的那种效果。这里我自定义了一个注解，可以加在方法上，这个注解是用来携带参数给 CustomerJsonSerializer.filter 方法的，就是某个类的某些字段需要过滤或者包含。</p>
+<pre><code>package diamond.cms.server.json;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JSON {
+    Class&lt;?&gt; type();
+    String include() default &quot;&quot;;
+    String filter() default &quot;&quot;;
+}
+</code></pre><p>##实现 Spring MVC 的 HandlerMethodReturnValueHandler</p>
+<p>HandlerMethodReturnValueHandler 接口 Spring MVC 用于处理请求返回值 。 看一下这个接口的定义和描述，接口有两个方法supportsReturnType 用来判断 处理类 是否支持当前请求， handleReturnValue 就是具体返回逻辑的实现。</p>
+<pre><code> // Spring MVC 源码
+package org.springframework.web.method.support;
+
+import org.springframework.core.MethodParameter;
+import org.springframework.web.context.request.NativeWebRequest;
+
+public interface HandlerMethodReturnValueHandler {
+
+    boolean supportsReturnType(MethodParameter returnType);
+
+    void handleReturnValue(Object returnValue, MethodParameter returnType,
+            ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception;
+
+}
+</code></pre><p>我们平时使用 @ResponseBody 就是交给 RequestResponseBodyMethodProcessor 这个类处理的<br>还有我们返回 ModelAndView 的时候， 是由 ModelAndViewMethodReturnValueHandler 类处理的<br>要实现文章开头的效果，我实现了一个 JsonReturnHandler类，当方法有 @JSON 注解的时候，使用该类来处理返回值。</p>
+<pre><code>package diamond.cms.server.json.spring;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import diamond.cms.server.json.CustomerJsonSerializer;
+import diamond.cms.server.json.JSON;
+
+public class JsonReturnHandler implements HandlerMethodReturnValueHandler{
+
+    @Override
+    public boolean supportsReturnType(MethodParameter returnType) {  
+        // 如果有我们自定义的 JSON 注解 就用我们这个Handler 来处理
+        boolean hasJsonAnno= returnType.getMethodAnnotation(JSON.class) != null;
+        return hasJsonAnno;
+    }
+
+    @Override
+    public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest) throws Exception {
+        // 设置这个就是最终的处理类了，处理完不再去找下一个类进行处理
+        mavContainer.setRequestHandled(true);
+
+        // 获得注解并执行filter方法 最后返回
+        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+        Annotation[] annos = returnType.getMethodAnnotations();
+        CustomerJsonSerializer jsonSerializer = new CustomerJsonSerializer();
+        Arrays.asList(annos).forEach(a -&gt; {
+            if (a instanceof JSON) {
+                JSON json = (JSON) a;
+                jsonSerializer.filter(json.type(), json.include(), json.filter());
+            }
+        });
+
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        String json = jsonSerializer.toJson(returnValue);
+        response.getWriter().write(json);
+    }    
+}
+</code></pre><p>通过这些，我们就可以最终实现以下效果。</p>
+<pre><code>class Article {
+      private String id;
+      private String title;
+      private String content;
+      private Long createTime;
+     // ... getter/setter
+}
+
+@Controller
+@RequestMapping(&quot;article&quot;)
+class ArticleController {
+      @RequestMapping(value = &quot;{id}&quot;, method = RequestMethod.GET)
+      @JSON(type = Article.class, filter=&quot;createTime&quot;)  
+      public Article get(@PathVariable String id) {
+      return articleService.get(id);
+      }
+
+      @RequestMapping(value=&quot;list&quot;, method = RequestMethod.GET)
+      @JSON(type = Article.class  , include=&quot;id,title&quot;)
+      public List&lt;Article&gt; findAll() {
+      return articleService.findAll();
+      }
+}
+</code></pre><p>请求 /article/{articleId}</p>
+<pre><code>{
+    id: &quot;xxxx&quot;,
+    title: &quot;xxxx&quot;,
+  content: &quot;xxxx&quot;
+}
+</code></pre><p>请求 article/list</p>
+<pre><code>[ {id: &quot;xx&quot;, title: &quot;&quot;}, {id: &quot;xx&quot;, title: &quot;&quot;}, {id: &quot;xx&quot;, title: &quot;&quot;} ... ]
+</code></pre><p>参考文献：<br><a href="https://my.oschina.net/u/2328699/blog/836727" target="_blank" rel="external">https://my.oschina.net/u/2328699/blog/836727</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/01/TreeMap/" rel="next" title="TreeMap">
+                <i class="fa fa-chevron-left"></i> TreeMap
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/13/自定义json序列化规则/"
+     data-title=""
+     data-content=""
+     data-url="http://yoursite.com/2017/02/13/自定义json序列化规则/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/13/自定义json序列化规则/"
+           data-title="" data-url="http://yoursite.com/2017/02/13/自定义json序列化规则/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.png"
+               alt="ZL" />
+          <p class="site-author-name" itemprop="name">ZL</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zl8613086" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags"><span class="nav-number">1.</span> <span class="nav-text">tags:</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZL</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zlduoshuo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
